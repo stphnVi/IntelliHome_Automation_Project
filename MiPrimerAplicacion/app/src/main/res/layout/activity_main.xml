@@ -4,12 +4,13 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F4F0"
+    android:background="@color/Azul"
     tools:context=".MainActivity">
 
+
     <LinearLayout
-        android:layout_width="367dp"
-        android:layout_height="564dp"
+        android:layout_width="376dp"
+        android:layout_height="695dp"
         android:orientation="vertical"
         android:padding="20dp"
         android:paddingVertical="20dp"
@@ -17,7 +18,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.497">
+        app:layout_constraintVertical_bias="0.192">
+
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/logoImageView"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="Logo de la empresa"
+            android:src="@drawable/logoempresa" />
 
 
         <TextView
@@ -31,56 +41,119 @@
             android:textColor="@color/black"
             android:textSize="30dp" />
 
+
         <EditText
             android:id="@+id/editTextMessage"
-            android:layout_width="305dp"
+            android:layout_width="331dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="@color/white"
             android:hint="Usuario o Correo"
-            android:padding="20dp" />
-
+            android:padding="15dp"
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Contraseña" />
-
-        <EditText
-            android:id="@+id/editTextTextPassword"
-            android:layout_width="304dp"
+            android:layout_width="319dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:ems="8"
-            android:inputType="textPassword" />
+            android:paddingTop="20dp"
+            android:textColor="@color/black"
+            android:text="Contraseña"
+            android:textSize="20dp" />
+
+        <LinearLayout
+            android:layout_width="331dp"
+            android:layout_height="43dp"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/editTextTextPassword"
+                android:layout_width="278dp"
+                android:layout_height="55dp"
+                android:layout_gravity="center"
+                android:background="@color/white"
+                android:ems="8"
+                android:inputType="textPassword"
+                android:padding="16dp"
+                android:paddingRight="20dp" />
+
+            <ImageButton
+                android:id="@+id/imageButton3"
+                android:layout_width="68dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="@color/white"
+                app:srcCompat="@drawable/ojo" />
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#F6F4F0"
+            android:backgroundTint="@color/Azul"
             android:drawablePadding="20dp"
             android:fontFamily="sans-serif-light"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
             android:text="¿Olvidaste tu contraseña?"
-            android:textColor="#2E5077" />
+            android:textColor="#2E5077"
+            android:textSize="12dp" />
+
+
+
+        <Button
+            android:id="@+id/buttonExit"
+            android:layout_width="200dp"
+            android:layout_height="62dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/Azuloscuro"
+            android:drawablePadding="20dp"
+            android:gravity="center"
+            android:text="Iniciar sesión"
+            android:textSize="18dp" />
+
+
+        <LinearLayout
+            android:layout_width="136dp"
+            android:layout_height="86dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <!-- Logo Facebook-->
+            <ImageView
+                android:id="@+id/logoImageViewFacebook"
+                android:layout_width="67dp"
+                android:layout_height="66dp"
+                android:layout_gravity="center"
+                android:contentDescription="Logo de la empresa"
+                android:src="@drawable/logofacebook" />
+
+            <!-- Logo Google-->
+            <ImageView
+                android:id="@+id/logoImageViewGoogle"
+                android:layout_width="67dp"
+                android:layout_height="66dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="20dp"
+                android:contentDescription="Logo de la empresa"
+                android:src="@drawable/logogoogle" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/buttonSend"
             android:layout_width="200dp"
             android:layout_height="62dp"
             android:layout_gravity="center"
-            android:backgroundTint="#4DA1A9"
+            android:backgroundTint="@color/Azul"
             android:drawablePadding="20dp"
             android:gravity="center"
-            android:text="Iniciar sesión" />
-
-        <Button
-            android:id="@+id/buttonExit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:shadowColor="#4DA1A9"
-            android:text="Salir" />
+            android:paddingTop="20dp"
+            android:text="Registrate"
+            android:textColor="@color/Azuloscuro"
+            android:textSize="20dp" />
 
     </LinearLayout>
 

@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         editTextMessage = findViewById(R.id.editTextMessage);
-        textViewChat = findViewById(R.id.textViewChat);
+        //textViewChat = findViewById(R.id.textViewChat);
         Button buttonSend = findViewById(R.id.buttonSend);
         Button buttonExit = findViewById(R.id.buttonExit);
 
