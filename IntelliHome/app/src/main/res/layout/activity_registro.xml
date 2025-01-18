@@ -1,0 +1,178 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/Azul">
+
+
+    <!-- Contenedor principal que contiene todos los elementos -->
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:background="@color/Azul"
+        tools:ignore="ExtraText">
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/logoImageView"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/logoempresa"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="Logo de la empresa" />
+
+        <!-- Foto de perfil -->
+        <Button
+            android:id="@+id/selectPhotoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Subir Foto de Perfil"
+            android:textColor="@color/colorWhite"
+            android:backgroundTint="@color/Azuloscuro"
+            android:layout_marginTop="16dp" />
+
+        <!-- Nombre y Apellido -->
+        <EditText
+            android:id="@+id/nameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre"
+            android:inputType="textPersonName"
+            android:background="@drawable/edit_text_background"
+            android:layout_marginTop="16dp" />
+
+
+        <EditText
+            android:id="@+id/lastNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Apellido"
+            android:inputType="textPersonName"
+            android:background="@drawable/edit_text_background"
+            android:layout_marginTop="16dp" />
+
+
+        <!-- Fecha de Nacimiento -->
+        <Button
+            android:id="@+id/selectDateButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Seleccionar Fecha de Nacimiento"
+            android:textColor="@color/colorWhite"
+            android:backgroundTint="@color/Azuloscuro"
+            android:layout_marginTop="16dp" />
+
+        <!-- Nickname -->
+        <EditText
+            android:id="@+id/nicknameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nickname"
+            android:inputType="text"
+            android:background="@drawable/edit_text_background"
+            android:layout_marginTop="16dp" />
+
+
+        <!-- Correo y Contraseña -->
+        <EditText
+            android:id="@+id/emailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Correo Electrónico"
+            android:inputType="textEmailAddress"
+            android:background="@drawable/edit_text_background"
+            android:layout_marginTop="16dp" />
+
+
+        <EditText
+            android:id="@+id/passwordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            android:background="@drawable/edit_text_background"
+            android:layout_marginTop="8dp" />
+
+
+        <!-- Nacionalidad -->
+        <EditText
+            android:id="@+id/nationalityEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nacionalidad"
+            android:inputType="text"
+            android:background="@drawable/edit_text_background"
+            android:layout_marginTop="16dp" />
+
+
+        <!-- Descripción -->
+        <EditText
+            android:id="@+id/descriptionEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Descripción de la dueño de la casa"
+            android:inputType="textMultiLine"
+            android:lines="3"
+            android:background="@drawable/edit_text_background"
+            android:layout_marginTop="16dp" />
+
+
+        <!-- Hobbies -->
+        <EditText
+            android:id="@+id/hobbiesEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Gustos o Hobbies"
+            android:inputType="text"
+            android:background="@drawable/edit_text_background"
+            android:layout_marginTop="16dp" />
+            >
+
+        <!-- Instrucciones Generales -->
+        <EditText
+            android:id="@+id/generalInstructionsEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Instrucciones Generales"
+            android:inputType="textMultiLine"
+            android:lines="3"
+            android:background="@drawable/edit_text_background"
+            android:layout_marginTop="16dp" />
+
+
+        <!-- Botones -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="24dp"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/registerButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Registrar"
+                android:textColor="@color/colorWhite"
+                android:backgroundTint="@color/Azuloscuro" />
+
+            <View
+                android:layout_width="16dp"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/cancelButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Cancelar"
+                android:textColor="@color/colorWhite"
+                android:backgroundTint="@color/Azuloscuro" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
