@@ -27,6 +27,10 @@ public class MainActivity extends AppCompatActivity {
     private PrintWriter out;
     private Scanner in;
 
+    private EditText editTextPassword;
+    private ImageButton imageButtonShowHidePassword;
+    private boolean isPasswordVisible = false; // Flag para manejar el estado de visibilidad
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +75,9 @@ public class MainActivity extends AppCompatActivity {
             String userEmail = ((EditText) findViewById(R.id.editTextMessage)).getText().toString();
             String password = ((EditText) findViewById(R.id.editTextTextPassword)).getText().toString();
             //String message = editTextMessage.getText().toString();
-            String message = "userEmail: " + userEmail + ", password: " + password;
+            //String message = "userEmail: " + userEmail + ", password: " + password;
+
+            String message = editTextMessage.getText().toString();
             sendMessage(message); // Llama a la función para enviar el mensaje
             textViewChat.append("Yo: " + message + "\n");
 
@@ -80,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
 
         buttonExit.setOnClickListener(view -> { // mapeo del boton exit
 
-            Intent intent = new Intent(MainActivity.this, ExitActivity.class);
+            Intent intent = new Intent(MainActivity.this, RegistroActivity.class);
+            //Intent intent = new Intent(MainActivity.this, ExitActivity.class);
             startActivity(intent);
         });
 
