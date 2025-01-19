@@ -2,6 +2,7 @@ import socket
 import threading
 import tkinter as tk
 from tkinter import scrolledtext
+from database.manageLogin import *
 
 class ChatServer:
     def __init__(self, host='0.0.0.0', port=1717):
@@ -60,6 +61,8 @@ class ChatServer:
         self.chat_display.config(state='normal')
         self.chat_display.insert(tk.END, f"Cliente: {message}\n")
         self.chat_display.config(state='disabled')
+        
+        receive_info(message)
 
         for client in self.clients: # para cada cliente que haya
             if client != sender_socket:  # No enviar al remitente
@@ -70,6 +73,7 @@ class ChatServer:
                     self.clients.remove(client)
     def broadcast1(self, message, sender_socket): # Esto es para que sirva el boton
         self.chat_display.config(state='normal')
+        self.chat_display.insert(tk.END, receive_info(message))
         self.chat_display.insert(tk.END, f"Servidor: {message}\n")
         self.chat_display.config(state='disabled')
         
@@ -96,6 +100,10 @@ class ChatServer:
             client.close()
         self.server_socket.close()
         self.root.destroy()
+        
+    
+        
+        
 
 if __name__ == "__main__":
     ChatServer()

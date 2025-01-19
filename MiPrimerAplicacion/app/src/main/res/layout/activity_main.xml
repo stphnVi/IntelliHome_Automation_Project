@@ -44,7 +44,7 @@
 
 
         <EditText
-            android:id="@+id/editTextMessage"
+            android:id="@+id/userEmail"
             android:layout_width="331dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -70,7 +70,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/editTextTextPassword"
+                android:id="@+id/password"
                 android:layout_width="278dp"
                 android:layout_height="55dp"
                 android:layout_gravity="center"

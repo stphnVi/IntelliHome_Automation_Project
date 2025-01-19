@@ -1,7 +1,6 @@
 package com.example.miprimeraplicacion;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -10,6 +9,7 @@ import android.widget.TextView;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import org.json.JSONObject;
 
 
 // Recordar que dar los permisos del HW para utilizar los componentes por ejemplo la red
@@ -28,12 +28,13 @@ public class MainActivity extends AppCompatActivity {
     private PrintWriter out;
     private Scanner in;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        editTextMessage = findViewById(R.id.editTextMessage);
+        editTextMessage = findViewById(R.id.userEmail);
         //textViewChat = findViewById(R.id.textViewChat);
         Button buttonSend = findViewById(R.id.buttonSend);
         Button buttonExit = findViewById(R.id.buttonExit);
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread(() -> {
             try {
                 // Cambiar a la dirección IP de su servidor
-                socket = new Socket("192.168.0.106", 1717);
+                socket = new Socket("192.168.1.17", 1717);
                 out = new PrintWriter(socket.getOutputStream(), true);
                 in = new Scanner(socket.getInputStream());
                 new Thread(() -> {
@@ -66,7 +67,10 @@ public class MainActivity extends AppCompatActivity {
         }).start();
 
         buttonSend.setOnClickListener(view -> { // mapeo del boton enviar
-            String message = editTextMessage.getText().toString();
+            String userEmail = ((EditText) findViewById(R.id.userEmail)).getText().toString();
+            String password = ((EditText) findViewById(R.id.password)).getText().toString();
+            //String message = editTextMessage.getText().toString();
+            String message = "userEmail: " + userEmail + ", password: " + password;
             sendMessage(message); // Llama a la función para enviar el mensaje
             textViewChat.append("Yo: " + message + "\n");
             editTextMessage.setText("");
