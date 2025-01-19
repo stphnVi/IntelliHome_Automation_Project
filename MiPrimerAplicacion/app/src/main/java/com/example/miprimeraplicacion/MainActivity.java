@@ -1,5 +1,7 @@
 package com.example.miprimeraplicacion;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         //textViewChat = findViewById(R.id.textViewChat);
         Button buttonSend = findViewById(R.id.buttonSend);
         Button buttonExit = findViewById(R.id.buttonExit);
+
 
         // Iniciar el hilo para conectarse al servidor y recibir mensajes
         new Thread(() -> {
@@ -73,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, ExitActivity.class);
             startActivity(intent);
         });
+
     }
 
     private void sendMessage(String message) {

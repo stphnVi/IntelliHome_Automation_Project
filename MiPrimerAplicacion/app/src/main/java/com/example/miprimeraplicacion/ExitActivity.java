@@ -1,5 +1,7 @@
 package com.example.miprimeraplicacion;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -12,6 +14,11 @@ public class ExitActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registro);
+        Button buttonCancel = findViewById(R.id.cancelButton);
+        buttonCancel.setOnClickListener(view -> { // mapeo del boton exit
+            Intent intent = new Intent( ExitActivity.this, MainActivity.class);
+            startActivity(intent);
+        });
 
         // Configurar la animación de degradado
         //TextView textView = findViewById(R.id.textViewExit);
