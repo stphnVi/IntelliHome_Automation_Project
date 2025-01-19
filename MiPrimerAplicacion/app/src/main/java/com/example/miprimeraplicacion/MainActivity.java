@@ -1,5 +1,7 @@
 package com.example.miprimeraplicacion;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -32,15 +34,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         editTextMessage = findViewById(R.id.editTextMessage);
-        textViewChat = findViewById(R.id.textViewChat);
+        //textViewChat = findViewById(R.id.textViewChat);
         Button buttonSend = findViewById(R.id.buttonSend);
         Button buttonExit = findViewById(R.id.buttonExit);
+
 
         // Iniciar el hilo para conectarse al servidor y recibir mensajes
         new Thread(() -> {
             try {
                 // Cambiar a la dirección IP de su servidor
-                socket = new Socket("172.17.53.129", 1717);
+                socket = new Socket("192.168.0.106", 1717);
                 out = new PrintWriter(socket.getOutputStream(), true);
                 in = new Scanner(socket.getInputStream());
                 new Thread(() -> {
@@ -73,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, ExitActivity.class);
             startActivity(intent);
         });
+
     }
 
     private void sendMessage(String message) {
