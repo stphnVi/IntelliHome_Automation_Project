@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -28,16 +30,45 @@ public class MainActivity extends AppCompatActivity {
     private PrintWriter out;
     private Scanner in;
 
+    private EditText editTextPassword;
+    private ImageButton imageButtonShowHidePassword;
+    private boolean isPasswordVisible = false; // Flag para manejar el estado de visibilidad
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         editTextMessage = findViewById(R.id.editTextMessage);
-        //textViewChat = findViewById(R.id.textViewChat);
+        // textViewChat = findViewById(R.id.textViewChat);
         Button buttonSend = findViewById(R.id.buttonSend);
         Button buttonExit = findViewById(R.id.buttonExit);
+        Button buttonForgetPassword = findViewById(R.id.buttonForgot);
 
+        // Configuración para olvidar contraseña
+        buttonForgetPassword.setOnClickListener(view -> {
+            Log.d("MainActivity", "Botón de olvidar contraseña presionado");
+            Intent intent = new Intent(MainActivity.this, PreguntasActivity.class);
+            startActivity(intent);
+        });
+
+        // Inicializar elementos de la contraseña
+        editTextPassword = findViewById(R.id.editTextTextPassword);
+        imageButtonShowHidePassword = findViewById(R.id.imageButton3);
+
+
+        imageButtonShowHidePassword.setOnClickListener(view -> {
+            if (isPasswordVisible) {
+                // Cambiar a "ocultar" contraseña
+                editTextPassword.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                imageButtonShowHidePassword.setImageResource(R.drawable.ojo); 
+            } else {
+
+                editTextPassword.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                imageButtonShowHidePassword.setImageResource(R.drawable.botonojo);
+            }
+            isPasswordVisible = !isPasswordVisible; // Alternar estado
+        });
 
         // Iniciar el hilo para conectarse al servidor y recibir mensajes
         new Thread(() -> {
@@ -51,36 +82,32 @@ public class MainActivity extends AppCompatActivity {
                         // Escuchar continuamente los mensajes del servidor
                         if (in.hasNextLine()) {
                             String message = in.nextLine();
-                            runOnUiThread(() -> { // actualiza el la gui en un hilo
+                            runOnUiThread(() -> {
                                 textViewChat.append("Servidor: " + message + "\n");
                             });
                         }
                     }
-
-
                 }).start();
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }).start();
 
-        buttonSend.setOnClickListener(view -> { // mapeo del boton enviar
+        buttonSend.setOnClickListener(view -> {
             String message = editTextMessage.getText().toString();
-            sendMessage(message); // Llama a la función para enviar el mensaje
+            sendMessage(message);
             textViewChat.append("Yo: " + message + "\n");
             editTextMessage.setText("");
         });
 
-        buttonExit.setOnClickListener(view -> { // mapeo del boton exit
+        buttonExit.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, ExitActivity.class);
             startActivity(intent);
         });
-
     }
 
     private void sendMessage(String message) {
-        new Thread(() -> { // un hilo por a parte
+        new Thread(() -> {
             try {
                 if (out != null) {
                     out.println(message);
@@ -92,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() { // lo que se ejecuta cuando termina, se sale de la aplicación
+    protected void onDestroy() {
         super.onDestroy();
         try {
             if (out != null) out.close();
