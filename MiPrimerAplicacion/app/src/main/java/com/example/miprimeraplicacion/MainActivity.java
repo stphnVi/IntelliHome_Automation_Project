@@ -3,6 +3,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
                             String message = in.nextLine();
                             runOnUiThread(() -> { // actualiza el la gui en un hilo
                                 textViewChat.append("Servidor: " + message + "\n");
+
+
                             });
                         }
                     }
@@ -73,10 +76,12 @@ public class MainActivity extends AppCompatActivity {
             String message = "userEmail: " + userEmail + ", password: " + password;
             sendMessage(message); // Llama a la función para enviar el mensaje
             textViewChat.append("Yo: " + message + "\n");
-            editTextMessage.setText("");
+
+            //editTextMessage.setText("");
         });
 
         buttonExit.setOnClickListener(view -> { // mapeo del boton exit
+
             Intent intent = new Intent(MainActivity.this, ExitActivity.class);
             startActivity(intent);
         });
