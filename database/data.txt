@@ -1,2 +1,0 @@
-username: Tefa1, email: tefa@protonmail.com, password: 1234
-
