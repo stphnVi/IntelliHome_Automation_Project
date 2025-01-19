@@ -1,4 +1,5 @@
 package com.example.miprimeraplicacion;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,13 +13,13 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-
 // Recordar que dar los permisos del HW para utilizar los componentes por ejemplo la red
 // Esto se hace en el archivo AndroidManifest
 
 /**
  * Creado por Jason Leitón Jiménez para guía del curso de Principio de Modelado
- * Esta clase es la que permite enviar y recibir mensajes desde y hacia el servidor en python
+ * Esta clase es la que permite enviar y recibir mensajes desde y hacia el
+ * servidor en python
  * Recordar que la gui está en res
  */
 public class MainActivity extends AppCompatActivity {
@@ -55,15 +56,16 @@ public class MainActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextTextPassword);
         imageButtonShowHidePassword = findViewById(R.id.imageButton3);
 
-
         imageButtonShowHidePassword.setOnClickListener(view -> {
             if (isPasswordVisible) {
                 // Cambiar a "ocultar" contraseña
-                editTextPassword.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                editTextPassword.setInputType(
+                        android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 imageButtonShowHidePassword.setImageResource(R.drawable.ojo);
             } else {
 
-                editTextPassword.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                editTextPassword.setInputType(android.text.InputType.TYPE_CLASS_TEXT
+                        | android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                 imageButtonShowHidePassword.setImageResource(R.drawable.botonojo);
             }
             isPasswordVisible = !isPasswordVisible; // Alternar estado
@@ -73,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread(() -> {
             try {
                 // Cambiar a la dirección IP de su servidor
-                socket = new Socket("192.168.0.106", 1717);
+                socket = new Socket("192.168.1.17", 1717);
                 out = new PrintWriter(socket.getOutputStream(), true);
                 in = new Scanner(socket.getInputStream());
                 new Thread(() -> {
@@ -83,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
                             String message = in.nextLine();
                             runOnUiThread(() -> {
                                 textViewChat.append("Servidor: " + message + "\n");
+
                             });
                         }
                     }
@@ -96,7 +99,8 @@ public class MainActivity extends AppCompatActivity {
             String message = editTextMessage.getText().toString();
             sendMessage(message);
             textViewChat.append("Yo: " + message + "\n");
-            editTextMessage.setText("");
+
+            // editTextMessage.setText("");
         });
 
         buttonExit.setOnClickListener(view -> {
@@ -121,9 +125,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         try {
-            if (out != null) out.close();
-            if (in != null) in.close();
-            if (socket != null) socket.close();
+            if (out != null)
+                out.close();
+            if (in != null)
+                in.close();
+            if (socket != null)
+                socket.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
