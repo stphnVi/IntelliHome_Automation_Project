@@ -102,6 +102,9 @@ public class MainActivity extends AppCompatActivity {
             sendMessage(message);
             textViewChat.append("Yo: " + message + "\n");
             // editTextMessage.setText("");
+            Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
+            startActivity(intent);
+
         });
 
         buttonExit.setOnClickListener(view -> {

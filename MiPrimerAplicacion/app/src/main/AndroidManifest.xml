@@ -17,6 +17,9 @@
         <!-- Declarar la actividad ExitActivity -->
         <activity android:name=".RegistroActivity"></activity>
 
+        <!-- Declarar la actividad Principal -->
+        <activity android:name=".PrincipalActivity"></activity>
+
         <!-- Declarar la actividad MainActivity -->
         <activity
             android:name=".MainActivity"
