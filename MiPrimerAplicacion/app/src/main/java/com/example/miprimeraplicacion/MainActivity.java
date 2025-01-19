@@ -3,14 +3,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
-import org.json.JSONObject;
 
 
 // Recordar que dar los permisos del HW para utilizar los componentes por ejemplo la red
@@ -35,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        editTextMessage = findViewById(R.id.userEmail);
+        editTextMessage = findViewById(R.id.editTextMessage);
         //textViewChat = findViewById(R.id.textViewChat);
         Button buttonSend = findViewById(R.id.buttonSend);
         Button buttonExit = findViewById(R.id.buttonExit);
@@ -70,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
         }).start();
 
         buttonSend.setOnClickListener(view -> { // mapeo del boton enviar
-            String userEmail = ((EditText) findViewById(R.id.userEmail)).getText().toString();
-            String password = ((EditText) findViewById(R.id.password)).getText().toString();
+            String userEmail = ((EditText) findViewById(R.id.editTextMessage)).getText().toString();
+            String password = ((EditText) findViewById(R.id.editTextTextPassword)).getText().toString();
             //String message = editTextMessage.getText().toString();
             String message = "userEmail: " + userEmail + ", password: " + password;
             sendMessage(message); // Llama a la función para enviar el mensaje
