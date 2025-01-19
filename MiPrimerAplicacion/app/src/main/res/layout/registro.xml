@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -11,7 +14,6 @@
         android:padding="16dp"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="93dp">
-
 
         <!-- Contenedor principal que contiene todos los elementos -->
         <LinearLayout
@@ -22,6 +24,7 @@
             android:gravity="center_horizontal"
             android:orientation="vertical"
             tools:ignore="ExtraText">
+
             <!-- Logo -->
             <ImageView
                 android:id="@+id/logoImageView"
@@ -51,7 +54,6 @@
                 android:hint="Nombre"
                 android:inputType="textPersonName" />
 
-
             <EditText
                 android:id="@+id/lastNameEditText"
                 android:layout_width="match_parent"
@@ -60,7 +62,6 @@
                 android:background="@color/white"
                 android:hint="Apellido"
                 android:inputType="textPersonName" />
-
 
             <!-- Fecha de Nacimiento -->
             <Button
@@ -71,6 +72,16 @@
                 android:backgroundTint="@color/Azuloscuro"
                 android:text="Seleccionar Fecha de Nacimiento"
                 android:textColor="@color/colorWhite" />
+            <EditText
+                android:id="@+id/fechaNacimientoEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:layout_marginTop="16dp"
+                android:hint="Fecha de Nacimiento"
+                android:focusable="false"
+                android:clickable="true" />
+
 
             <!-- Nickname -->
             <EditText
@@ -82,7 +93,6 @@
                 android:hint="Nickname"
                 android:inputType="text" />
 
-
             <!-- Correo y Contraseña -->
             <EditText
                 android:id="@+id/emailEditText"
@@ -93,7 +103,6 @@
                 android:hint="Correo Electrónico"
                 android:inputType="textEmailAddress" />
 
-
             <EditText
                 android:id="@+id/passwordEditText"
                 android:layout_width="match_parent"
@@ -101,6 +110,15 @@
                 android:layout_marginTop="8dp"
                 android:background="@color/white"
                 android:hint="Contraseña"
+                android:inputType="textPassword" />
+            <!-- Confirmar Contraseña -->
+            <EditText
+                android:id="@+id/confirmPasswordEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/white"
+                android:hint="Confirmar Contraseña"
                 android:inputType="textPassword" />
 
 
@@ -114,7 +132,6 @@
                 android:hint="Nacionalidad"
                 android:inputType="text" />
 
-
             <!-- Descripción -->
             <EditText
                 android:id="@+id/descriptionEditText"
@@ -126,7 +143,6 @@
                 android:inputType="textMultiLine"
                 android:lines="3" />
 
-
             <!-- Hobbies -->
             <EditText
                 android:id="@+id/hobbiesEditText"
@@ -136,7 +152,6 @@
                 android:background="@color/white"
                 android:hint="Gustos o Hobbies"
                 android:inputType="text" />
-            >
 
             <!-- Instrucciones Generales -->
             <EditText
@@ -148,6 +163,71 @@
                 android:hint="Instrucciones Generales"
                 android:inputType="textMultiLine"
                 android:lines="3" />
+
+            <!-- Preguntas de Seguridad -->
+            <EditText
+                android:id="@+id/professorNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:hint="¿Cuál es el nombre de su profesor preferido?"
+                android:padding="16dp"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp" />
+
+            <EditText
+                android:id="@+id/childhoodNicknameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:hint="¿Cuál era su apodo de niño?"
+                android:padding="16dp"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp" />
+
+            <EditText
+                android:id="@+id/favoriteTeamEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:hint="¿Cuál es su equipo de fútbol favorito?"
+                android:padding="16dp"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp" />
+
+            <!-- Datos de la Tarjeta -->
+            <EditText
+                android:id="@+id/cardNumberEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:hint="Número de Tarjeta"
+                android:inputType="number"
+                android:padding="16dp"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp" />
+
+            <EditText
+                android:id="@+id/cardExpiryEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:hint="Fecha de Expiración (MM/AA)"
+                android:inputType="text"
+                android:padding="16dp"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp" />
+
+            <EditText
+                android:id="@+id/cardCvcEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:hint="CVC"
+                android:inputType="numberPassword"
+                android:padding="16dp"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp" />
 
 
             <!-- Botones -->
@@ -179,9 +259,10 @@
                     android:backgroundTint="@color/Azuloscuro"
                     android:text="Cancelar"
                     android:textColor="@color/colorWhite" />
+
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
