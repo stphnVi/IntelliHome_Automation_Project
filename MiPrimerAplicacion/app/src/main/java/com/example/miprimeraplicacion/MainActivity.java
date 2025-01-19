@@ -1,7 +1,6 @@
 package com.example.miprimeraplicacion;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -61,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             if (isPasswordVisible) {
                 // Cambiar a "ocultar" contraseña
                 editTextPassword.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                imageButtonShowHidePassword.setImageResource(R.drawable.ojo); 
+                imageButtonShowHidePassword.setImageResource(R.drawable.ojo);
             } else {
 
                 editTextPassword.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
@@ -101,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         buttonExit.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, ExitActivity.class);
+            Intent intent = new Intent(MainActivity.this, RegistroActivity.class);
             startActivity(intent);
         });
     }
