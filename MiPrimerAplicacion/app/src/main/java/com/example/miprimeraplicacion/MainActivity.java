@@ -1,5 +1,6 @@
 package com.example.miprimeraplicacion;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import android.os.Handler;
+import android.os.Looper;
 
 // Recordar que dar los permisos del HW para utilizar los componentes por ejemplo la red
 // Esto se hace en el archivo AndroidManifest
@@ -25,7 +28,7 @@ import java.util.Scanner;
 public class MainActivity extends AppCompatActivity {
 
     private EditText editTextMessage;
-    private TextView textViewChat;
+    //private TextView textViewChat;
     private Socket socket;
     private PrintWriter out;
     private Scanner in;
@@ -75,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread(() -> {
             try {
                 // Cambiar a la dirección IP de su servidor
-                socket = new Socket("192.168.0.106", 1717);
+                socket = new Socket("192.168.1.17", 1717);
                 out = new PrintWriter(socket.getOutputStream(), true);
                 in = new Scanner(socket.getInputStream());
                 new Thread(() -> {
@@ -83,27 +86,41 @@ public class MainActivity extends AppCompatActivity {
                         // Escuchar continuamente los mensajes del servidor
                         if (in.hasNextLine()) {
                             String message = in.nextLine();
-                            runOnUiThread(() -> {
-                                textViewChat.append("Servidor: " + message + "\n");
-
-                            });
+                            procesarMensaje(message);
+                            //textViewChat.append("Servidor: " + message + "\n");
                         }
                     }
+
                 }).start();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }).start();
 
+
+
         buttonSend.setOnClickListener(view -> {
             String userEmail = ((EditText) findViewById(R.id.editTextMessage)).getText().toString();
             String password = ((EditText) findViewById(R.id.editTextTextPassword)).getText().toString();
-            String message = "userEmail: " + userEmail + ", password: " + password;
-            sendMessage(message);
-            textViewChat.append("Yo: " + message + "\n");
+
+
+            // Validar campos vacíos
+            if (userEmail.isEmpty()) {
+                marcarCampoTemporalmente(editTextMessage);
+            }
+
+            if (password.isEmpty()) {
+                marcarCampoTemporalmente(editTextPassword);
+            }
+
+            // Continuar con la lógica solo si ambos campos están llenos
+            if (!userEmail.isEmpty() && !password.isEmpty()) {
+                String messageSend = "userEmail: " + userEmail + ", password: " + password;
+                sendMessage(messageSend);
+            }
+
+            //textViewChat.append("Yo: " + message + "\n");
             // editTextMessage.setText("");
-            Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
-            startActivity(intent);
 
         });
 
@@ -111,6 +128,17 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, RegistroActivity.class);
             startActivity(intent);
         });
+    }
+
+    // Método para cambiar el fondo de un campo a rojo temporalmente
+    private void marcarCampoTemporalmente(EditText editText) {
+        // Cambiar el fondo a rojo
+        editText.setBackgroundResource(android.R.color.holo_red_light);
+
+        // Restaurar el fondo blanco después de 3 segundos
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            editText.setBackgroundResource(android.R.color.white); // Reestablecer el color blanco
+        }, 2000); // 2000 ms = 2 segundos
     }
 
     private void sendMessage(String message) {
@@ -123,6 +151,31 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    private void procesarMensaje(String message){
+
+        runOnUiThread(() -> {
+            if ("1".equals(message)) {
+                // Abrir nueva ventana si el mensaje es "1"
+                Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
+                startActivity(intent);
+            } else if ("0".equals(message)) {
+                // Mostrar mensaje de credenciales incorrectas
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Error de autenticación")
+                        .setMessage("Credenciales incorrectas. Por favor, intenta de nuevo.")
+                        .setPositiveButton("Aceptar", (dialog, which) -> dialog.dismiss())
+                        .create()
+                        .show();
+
+            } else {
+                // Manejar otros mensajes si es necesario
+
+
+            }
+        });
+
     }
 
     @Override

@@ -1,2 +1,1 @@
-username: Tefa1, email: tefa@protonmail.com, password: 1234
-
+username: Tefa1, email: tefa@protonmail.com, password: 1234 nombre: estefany, apellido: Villalta, fecha: 10/10/10, nacionalidad: CR, descripcion: abcjsjdf, gustos: dksajcncj, intrucciones: askjcakc, nombreProfe: Json, apodo: gogi, equipo: liga, tarjeta: 123, expTarjeta: 12
