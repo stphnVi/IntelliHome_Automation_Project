@@ -83,26 +83,29 @@ public class MainActivity extends AppCompatActivity {
                         // Escuchar continuamente los mensajes del servidor
                         if (in.hasNextLine()) {
                             String message = in.nextLine();
-                            runOnUiThread(() -> {
-                                //textViewChat.append("Servidor: " + message + "\n");
-
-                            });
+                            procesarMensaje(message);
+                            //textViewChat.append("Servidor: " + message + "\n");
                         }
                     }
+
                 }).start();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }).start();
 
+
+
         buttonSend.setOnClickListener(view -> {
             String userEmail = ((EditText) findViewById(R.id.editTextMessage)).getText().toString();
             String password = ((EditText) findViewById(R.id.editTextTextPassword)).getText().toString();
-            String message = "userEmail: " + userEmail + ", password: " + password;
-            sendMessage(message);
+            String messageSend = "userEmail: " + userEmail + ", password: " + password;
+            sendMessage(messageSend);
 
-            Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
-            startActivity(intent);
+            //Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
+            //startActivity(intent);
+
+
 
             //textViewChat.append("Yo: " + message + "\n");
             // editTextMessage.setText("");
@@ -125,6 +128,25 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    private void procesarMensaje(String message){
+
+        runOnUiThread(() -> {
+            if ("1".equals(message)) {
+                // Abrir nueva ventana si el mensaje es "1"
+                Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
+                startActivity(intent);
+            } else if ("0".equals(message)) {
+                // Mostrar mensaje de error si el mensaje es "0"
+
+            } else {
+                // Manejar otros mensajes si es necesario
+
+
+            }
+        });
+
     }
 
     @Override
