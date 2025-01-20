@@ -49,6 +49,7 @@ class ChatServer:
                              args=(client_socket,)).start()
 
     def handle_client(self, client_socket):
+
         while True:  # Siempre estar atento a recibir mensajes de cualquier cliente
             try:
                 message = client_socket.recv(1024).decode(
@@ -58,8 +59,9 @@ class ChatServer:
                     self.broadcast(message, client_socket)
 
                     # AQUI SE ENVIA EL MENSAJE DIRECTO
+                    resultado = receive_info(message) + "\n"
                     self.send_direct_message(
-                        client_socket, receive_info(message))
+                        client_socket, resultado)
 
                 else:
                     break
@@ -108,6 +110,7 @@ class ChatServer:
 
 # enviar datos directo
     def send_direct_message(self, client_socket, message):
+
         try:
             client_socket.send(message.encode('utf-8'))
             self.chat_display.config(state='normal')
