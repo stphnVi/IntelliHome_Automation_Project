@@ -26,14 +26,16 @@ def receive_info(message):
             print(f"Mensaje modificado: {modified_message}")
             print(f"Username extraído: {username}")
             print(f"Password extraído: {password}")
+            print(f"db_pass: {db_password}")
+            print(f"db_user: {db_username}")
             if password == db_password and username == db_username:
 
                 print("¡Coinciden!")
-                return 1
+                return "1"
 
     # Si no hay coincidencia
         print("No coinciden")
-        return 0
+        return "0"
 
 
 def get_username_from_string(data):
