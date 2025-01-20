@@ -1,2 +1,3 @@
 username: Tefa1, email: tefa@protonmail.com, password: 1234
-
+username: Tefa1, email: tefa@protonmail.com, password: 1234
+username: Juan123, email: juan@example.com, password: 5678

@@ -50,3 +50,19 @@ def get_password_from_string(data):
     if match:
         return match.group(1)
     return None
+
+
+def add_user(user_info):
+    try:
+        # Abrir el archivo en modo append (agregar al final)
+        with open('./database/data.txt', 'a') as file:
+            # Escribir la información del usuario en el archivo
+            file.write(user_info + "\n")
+        print("Usuario agregado")
+    except Exception as e:
+        print(f"Error")
+
+
+# Ejemplo de uso
+# add_user("username: Tefa1, email: tefa@protonmail.com, password: 1234")
+# add_user("username: Juan123, email: juan@example.com, password: 5678")

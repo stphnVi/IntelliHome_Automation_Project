@@ -57,6 +57,8 @@ class ChatServer:
                 if message:
                     # mandar mensaje a todo mundo
                     self.broadcast(message, client_socket)
+
+                    # self.send_message_in_thread()
                 else:
                     break
             except:
@@ -68,7 +70,7 @@ class ChatServer:
     def broadcast(self, message, sender_socket):
         self.chat_display.config(state='normal')
         # mensaje que llega del cliente
-        self.chat_display.insert(tk.END, f"Cliente: {receive_info(message)}\n")
+        self.chat_display.insert(tk.END, f"Cliente: {message}\n")
         self.chat_display.config(state='disabled')
 
         # receive_info(message)
@@ -105,9 +107,22 @@ class ChatServer:
         message = self.message_entry.get()
         if message:
             # Enviar sin remitente
+
             self.broadcast(f"Servidor: {message}", None)
 
             self.message_entry.delete(0, tk.END)  # Limpiar la entrada
+
+    def send_message_in_thread(self, message):
+        # Esta función creará un hilo y enviará el mensaje a los clientes
+
+        def send_message():
+            # Llamamos a la función broadcast para enviar el mensaje
+            # Aquí puedes poner el mensaje que quieras
+            self.broadcast(f"Servidor: {message}", None)
+            print(f"Mensaje enviado: {message}")  # Depuración (opcional)
+
+        # Crear y ejecutar un hilo para no bloquear la ejecución principal
+        threading.Thread(target=send_message).start()
 
     def close_server(self):
         for client in self.clients:

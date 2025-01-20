@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread(() -> {
             try {
                 // Cambiar a la dirección IP de su servidor
-                socket = new Socket("192.168.0.106", 1717);
+                socket = new Socket("192.168.1.17", 1717);
                 out = new PrintWriter(socket.getOutputStream(), true);
                 in = new Scanner(socket.getInputStream());
                 new Thread(() -> {
