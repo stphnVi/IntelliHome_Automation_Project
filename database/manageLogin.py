@@ -1,5 +1,8 @@
 import re
 
+#                                                        _____________________________________________
+# ______________________________________________________/función que recibe los mensajes del cliente
+
 
 def receive_info(message):
     print(message)
@@ -19,6 +22,7 @@ def receive_info(message):
         for line in file:
             print(line)
             line = line.strip()  # Quitar saltos de línea
+            # obtener los valores de la base de datos
             db_password = get_password_from_string(line)
             db_username = get_username_from_string(line)
 
@@ -37,6 +41,9 @@ def receive_info(message):
         print("No coinciden")
         return "0"
 
+#                                                        _____________________________________________
+# ______________________________________________________/Auxiliar de login, obtiene username
+
 
 def get_username_from_string(data):
     # Extraer el username (en este caso, mail) del string
@@ -44,6 +51,8 @@ def get_username_from_string(data):
     if match:
         return match.group(1)
     return None
+#                                                        _____________________________________________
+# ______________________________________________________/Auxiliar de login, obtiene password
 
 
 def get_password_from_string(data):
@@ -52,6 +61,9 @@ def get_password_from_string(data):
     if match:
         return match.group(1)
     return None
+
+#                                                        _____________________________________________
+# ______________________________________________________/Agregar usuario a la base de datos
 
 
 def add_user(user_info):
@@ -64,16 +76,21 @@ def add_user(user_info):
     except Exception as e:
         print(f"Error")
 
+#                                                        _______________________________________________________
+# ______________________________________________________/Auxiliar para tomar datos de recuperacion de contraseña
 
 # Función para obtener un dato
+
+
 def get_field_from_string(data, field):
     match = re.search(rf"{field}:\s*([^\n,]+)", data)
     if match:
         return match.group(1).strip()  # Eliminamos espacios adicionales
     return None
 
-# Función para comparar los datos con la base de datos
 
+#                                                        _______________________________________________________
+# ______________________________________________________/Recuperacion de contraseña
 
 def questions(user_info):
     try:

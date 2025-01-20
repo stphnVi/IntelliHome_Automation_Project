@@ -47,6 +47,8 @@ class ChatServer:
             self.chat_display.config(state='disabled')
             threading.Thread(target=self.handle_client,
                              args=(client_socket,)).start()
+#                                                        ___________________________________________________________
+# ______________________________________________________/Inicializacion de la ecucha de mensajes
 
     def handle_client(self, client_socket):
 
@@ -58,7 +60,10 @@ class ChatServer:
 
                     self.broadcast(message, client_socket)
 
-                    # AQUI SE ENVIA EL MENSAJE DIRECTO
+#                                                        ___________________________________________________________
+# ______________________________________________________/llamada a la función que envia mensajes directos al cliente
+# con el mensaje de retorno de la función que maneja el mensaje del cliente
+
                     resultado = receive_info(message) + "\n"
                     self.send_direct_message(
                         client_socket, resultado)
@@ -70,6 +75,10 @@ class ChatServer:
 
         client_socket.close()
         self.clients.remove(client_socket)
+
+#                                                        ___________________________________________________________
+# ______________________________________________________/Envía un mensaje a todos los clientes conectados,
+# excepto al que lo envió.
 
     def broadcast(self, message, sender_socket):
         self.chat_display.config(state='normal')
@@ -84,6 +93,10 @@ class ChatServer:
                     client.close()
                     self.clients.remove(client)
 
+#                                                        ___________________________________________________________
+# ______________________________________________________/Envía un mensaje a todos los clientes conectados,
+# incluyendo al remitente.
+
     def broadcast1(self, message, sender_socket):
         self.chat_display.config(state='normal')
         self.chat_display.insert(tk.END, f"Servidor: {message}\n")
@@ -96,11 +109,19 @@ class ChatServer:
                 client.close()
                 self.clients.remove(client)
 
+#                                                        ___________________________________________________________
+# ______________________________________________________/Envía un mensaje del servidor a todos los clientes en un
+#  hilo separado.
+
     def send_message_thread(self):
         # Se debe agregar \n para que termine la cadena que se requiere enviar
         threading.Thread(target=self.broadcast1(
             self.message_entry.get() + "\n", None)).start()
         self.message_entry.delete(0, tk.END)
+
+#                                                        ___________________________________________________________
+# ______________________________________________________/Envía un mensaje del servidor a todos los clientes desde
+# la interfaz gráfica.
 
     def send_message_to_clients(self):  # parte grafica
         message = self.message_entry.get()
@@ -108,7 +129,9 @@ class ChatServer:
             self.broadcast(f"Servidor: {message}", None)
             self.message_entry.delete(0, tk.END)
 
-# enviar datos directo
+#                                                        ___________________________________________________________
+# ______________________________________________________/ función que envia mensajes directos al cliente
+
     def send_direct_message(self, client_socket, message):
 
         try:
