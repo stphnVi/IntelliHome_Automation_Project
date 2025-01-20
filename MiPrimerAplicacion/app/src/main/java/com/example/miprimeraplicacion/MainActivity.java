@@ -25,7 +25,7 @@ import java.util.Scanner;
 public class MainActivity extends AppCompatActivity {
 
     private EditText editTextMessage;
-    private TextView textViewChat;
+    //private TextView textViewChat;
     private Socket socket;
     private PrintWriter out;
     private Scanner in;
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                         if (in.hasNextLine()) {
                             String message = in.nextLine();
                             runOnUiThread(() -> {
-                                textViewChat.append("Servidor: " + message + "\n");
+                                //textViewChat.append("Servidor: " + message + "\n");
 
                             });
                         }
@@ -100,10 +100,12 @@ public class MainActivity extends AppCompatActivity {
             String password = ((EditText) findViewById(R.id.editTextTextPassword)).getText().toString();
             String message = "userEmail: " + userEmail + ", password: " + password;
             sendMessage(message);
-            textViewChat.append("Yo: " + message + "\n");
-            // editTextMessage.setText("");
+
             Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
             startActivity(intent);
+
+            //textViewChat.append("Yo: " + message + "\n");
+            // editTextMessage.setText("");
 
         });
 
