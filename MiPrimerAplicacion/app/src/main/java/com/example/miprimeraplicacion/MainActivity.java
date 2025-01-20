@@ -1,5 +1,6 @@
 package com.example.miprimeraplicacion;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import android.os.Handler;
+import android.os.Looper;
 
 // Recordar que dar los permisos del HW para utilizar los componentes por ejemplo la red
 // Esto se hace en el archivo AndroidManifest
@@ -99,13 +102,22 @@ public class MainActivity extends AppCompatActivity {
         buttonSend.setOnClickListener(view -> {
             String userEmail = ((EditText) findViewById(R.id.editTextMessage)).getText().toString();
             String password = ((EditText) findViewById(R.id.editTextTextPassword)).getText().toString();
-            String messageSend = "userEmail: " + userEmail + ", password: " + password;
-            sendMessage(messageSend);
-
-            //Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
-            //startActivity(intent);
 
 
+            // Validar campos vacíos
+            if (userEmail.isEmpty()) {
+                marcarCampoTemporalmente(editTextMessage);
+            }
+
+            if (password.isEmpty()) {
+                marcarCampoTemporalmente(editTextPassword);
+            }
+
+            // Continuar con la lógica solo si ambos campos están llenos
+            if (!userEmail.isEmpty() && !password.isEmpty()) {
+                String messageSend = "userEmail: " + userEmail + ", password: " + password;
+                sendMessage(messageSend);
+            }
 
             //textViewChat.append("Yo: " + message + "\n");
             // editTextMessage.setText("");
@@ -116,6 +128,17 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, RegistroActivity.class);
             startActivity(intent);
         });
+    }
+
+    // Método para cambiar el fondo de un campo a rojo temporalmente
+    private void marcarCampoTemporalmente(EditText editText) {
+        // Cambiar el fondo a rojo
+        editText.setBackgroundResource(android.R.color.holo_red_light);
+
+        // Restaurar el fondo blanco después de 3 segundos
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            editText.setBackgroundResource(android.R.color.white); // Reestablecer el color blanco
+        }, 2000); // 2000 ms = 2 segundos
     }
 
     private void sendMessage(String message) {
@@ -138,7 +161,13 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
                 startActivity(intent);
             } else if ("0".equals(message)) {
-                // Mostrar mensaje de error si el mensaje es "0"
+                // Mostrar mensaje de credenciales incorrectas
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Error de autenticación")
+                        .setMessage("Credenciales incorrectas. Por favor, intenta de nuevo.")
+                        .setPositiveButton("Aceptar", (dialog, which) -> dialog.dismiss())
+                        .create()
+                        .show();
 
             } else {
                 // Manejar otros mensajes si es necesario
