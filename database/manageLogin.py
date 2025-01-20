@@ -26,14 +26,16 @@ def receive_info(message):
             print(f"Mensaje modificado: {modified_message}")
             print(f"Username extraído: {username}")
             print(f"Password extraído: {password}")
+            print(f"db_pass: {db_password}")
+            print(f"db_user: {db_username}")
             if password == db_password and username == db_username:
 
                 print("¡Coinciden!")
-                return 1
+                return "1"
 
     # Si no hay coincidencia
         print("No coinciden")
-        return 0
+        return "0"
 
 
 def get_username_from_string(data):
@@ -50,3 +52,48 @@ def get_password_from_string(data):
     if match:
         return match.group(1)
     return None
+
+
+def add_user(user_info):
+    try:
+        # Abrir el archivo en modo append (agregar al final)
+        with open('./database/data.txt', 'a') as file:
+            # Escribir la información del usuario en el archivo
+            file.write(user_info + "\n")
+        print("Usuario agregado")
+    except Exception as e:
+        print(f"Error")
+
+
+# Función para obtener un dato
+def get_field_from_string(data, field):
+    match = re.search(rf"{field}:\s*([^\n,]+)", data)
+    if match:
+        return match.group(1).strip()  # Eliminamos espacios adicionales
+    return None
+
+# Función para comparar los datos con la base de datos
+
+
+def questions(user_info):
+    try:
+
+        with open("./database/data.txt", "r") as file:
+            for line in file:
+                # Comparar cada campo del usuario con la línea en el archivo
+                if all(get_field_from_string(user_info, field) == get_field_from_string(line, field)
+                       for field in ["username", "nombreProfe", "apodo", "equipo"]):
+                    print("si es el usuario")
+                    return 1  # Todos los datos coinciden
+        print("no es el usuario")
+        return 0  # No se encontraron coincidencias
+    except Exception as e:
+        print(f"Error: {e}")
+        return 0
+
+
+# Ejemplo de uso:
+# questions("username: Tefa1, nombreProfe: json, apodo: gogi, equipo: liga")
+
+# add_user("username: Tefa1, email: tefa@protonmail.com, password: 1234")
+# add_user("username: Juan123, email: juan@example.com, password: 5678")

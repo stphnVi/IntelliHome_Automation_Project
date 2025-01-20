@@ -31,7 +31,7 @@ class ChatServer:
             self.root, text="Salir", command=self.close_server)
         self.quit_button.pack(pady=5)
 
-        # Hilo para manejar el servidor con el fin de que sea en hilos separados
+        # Para que sea en hilo separado
         self.thread = threading.Thread(target=self.accept_connections)
         self.thread.start()
 
@@ -39,53 +39,54 @@ class ChatServer:
         self.root.mainloop()
 
     def accept_connections(self):
-
         while True:  # Este while es para siempre escuchar nuevos clientes
             client_socket, addr = self.server_socket.accept()
             self.clients.append(client_socket)
             self.chat_display.config(state='normal')
             self.chat_display.insert(tk.END, f"Conexión de {addr}\n")
             self.chat_display.config(state='disabled')
-            threading.Thread(target=self.handle_client, args=(
-                client_socket,)).start()  # Para que sea en hilo separado
+            threading.Thread(target=self.handle_client,
+                             args=(client_socket,)).start()
 
     def handle_client(self, client_socket):
+
         while True:  # Siempre estar atento a recibir mensajes de cualquier cliente
             try:
                 message = client_socket.recv(1024).decode(
                     'utf-8')  # recibe los mensajes
                 if message:
-                    # mandar mensaje a todo mundo
+
                     self.broadcast(message, client_socket)
+
+                    # AQUI SE ENVIA EL MENSAJE DIRECTO
+                    resultado = receive_info(message) + "\n"
+                    self.send_direct_message(
+                        client_socket, resultado)
+
                 else:
                     break
             except:
                 break
+
         client_socket.close()
-        # elimina clientes cuando ya no están
         self.clients.remove(client_socket)
 
     def broadcast(self, message, sender_socket):
         self.chat_display.config(state='normal')
-        # mensaje que llega del cliente
-        self.chat_display.insert(tk.END, f"Cliente: {receive_info(message)}\n")
+        self.chat_display.insert(tk.END, f"Cliente: {message}\n")
         self.chat_display.config(state='disabled')
-
-        # receive_info(message)
 
         for client in self.clients:  # para cada cliente que haya
             if client != sender_socket:  # No enviar al remitente
                 try:
-                    client.send(message.encode('utf-8'))  # envía el mensaje
+                    client.send(message.encode('utf-8'))  # envia el mensaje
                 except:
                     client.close()
                     self.clients.remove(client)
 
-    def broadcast1(self, message, sender_socket):  # Esto es para que sirva el boton
+    def broadcast1(self, message, sender_socket):
         self.chat_display.config(state='normal')
-        # self.chat_display.insert(tk.END, receive_info(message))
-        self.chat_display.insert(
-            tk.END, f"Servidor: {message}\n")
+        self.chat_display.insert(tk.END, f"Servidor: {message}\n")
         self.chat_display.config(state='disabled')
 
         for client in self.clients:
@@ -98,16 +99,29 @@ class ChatServer:
     def send_message_thread(self):
         # Se debe agregar \n para que termine la cadena que se requiere enviar
         threading.Thread(target=self.broadcast1(
-            self.message_entry.get()+"\n", None)).start()
-        self.message_entry.delete(0, tk.END)  # Limpiar la entrada
+            self.message_entry.get() + "\n", None)).start()
+        self.message_entry.delete(0, tk.END)
 
-    def send_message_to_clients(self):
+    def send_message_to_clients(self):  # parte grafica
         message = self.message_entry.get()
         if message:
-            # Enviar sin remitente
             self.broadcast(f"Servidor: {message}", None)
+            self.message_entry.delete(0, tk.END)
 
-            self.message_entry.delete(0, tk.END)  # Limpiar la entrada
+# enviar datos directo
+    def send_direct_message(self, client_socket, message):
+
+        try:
+            client_socket.send(message.encode('utf-8'))
+            self.chat_display.config(state='normal')
+            self.chat_display.insert(
+                tk.END, f"Mensaje enviado a cliente: {message}\n")
+            self.chat_display.config(state='disabled')
+        except:
+            self.chat_display.config(state='normal')
+            self.chat_display.insert(
+                tk.END, f"No se pudo enviar el mensaje a este cliente\n")
+            self.chat_display.config(state='disabled')
 
     def close_server(self):
         for client in self.clients:
@@ -117,4 +131,4 @@ class ChatServer:
 
 
 if __name__ == "__main__":
-    ChatServer()
+    server = ChatServer()
