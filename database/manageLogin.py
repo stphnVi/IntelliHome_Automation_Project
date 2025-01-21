@@ -6,48 +6,56 @@ import re
 
 
 def login_info(message):
-    print(message)
-    # Reemplazar 'userEmail' por 'mail' en todo el mensaje
-    modified_message = message.replace("userEmail", "username")
+    print(f"Mensaje recibido: {message}")
 
-    # Obtener los valores de username y password del mensaje modificado
-    username = get_username_from_string(modified_message)
+    # Verificar si el mensaje contiene un correo electrónico
+    if "@" in message:
+        print("El string es un correo")
+        modified_message = message.replace("userEmail", "email")
+        email = get_email_from_string(modified_message)
+    else:
+        print("El string no es un correo, probablemente es un username")
+        modified_message = message.replace("userEmail", "username")
+        username = get_username_from_string(modified_message)
+
     password = get_password_from_string(modified_message)
 
-    if not username or not password:
-        print("Error: Datos inválidos")
-        return 0
-
-    # Abrir el archivo para comprobar las credenciales
+    # Abrir el archivo
     with open('./database/data.txt', 'r') as file:
         for line in file:
-            print(line)
+            print(f"Línea de la base de datos: {line}")
             line = line.strip()  # Quitar saltos de línea
-            # obtener los valores de la base de datos
-            db_password = get_password_from_string(line)
-            db_username = get_username_from_string(line)
 
-            # Comparar el username y password con los del archivo
+            # Obtener los valores de la base de datos
+            if "@" in message:
+                db_password = get_password_from_string(line)
+                db_email = get_email_from_string(line)
+                if password == db_password and email == db_email:
+                    print("¡Coinciden las credenciales de correo!")
+                    return "1"
+                print(f"Correo extraído: {email}")
+                print(f"Password extraído: {password}")
+                print(f"db_pass: {db_password}")
+                print(f"db_email: {db_email}")
+            else:
+                db_password = get_password_from_string(line)
+                db_username = get_username_from_string(line)
+                if password == db_password and username == db_username:
+                    print("¡Coinciden las credenciales de usuario!")
+                    return "1"
+                print(f"Username extraído: {username}")
+                print(f"Password extraído: {password}")
+                print(f"db_pass: {db_password}")
+                print(f"db_user: {db_username}")
 
-            print(f"Username extraído: {username}")
-            print(f"Password extraído: {password}")
-            print(f"db_pass: {db_password}")
-            print(f"db_user: {db_username}")
-            if password == db_password and username == db_username:
+    print("No coinciden las credenciales")
+    return "0"
 
-                print("¡Coinciden!")
-                return "1"
-
-    # Si no hay coincidencia
-        print("No coinciden")
-        return "0"
-
-#                                                        ___________________________________________________
+#                                                        ____________________________________________________
 # ______________________________________________________/Auxiliar de login, obtiene email
 
 
-def get_username_from_string(data):
-
+def get_email_from_string(data):
     match = re.search(r"email:\s*(\S+)", data)
     if match:
         return match.group(1)
@@ -158,8 +166,10 @@ def receive_info(data):
 
 #                                                        _____________________________________________
 # ______________________________________________________/ Pruebas de mensajes del cliente
+receive_info("func: login, username: Juan123, password: 5678")
+
 receive_info(
-    "func: login, username: Juan1233, password: 5678")
+    "func: login, email: juan@example.com, password: 578")
 
 # recovery: "func: rec, username: Tefa1, nombreProfe: Json, apodo: gogi, equipo: liga"
 # register: "func: reg, username: Juan123, email: juan@example.com, password: 5678"
