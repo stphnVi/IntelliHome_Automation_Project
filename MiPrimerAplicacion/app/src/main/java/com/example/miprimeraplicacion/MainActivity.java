@@ -10,11 +10,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.Toast;
 
 // Recordar que dar los permisos del HW para utilizar los componentes por ejemplo la red
 // Esto se hace en el archivo AndroidManifest
@@ -30,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText editTextMessage;
     //private TextView textViewChat;
     private Socket socket;
-    private PrintWriter out;
-    private Scanner in;
+    public static PrintWriter out;
+    public static Scanner in;
 
     private EditText editTextPassword;
     private ImageButton imageButtonShowHidePassword;
@@ -160,7 +163,8 @@ public class MainActivity extends AppCompatActivity {
                 // Abrir nueva ventana si el mensaje es "1"
                 Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
                 startActivity(intent);
-            } else if ("0".equals(message)) {
+            }
+            else if ("0".equals(message)) {
                 // Mostrar mensaje de credenciales incorrectas
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("Error de autenticación")
@@ -168,14 +172,11 @@ public class MainActivity extends AppCompatActivity {
                         .setPositiveButton("Aceptar", (dialog, which) -> dialog.dismiss())
                         .create()
                         .show();
-
-            } else {
-                // Manejar otros mensajes si es necesario
-
+            }
+            else if ("2".equals(message)) {
 
             }
         });
-
     }
 
     @Override
