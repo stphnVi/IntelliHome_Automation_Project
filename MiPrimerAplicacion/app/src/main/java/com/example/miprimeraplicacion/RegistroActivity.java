@@ -15,10 +15,12 @@ import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.Calendar;
 
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Scanner;
 import java.util.Set;
 import android.provider.MediaStore;
 
@@ -68,6 +70,9 @@ public class RegistroActivity extends AppCompatActivity {
 
     private ImageView fotoPerfil;
 
+    private PrintWriter out;
+    private Scanner in;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,12 +119,32 @@ public class RegistroActivity extends AppCompatActivity {
         registerButton.setOnClickListener(view -> {
 
             //Asignacion de variables
+            String userNombre = nameEditText.getText().toString();
+            String userApellido = lastNameEditText.getText().toString();
+            String fechaNacimiento = fechaNacimientoEditText.getText().toString();
+            String username = nicknameEditText.getText().toString();
+            String userEmail = emailEditText.getText().toString();
             String password = passwordEditText.getText().toString();
             String confirmacionPassword = confirmPasswordEditText.getText().toString();
+            String descripcion = descriptionEditText.getText().toString();
+            String instrucciones = generalInstructionsEditText.getText().toString();
+            String nombreProfe = professorNameEditText.getText().toString();
+            String apodo = childhoodNicknameEditText.getText().toString();
+            String equipo = favoriteTeamEditText.getText().toString();
+            String numeroTarjeta = cardNumberEditText.getText().toString();
+            String expiracionTarjeta = cardExpiryEditText.getText().toString();
+            String cvvTarjeta =  cardCvcEditText.getText().toString();
 
             if (checkProfanidades() && isValidPassword(password) && passwordConfirmationMatch(password, confirmacionPassword)
             && checkEspaciosObligatorios()) {
                 // Se envia al usuario a la pagina principal
+                // Se envia al usuario a la pagina principal
+                String messageSend = "userNombre: " + userNombre + ", userApellido: " + userApellido + ", fechaNacimiento: " + fechaNacimiento +
+                        ", username: " + username + ", userEmail: " + userEmail + ", descripcion: " + descripcion + ", instrucciones: "
+                        + instrucciones + "nombreProfe: " + nombreProfe + "apodo: " + apodo + "equipo: " +
+                        equipo + ", numeroTarjeta: " + numeroTarjeta + ", expiracionTarjeta: " + expiracionTarjeta +
+                        ", cvvTarjeta: " + cvvTarjeta;
+                sendMessage(messageSend);
             }
             else {
                 Toast.makeText(this, "No se ha creado el usuario", Toast.LENGTH_SHORT).show();
@@ -383,5 +408,17 @@ public class RegistroActivity extends AppCompatActivity {
         // Muestra la alerta
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private void sendMessage(String message) {
+        new Thread(() -> {
+            try {
+                if (MainActivity.out != null) {
+                    MainActivity.out.println(message);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 }
