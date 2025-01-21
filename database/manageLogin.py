@@ -146,13 +146,13 @@ def receive_info(data):
         nuevo_data = data[:inicio].strip() + " " + data[fin+1:].strip()
 
     if valor_func == "login":
-        login_info(nuevo_data.strip())
+        return login_info(nuevo_data.strip())
     elif valor_func == "rec":
         print("entra")
-        questions(nuevo_data.strip())
+        return questions(nuevo_data.strip())
     else:
-        add_user(nuevo_data.strip())
-
+        return add_user(nuevo_data.strip())
+    
     print(f"Valor de 'func': {valor_func}")
     print(f"String modificado: {nuevo_data.strip()}")
 
