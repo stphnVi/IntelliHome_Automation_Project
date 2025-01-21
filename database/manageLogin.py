@@ -115,12 +115,12 @@ def questions(user_info):
                 if all(get_field_from_string(user_info, field) == get_field_from_string(line, field)
                        for field in ["username", "nombreProfe", "apodo", "equipo"]):
                     print("SI es el usuario")
-                    return 1  # Todos los datos coinciden
+                    return "1"  # Todos los datos coinciden
         print("NO es el usuario")
-        return 0  # No se encontraron coincidencias
+        return "0"  # No se encontraron coincidencias
     except Exception as e:
         print(f"Error: {e}")
-        return 0
+        return "0"
 
 
 #                                                        _____________________________________________
