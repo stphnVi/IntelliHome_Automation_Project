@@ -139,9 +139,9 @@ public class RegistroActivity extends AppCompatActivity {
             && checkEspaciosObligatorios()) {
                 // Se envia al usuario a la pagina principal
                 // Se envia al usuario a la pagina principal
-                String messageSend = "userNombre: " + userNombre + ", userApellido: " + userApellido + ", fechaNacimiento: " + fechaNacimiento +
-                        ", username: " + username + ", userEmail: " + userEmail + ", descripcion: " + descripcion + ", instrucciones: "
-                        + instrucciones + "nombreProfe: " + nombreProfe + "apodo: " + apodo + "equipo: " +
+                String messageSend = "func: reg" + ", userNombre: " + userNombre + ", userApellido: " + userApellido + ", fechaNacimiento: " + fechaNacimiento +
+                        ", username: " + username + ", password: " + password + " email: " + userEmail + ", descripcion: " + descripcion + ", instrucciones: "
+                        + instrucciones + ", nombreProfe: " + nombreProfe + ", apodo: " + apodo + ", equipo: " +
                         equipo + ", numeroTarjeta: " + numeroTarjeta + ", expiracionTarjeta: " + expiracionTarjeta +
                         ", cvvTarjeta: " + cvvTarjeta;
                 sendMessage(messageSend);

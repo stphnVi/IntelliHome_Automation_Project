@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Continuar con la lógica solo si ambos campos están llenos
             if (!userEmail.isEmpty() && !password.isEmpty()) {
-                String messageSend = "userEmail: " + userEmail + ", password: " + password;
+                String messageSend = "func: login, " + "userEmail: " + userEmail + ", password: " + password;
                 sendMessage(messageSend);
             }
 

@@ -4,52 +4,45 @@ import re
 #                                                        ________________________________________________
 # ______________________________________________________/función revisa si los credenciales son correctos
 
-
 def login_info(message):
     print(f"Mensaje recibido: {message}")
 
-    # Verificar si el mensaje contiene un correo electrónico
-    if "@" in message:
+    # Normalizar el mensaje
+    message = message.lower().strip()
+    is_email = "@" in message
+
+    if is_email:
         print("El string es un correo")
-        modified_message = message.replace("userEmail", "email")
-        email = get_email_from_string(modified_message)
+        modified_message = message.replace("useremail", "email")
+        identifier = get_email_from_string(modified_message)
     else:
         print("El string no es un correo, probablemente es un username")
-        modified_message = message.replace("userEmail", "username")
-        username = get_username_from_string(modified_message)
+        modified_message = message.replace("useremail", "username")
+        identifier = get_username_from_string(modified_message)
 
     password = get_password_from_string(modified_message)
 
-    # Abrir el archivo
-    with open('./database/data.txt', 'r') as file:
-        for line in file:
-            print(f"Línea de la base de datos: {line}")
-            line = line.strip()  # Quitar saltos de línea
+    if not identifier or not password:
+        print("Error: Datos incompletos en el mensaje.")
+        return "0"
 
-            # Obtener los valores de la base de datos
-            if "@" in message:
+    try:
+        with open('./database/data.txt', 'r') as file:
+            for line in file:
+                line = line.strip().lower()
                 db_password = get_password_from_string(line)
-                db_email = get_email_from_string(line)
-                if password == db_password and email == db_email:
-                    print("¡Coinciden las credenciales de correo!")
+                db_identifier = get_email_from_string(
+                    line) if is_email else get_username_from_string(line)
+
+                if db_password and db_identifier and db_password == password and db_identifier == identifier:
+                    print("¡Coinciden las credenciales!")
                     return "1"
-                print(f"Correo extraído: {email}")
-                print(f"Password extraído: {password}")
-                print(f"db_pass: {db_password}")
-                print(f"db_email: {db_email}")
-            else:
-                db_password = get_password_from_string(line)
-                db_username = get_username_from_string(line)
-                if password == db_password and username == db_username:
-                    print("¡Coinciden las credenciales de usuario!")
-                    return "1"
-                print(f"Username extraído: {username}")
-                print(f"Password extraído: {password}")
-                print(f"db_pass: {db_password}")
-                print(f"db_user: {db_username}")
+    except FileNotFoundError:
+        print("Error: Archivo de base de datos no encontrado.")
 
     print("No coinciden las credenciales")
     return "0"
+
 
 #                                                        ____________________________________________________
 # ______________________________________________________/Auxiliar de login, obtiene email
@@ -122,12 +115,12 @@ def questions(user_info):
                 if all(get_field_from_string(user_info, field) == get_field_from_string(line, field)
                        for field in ["username", "nombreProfe", "apodo", "equipo"]):
                     print("SI es el usuario")
-                    return 1  # Todos los datos coinciden
+                    return "1"  # Todos los datos coinciden
         print("NO es el usuario")
-        return 0  # No se encontraron coincidencias
+        return "0"  # No se encontraron coincidencias
     except Exception as e:
         print(f"Error: {e}")
-        return 0
+        return "0"
 
 
 #                                                        _____________________________________________
@@ -153,23 +146,25 @@ def receive_info(data):
         nuevo_data = data[:inicio].strip() + " " + data[fin+1:].strip()
 
     if valor_func == "login":
-        login_info(nuevo_data.strip())
+        return login_info(nuevo_data.strip())
     elif valor_func == "rec":
         print("entra")
-        questions(nuevo_data.strip())
+        return questions(nuevo_data.strip())
     else:
-        add_user(nuevo_data.strip())
-
+        return add_user(nuevo_data.strip())
+    
     print(f"Valor de 'func': {valor_func}")
     print(f"String modificado: {nuevo_data.strip()}")
 
 
 #                                                        _____________________________________________
 # ______________________________________________________/ Pruebas de mensajes del cliente
-receive_info("func: login, username: Juan123, password: 5678")
 
 receive_info(
-    "func: login, email: juan@example.com, password: 578")
+    "func: login, userEmail: juan@example.com, password: 5678")
+
+
+receive_info("func: login, userEmail: Juan123, password: 5678")
 
 # recovery: "func: rec, username: Tefa1, nombreProfe: Json, apodo: gogi, equipo: liga"
 # register: "func: reg, username: Juan123, email: juan@example.com, password: 5678"
