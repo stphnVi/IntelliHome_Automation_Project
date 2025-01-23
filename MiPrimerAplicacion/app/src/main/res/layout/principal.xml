@@ -32,15 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="21dp" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:backgroundTint="@color/Azuloscuro"
-            android:clickable="true"
-            android:padding="20dp"
-            app:srcCompat="@drawable/massimbolo" />
+
 
         <View
             android:layout_width="match_parent"
