@@ -9,14 +9,13 @@
 
 
     <LinearLayout
-        android:layout_width="309dp"
-        android:layout_height="601dp"
+        android:layout_width="306dp"
+        android:layout_height="627dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.323"
         tools:ignore="MissingConstraints">
 
         <!-- Logo -->
@@ -28,6 +27,24 @@
             android:layout_gravity="center_horizontal"
             android:contentDescription="Logo de la empresa"
             android:src="@drawable/logoempresa" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="21dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/Azuloscuro"
+            android:clickable="true"
+            android:padding="20dp"
+            app:srcCompat="@drawable/massimbolo" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="363dp" />
 
         <Button
             android:id="@+id/button2"
