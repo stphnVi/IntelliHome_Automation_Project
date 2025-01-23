@@ -3,3 +3,4 @@ username: Tefa1, email: tefa@protonmail.com, password: 1234 nombre: estefany, ap
 username: Juan123, email: juan@example.com, password: 5678
 password: 1234
 userNombre: Jose, userApellido: Umana, fechaNacimiento: 21/01/2025, username: jose123, password: arbol1234 email: jos@correo.com, descripcion: dsadsa, instrucciones: dsadsad, nombreProfe: dsadsad, apodo: dsadsad, equipo: dsadsa, numeroTarjeta: 3213, expiracionTarjeta: 3213, cvvTarjeta: 32131
+userNombre: Alisson, userApellido: Redondo, fechaNacimiento: 21/01/2025, username: AlissonRM, password: 1234asdf email: alissonredondo1906@gmail.com, descripcion: No quiero, instrucciones: Tengo dos gatos, nombreProfe: Jason, apodo: M, equipo: Argentina, numeroTarjeta: 122344, expiracionTarjeta: 67890, cvvTarjeta: 345678

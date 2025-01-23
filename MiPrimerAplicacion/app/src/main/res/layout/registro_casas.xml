@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Azul">
+
+    <LinearLayout
+        android:layout_width="309dp"
+        android:layout_height="601dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.323"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="51dp">
+
+        <!-- Logo -->
+
+        <ImageView
+            android:id="@+id/logoImageView"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="Logo de la empresa"
+            android:src="@drawable/logoempresa" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:gravity="center_horizontal"
+            android:padding="20dp"
+            android:text="Registro de nueva propiedad"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/nameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@color/white"
+            android:hint="Nombre"
+            android:inputType="textPersonName" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="24dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/Azuloscuro"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:gravity="center"
+                android:text="Regresar"
+                tools:layout_editor_absoluteX="149dp"
+                tools:layout_editor_absoluteY="654dp" />
+            <View
+                android:layout_width="16dp"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/Azuloscuro"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:text="Registrar"
+                tools:layout_editor_absoluteX="149dp"
+                tools:layout_editor_absoluteY="654dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
