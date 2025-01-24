@@ -87,6 +87,7 @@ def add_user(user_info):
             # Escribir la información del usuario en el archivo
             file.write("\n" + user_info)
         print("Usuario agregado")
+        return "1"
     except Exception as e:
         print(f"Error")
 
@@ -152,7 +153,7 @@ def receive_info(data):
         return questions(nuevo_data.strip())
     else:
         return add_user(nuevo_data.strip())
-    
+
     print(f"Valor de 'func': {valor_func}")
     print(f"String modificado: {nuevo_data.strip()}")
 
