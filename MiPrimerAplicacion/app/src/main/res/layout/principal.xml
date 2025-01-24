@@ -9,8 +9,8 @@
 
 
     <LinearLayout
-        android:layout_width="306dp"
-        android:layout_height="627dp"
+        android:layout_width="356dp"
+        android:layout_height="636dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,6 +33,12 @@
             android:layout_height="21dp" />
 
 
+        <ImageButton
+            android:id="@+id/agregarCasa"
+            android:layout_width="wrap_content"
+            android:layout_height="57dp"
+            android:background="@color/Azul"
+            app:srcCompat="@drawable/agregar" />
 
         <View
             android:layout_width="match_parent"
@@ -41,7 +47,7 @@
         <Button
             android:id="@+id/button2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="43dp"
             android:layout_gravity="center"
             android:backgroundTint="@color/Azuloscuro"
             android:gravity="center"
