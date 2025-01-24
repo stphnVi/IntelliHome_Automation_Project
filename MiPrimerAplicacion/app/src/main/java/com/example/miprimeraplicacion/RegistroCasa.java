@@ -3,13 +3,52 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+
 public class RegistroCasa extends AppCompatActivity {
 
     private boolean pantallaRegistroCasasAbierta;
+
+    // Lista de amenidades
+    String[] amenidades = {"Cocina equipada (con electrodomésticos modernos)",
+                            "Aire acondicionado",
+                            "Calefacción",
+                            "Wi-Fi gratuito",
+                            "Televisión por cable o satélite",
+                            "Lavadora y secadora",
+                            "Piscina",
+                            "Jardín o patio",
+                            "Barbacoa o parrilla",
+                            "Terraza o balcón",
+                            "Gimnasio en casa",
+                            "Garaje o espacio de estacionamiento",
+                            "Sistema de seguridad",
+                            "Habitaciones con baño en suite",
+                            "Muebles de exterior",
+                            "Microondas",
+                            "Lavavajillas",
+                            "Cafetera",
+                            "Ropa de cama y toallas incluidas",
+                            "Acceso a áreas comunes (piscina, gimnasio)",
+                            "Camas adicionales o sofá cama",
+                            "Servicios de limpieza opcionales",
+                            "Acceso a transporte público cercano",
+                            "Mascotas permitidas",
+                            "Cercanía a tiendas y restaurantes",
+                            "Sistema de calefacción por suelo radiante",
+                            "Escritorio o área de trabajo",
+                            "Sistemas de entretenimiento (videojuegos, equipo de música)",
+                            "Chimenea",
+                            "Acceso a internet de alta velocidad" };
+
+    boolean[] amenidadesSeleccionadas = new boolean[amenidades.length];
+    ArrayList<String> seleccionadas = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +63,39 @@ public class RegistroCasa extends AppCompatActivity {
         Button buttonRegresar= findViewById(R.id.regresar);
         Button buttonRegistrar = findViewById(R.id.registrar);
 
+
+        Button botonAmenidades = findViewById(R.id.botonAmenidades);
+        TextView textoSeleccionadas = findViewById(R.id.textoSeleccionadas);
+
+        botonAmenidades.setOnClickListener(view -> {
+            // Crear el AlertDialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(RegistroCasa.this);
+            builder.setTitle("Selecciona las amenidades");
+
+            // Configurar las opciones con CheckBox
+            builder.setMultiChoiceItems(amenidades, amenidadesSeleccionadas, (dialog, which, isChecked) -> {
+                if (isChecked) {
+                    // Agregar amenidad seleccionada
+                    seleccionadas.add(amenidades[which]);
+                } else {
+                    // Quitar amenidad deseleccionada
+                    seleccionadas.remove(amenidades[which]);
+                }
+            });
+
+            // Botón de confirmación
+            builder.setPositiveButton("Aceptar", (dialog, which) -> {
+                // Mostrar las amenidades seleccionadas en el TextView
+                textoSeleccionadas.setText(String.join(", ", seleccionadas));
+            });
+
+            // Botón de cancelación
+            builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
+
+            // Mostrar el diálogo
+            builder.create().show();
+        });
+
         //Cada vez que se abre la pantalla de RegistroCasas se indica en el boolean como true
         pantallaRegistroCasasAbierta = true;
 
@@ -31,6 +103,7 @@ public class RegistroCasa extends AppCompatActivity {
             pantallaRegistroCasasAbierta = false;
             Intent intent = new Intent(RegistroCasa.this, PrincipalActivity.class);
             startActivity(intent);
+
         });
 
         buttonRegistrar.setOnClickListener(view -> { // mapeo del boton exit
@@ -39,9 +112,13 @@ public class RegistroCasa extends AppCompatActivity {
             String reglasuso = reglasusoEditText.getText().toString();
             String capacidadmaxima = capacidadmaximaEditText.getText().toString();
             String precio = precioEditText.getText().toString();
+            String amenidades = textoSeleccionadas.getText().toString();
 
-            String messageSend = "func: rec" + ", nombre de la propiedad: " + nombrepropiedad + ", reglas de uso: " + reglasuso + ", capacidad maxima: " + capacidadmaxima + ", precio: " +  precio;
+            String messageSend = "func: rec" + ", nombre de la propiedad: " + nombrepropiedad + ", reglas de uso: " + reglasuso + ", amenidades:" + amenidades + ", capacidad maxima: " + capacidadmaxima + ", precio: " +  precio;
             Socket.sendMessage(messageSend);
+
+
+
         });
         new Thread(() -> {
             while (pantallaRegistroCasasAbierta == true) {
