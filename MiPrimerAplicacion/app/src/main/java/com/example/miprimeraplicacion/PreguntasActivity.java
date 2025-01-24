@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.PrintWriter;
@@ -12,9 +13,7 @@ import java.util.Scanner;
 
 public class PreguntasActivity extends AppCompatActivity {
 
-    public static PrintWriter out;
-
-    public static Scanner in;
+    private boolean pantallaPreguntasAbierta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +28,11 @@ public class PreguntasActivity extends AppCompatActivity {
         Button buttonVerifyAnswers = findViewById(R.id.verifyAnswersButton);
         Button buttonCancel = findViewById(R.id.cancelRecoveryButton);
 
+        //Cada vez que se abre la pantalla de registro se indica en el boolean
+        pantallaPreguntasAbierta = true;
+
         buttonCancel.setOnClickListener(view -> { // mapeo del boton exit
+            pantallaPreguntasAbierta = false;
             Intent intent = new Intent(PreguntasActivity.this, MainActivity.class);
             startActivity(intent);
         });
@@ -42,20 +45,58 @@ public class PreguntasActivity extends AppCompatActivity {
             String equipo = favoriteTeamEditText.getText().toString();
 
             String messageSend = "func: rec" + ", username: " + username + ", nombreProfe: " + nombreProfe + ", apodo: " + apodo + ", equipo: " +  equipo;
-            sendMessage(messageSend);
+            Socket.sendMessage(messageSend);
         });
+        new Thread(() -> {
+            while (pantallaPreguntasAbierta == true) {
+                // Escuchar continuamente los mensajes del servidor
+                if (com.example.miprimeraplicacion.Socket.message != null) {
+                    procesarMensaje();
+                    //textViewChat.append("Servidor: " + message + "\n");
+                }
+            }
+
+        }).start();
+
 
     }
 
-    private void sendMessage(String message) {
-        new Thread(() -> {
-            try {
-                if (MainActivity.out != null) {
-                    MainActivity.out.println(message);
+    /**
+     * Se procesan los mensajes del servidor
+     * SIEMPRE al final de cada if poner "Socket.message=null"
+     */
+    private void procesarMensaje(){
+
+        runOnUiThread(() -> {
+            if (com.example.miprimeraplicacion.Socket.message != null) {
+                String message = com.example.miprimeraplicacion.Socket.message;
+                if ("1".equals(message)) {
+                    // Abrir nueva ventana si el mensaje es "1"
+                    pantallaPreguntasAbierta = false;
+                    Intent intent = new Intent(PreguntasActivity.this, PrincipalActivity.class);
+                    startActivity(intent);
+                    Socket.message = null;
+                } else if ("0".equals(message)) {
+                    // Mostrar mensaje de credenciales incorrectas
+                    AlertDialog.Builder builder = new AlertDialog.Builder(PreguntasActivity.this);
+                    builder.setTitle("Error de autenticación")
+                            .setMessage("Credenciales incorrectas. Por favor, intenta de nuevo.")
+                            .setPositiveButton("Aceptar", (dialog, which) -> dialog.dismiss())
+                            .create()
+                            .show();
+                    Socket.message = null;
+
+                } else {
+                    // Manejar otros mensajes si es necesario
+                    Socket.message = null;
+
+
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-        }).start();
+            else {
+
+            }
+        });
+
     }
 }
