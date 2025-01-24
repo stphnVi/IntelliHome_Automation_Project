@@ -37,8 +37,31 @@
                 android:src="@drawable/logoempresa" />
 
             <!-- Foto de perfil -->
+            <Button
+                android:id="@+id/selectPhotoButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/Azuloscuro"
+                android:text="Seleccionar Foto de Perfil"
+                android:textColor="@color/colorWhite" />
+
+            <Button
+                android:id="@+id/uploadPhotoButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/Azuloscuro"
+                android:text="Subir Foto de Perfil"
+                android:textColor="@color/colorWhite" />
 
             <!-- Nombre y Apellido -->
+
+            <ImageView
+                android:id="@+id/fotoPerfil"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                app:srcCompat="@android:drawable/ic_menu_upload_you_tube" />
 
             <EditText
                 android:id="@+id/nameEditText"
@@ -47,8 +70,7 @@
                 android:layout_marginTop="16dp"
                 android:background="@color/white"
                 android:hint="Nombre"
-                android:inputType="textPersonName"
-                />
+                android:inputType="textPersonName" />
 
             <EditText
                 android:id="@+id/lastNameEditText"
@@ -60,13 +82,6 @@
                 android:inputType="textPersonName" />
 
             <!-- Fecha de Nacimiento -->
-            <ImageButton
-                android:id="@+id/botonFotoPerfil"
-                android:layout_width="180dp"
-                android:layout_height="180dp"
-                android:layout_marginTop="24dp"
-                app:srcCompat="@android:drawable/ic_menu_upload" />
-
             <Button
                 android:id="@+id/selectDateButton"
                 android:layout_width="match_parent"
@@ -120,30 +135,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
                 android:background="@color/white"
                 android:hint="Confirmar Contraseña"
                 android:inputType="textPassword" />
 
-            <!-- Nacionalidad drop down -->
 
-            <com.google.android.material.textfield.TextInputLayout
+            <!-- Nacionalidad -->
+            <EditText
+                android:id="@+id/nationalityEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="0dp"
+                android:layout_marginTop="16dp"
                 android:background="@color/white"
-                android:hint="@string/select"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                >
+                android:hint="Nacionalidad"
+                android:inputType="text" />
 
-                <AutoCompleteTextView
-                    android:id="@+id/auto_complete_txt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
+            <!-- Descripción -->
             <EditText
                 android:id="@+id/descriptionEditText"
                 android:layout_width="match_parent"
@@ -216,8 +223,7 @@
                 android:inputType="number"
                 android:padding="16dp"
                 android:textSize="16sp"
-                android:layout_marginTop="16dp"
-                android:maxLength="16"/>
+                android:layout_marginTop="16dp" />
 
             <EditText
                 android:id="@+id/cardExpiryEditText"
@@ -225,11 +231,10 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:hint="Fecha de Expiración (MM/AA)"
-                android:inputType="number"
+                android:inputType="text"
                 android:padding="16dp"
                 android:textSize="16sp"
-                android:layout_marginTop="16dp"
-                android:maxLength="4"/>
+                android:layout_marginTop="16dp" />
 
             <EditText
                 android:id="@+id/cardCvcEditText"
@@ -240,8 +245,7 @@
                 android:inputType="numberPassword"
                 android:padding="16dp"
                 android:textSize="16sp"
-                android:layout_marginTop="16dp"
-                android:maxLength="3"/>
+                android:layout_marginTop="16dp" />
 
 
             <!-- Botones -->

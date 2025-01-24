@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.Scanner;
 import android.os.Handler;
 import android.os.Looper;
@@ -28,11 +29,13 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText editTextMessage;
     //private TextView textViewChat;
+    private Socket socket;
+    public static PrintWriter out;
+    public static Scanner in;
 
     private EditText editTextPassword;
     private ImageButton imageButtonShowHidePassword;
     private boolean isPasswordVisible = false; // Flag para manejar el estado de visibilidad
-    private boolean pantallaInicioSesionAbierta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +47,6 @@ public class MainActivity extends AppCompatActivity {
         Button buttonSend = findViewById(R.id.buttonSend);
         Button buttonExit = findViewById(R.id.buttonExit);
         Button buttonForgetPassword = findViewById(R.id.buttonForgot);
-
-        //Cada vez que se abre la pantalla de inicio de sesion se indica en el boolean
-        pantallaInicioSesionAbierta = true;
 
         // Configuración para olvidar contraseña
         buttonForgetPassword.setOnClickListener(view -> {
@@ -74,29 +74,30 @@ public class MainActivity extends AppCompatActivity {
             isPasswordVisible = !isPasswordVisible; // Alternar estado
         });
 
-        // Se inicia el socket solamente la primera vez que se abre la aplicacion
-        if (com.example.miprimeraplicacion.Socket.sistemaInit == false) {
-            com.example.miprimeraplicacion.Socket.sistemaInit = true;
-            new Thread(() -> {
-                try {
-                    com.example.miprimeraplicacion.Socket.iniciarSocket();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        }
-
-        //Se escuchan los mensajes unicamente cuando la pantalla de inicio de sesion esta abierta
+        // Iniciar el hilo para conectarse al servidor y recibir mensajes
         new Thread(() -> {
-            while (pantallaInicioSesionAbierta == true) {
-                // Escuchar continuamente los mensajes del servidor
-                if (com.example.miprimeraplicacion.Socket.message != null) {
-                    procesarMensaje();
-                    //textViewChat.append("Servidor: " + message + "\n");
-                }
-            }
+            try {
+                // Cambiar a la dirección IP de su servidor
+                socket = new Socket("192.168.1.24", 1717);
+                out = new PrintWriter(socket.getOutputStream(), true);
+                in = new Scanner(socket.getInputStream());
+                new Thread(() -> {
+                    while (true) {
+                        // Escuchar continuamente los mensajes del servidor
+                        if (in.hasNextLine()) {
+                            String message = in.nextLine();
+                            procesarMensaje(message);
+                            //textViewChat.append("Servidor: " + message + "\n");
+                        }
+                    }
 
+                }).start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }).start();
+
+
 
         buttonSend.setOnClickListener(view -> {
             String userEmail = ((EditText) findViewById(R.id.editTextMessage)).getText().toString();
@@ -115,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             // Continuar con la lógica solo si ambos campos están llenos
             if (!userEmail.isEmpty() && !password.isEmpty()) {
                 String messageSend = "func: login, " + "userEmail: " + userEmail + ", password: " + password;
-                Socket.sendMessage(messageSend);
+                sendMessage(messageSend);
             }
 
             //textViewChat.append("Yo: " + message + "\n");
@@ -124,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         buttonExit.setOnClickListener(view -> {
-            pantallaInicioSesionAbierta = false; // hacer saber al sistema que se cierra la pantalla de inicio de sesion
             Intent intent = new Intent(MainActivity.this, RegistroActivity.class);
             startActivity(intent);
         });
@@ -141,35 +141,37 @@ public class MainActivity extends AppCompatActivity {
         }, 2000); // 2000 ms = 2 segundos
     }
 
-    private void procesarMensaje(){
+    private void sendMessage(String message) {
+        new Thread(() -> {
+            try {
+                if (out != null) {
+                    out.println(message);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void procesarMensaje(String message){
 
         runOnUiThread(() -> {
-            if (com.example.miprimeraplicacion.Socket.message != null) {
-                String message = com.example.miprimeraplicacion.Socket.message;
-                if ("1".equals(message)) {
-                    // Abrir nueva ventana si el mensaje es "1"
-                    pantallaInicioSesionAbierta = false;
-                    Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
-                    startActivity(intent);
-                    Socket.message = null;
-                } else if ("0".equals(message)) {
-                    // Mostrar mensaje de credenciales incorrectas
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setTitle("Error de autenticación")
-                            .setMessage("Credenciales incorrectas. Por favor, intenta de nuevo.")
-                            .setPositiveButton("Aceptar", (dialog, which) -> dialog.dismiss())
-                            .create()
-                            .show();
-                    Socket.message = null;
+            if ("1".equals(message)) {
+                // Abrir nueva ventana si el mensaje es "1"
+                Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
+                startActivity(intent);
+            } else if ("0".equals(message)) {
+                // Mostrar mensaje de credenciales incorrectas
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Error de autenticación")
+                        .setMessage("Credenciales incorrectas. Por favor, intenta de nuevo.")
+                        .setPositiveButton("Aceptar", (dialog, which) -> dialog.dismiss())
+                        .create()
+                        .show();
 
-                } else {
-                    // Manejar otros mensajes si es necesario
-                    Socket.message = null;
+            } else {
+                // Manejar otros mensajes si es necesario
 
-
-                }
-            }
-            else {
 
             }
         });
@@ -180,12 +182,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         try {
-            if (Socket.out != null)
-                Socket.out.close();
-            if (Socket.in != null)
-                Socket.in.close();
-            if (Socket.socket != null)
-                Socket.socket.close();
+            if (out != null)
+                out.close();
+            if (in != null)
+                in.close();
+            if (socket != null)
+                socket.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

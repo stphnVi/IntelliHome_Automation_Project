@@ -1,22 +1,13 @@
 package com.example.miprimeraplicacion;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.Toast;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
@@ -24,7 +15,6 @@ import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Calendar;
 
@@ -33,9 +23,6 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 import android.provider.MediaStore;
-
-import com.google.android.material.textfield.MaterialAutoCompleteTextView;
-import com.google.android.material.textfield.TextInputLayout;
 
 public class RegistroActivity extends AppCompatActivity {
 
@@ -55,6 +42,8 @@ public class RegistroActivity extends AppCompatActivity {
 
     private EditText confirmPasswordEditText;
 
+    private EditText nationalityEditText;
+
     private EditText descriptionEditText;
 
     private EditText hobbiesEditText;
@@ -73,17 +62,16 @@ public class RegistroActivity extends AppCompatActivity {
 
     private EditText cardCvcEditText;
     private Button registerButton;
-
-    private ImageButton fotoPerfilButton;
+    private Button selectImageButton;
+    private Button uploadImageButton;
 
     private static final int PICK_IMAGE_REQUEST = 1; // Código de solicitud para la galería
     private Uri imageUri; // URI de la imagen seleccionada
-    private boolean pantallaRegistroAbierta;
-    private static final int PICK_IMAGE = 1;
-    private static final int TAKE_PHOTO = 2;
-    AutoCompleteTextView autoCompleteTextView;
-    ArrayAdapter<String> adapterItems;
-    private String nacionalidad;
+
+    private ImageView fotoPerfil;
+
+    private PrintWriter out;
+    private Scanner in;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +88,7 @@ public class RegistroActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
         confirmPasswordEditText = findViewById(R.id.confirmPasswordEditText);
+        nationalityEditText = findViewById(R.id.nationalityEditText);
         descriptionEditText = findViewById(R.id.descriptionEditText);
         hobbiesEditText = findViewById(R.id.hobbiesEditText);
         generalInstructionsEditText = findViewById(R.id.generalInstructionsEditText);
@@ -110,17 +99,10 @@ public class RegistroActivity extends AppCompatActivity {
         cardExpiryEditText = findViewById(R.id.cardExpiryEditText);
         cardCvcEditText = findViewById(R.id.cardCvcEditText);
         registerButton = findViewById(R.id.registerButton);
-        fotoPerfilButton = findViewById(R.id.botonFotoPerfil);
+        selectImageButton = findViewById(R.id.selectPhotoButton);
+        uploadImageButton = findViewById(R.id.uploadPhotoButton);
+        fotoPerfil = findViewById(R.id.fotoPerfil);
 
-        // Variables para el menu drop down
-        String[] item = {"Costa Rica", "Nicaragua", "Panama", "Honduras"};
-        autoCompleteTextView = findViewById(R.id.auto_complete_txt);
-        adapterItems = new ArrayAdapter<String>(this, R.layout.list_item, item);
-        autoCompleteTextView.setAdapter(adapterItems);
-
-        autoCompleteTextView.setOnItemClickListener((adapterView, view, i, l) -> {
-            nacionalidad = adapterView.getItemAtPosition(i).toString();
-        });
 
         // Configura el listener para el botón de seleccionar fecha
         selectDateButton.setOnClickListener(view -> {
@@ -130,7 +112,6 @@ public class RegistroActivity extends AppCompatActivity {
 
         // Configura el listener para el botón de cancelar
         buttonCancel.setOnClickListener(view -> {
-            pantallaRegistroAbierta = false;
             Intent intent = new Intent(RegistroActivity.this, MainActivity.class);
             startActivity(intent);
         });
@@ -154,8 +135,8 @@ public class RegistroActivity extends AppCompatActivity {
             String expiracionTarjeta = cardExpiryEditText.getText().toString();
             String cvvTarjeta =  cardCvcEditText.getText().toString();
 
-            if (checkEspaciosObligatorios() && (checkProfanidades() && isValidPassword(password)
-                    && passwordConfirmationMatch(password, confirmacionPassword))) {
+            if (checkProfanidades() && isValidPassword(password) && passwordConfirmationMatch(password, confirmacionPassword)
+            && checkEspaciosObligatorios()) {
                 // Se envia al usuario a la pagina principal
                 // Se envia al usuario a la pagina principal
                 String messageSend = "func: reg" + ", userNombre: " + userNombre + ", userApellido: " + userApellido + ", fechaNacimiento: " + fechaNacimiento +
@@ -163,26 +144,23 @@ public class RegistroActivity extends AppCompatActivity {
                         + instrucciones + ", nombreProfe: " + nombreProfe + ", apodo: " + apodo + ", equipo: " +
                         equipo + ", numeroTarjeta: " + numeroTarjeta + ", expiracionTarjeta: " + expiracionTarjeta +
                         ", cvvTarjeta: " + cvvTarjeta;
-                Socket.sendMessage(messageSend);
+                sendMessage(messageSend);
             }
             else {
                 Toast.makeText(this, "No se ha creado el usuario", Toast.LENGTH_SHORT).show();
             }
         });
 
-        //Se escuchan los mensajes unicamente cuando la pantalla de registro esta abierta
-        new Thread(() -> {
-            while (pantallaRegistroAbierta == true) {
-                // Escuchar continuamente los mensajes del servidor
-                if (com.example.miprimeraplicacion.Socket.message != null) {
-                    procesarMensaje();
-                    //textViewChat.append("Servidor: " + message + "\n");
-                }
+        selectImageButton.setOnClickListener(v -> openGallery());
+
+        // Botón para subir la imagen seleccionada
+        uploadImageButton.setOnClickListener(v -> {
+            if (imageUri != null) {
+                uploadImage(imageUri);
+            } else {
+                Toast.makeText(this, "Primero selecciona una imagen", Toast.LENGTH_SHORT).show();
             }
-
-        }).start();
-
-        fotoPerfilButton.setOnClickListener(v -> showImageOptions());
+        });
 
 
     }
@@ -276,6 +254,9 @@ public class RegistroActivity extends AppCompatActivity {
         else if (contieneProfanidades(String.valueOf(confirmPasswordEditText.getText()))) {
             return false;
         }
+        else if (contieneProfanidades(String.valueOf(nationalityEditText.getText()))) {
+            return false;
+        }
         else if (contieneProfanidades(String.valueOf(descriptionEditText.getText()))) {
             return false;
         }
@@ -349,6 +330,32 @@ public class RegistroActivity extends AppCompatActivity {
     }
 
     // Metodo para abrir la galeria
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    // Recibe el resultado de la galería
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData(); // Obtiene la URI de la imagen seleccionada
+            fotoPerfil.setImageURI(imageUri); // Muestra la imagen en un ImageView
+        }
+    }
+
+    // Metodo para subir la imagen
+    private void uploadImage(Uri imageUri) {
+        // Aquí puedes usar Retrofit, Volley o cualquier otra biblioteca para enviar la imagen al servidor.
+        // Por ejemplo, puedes convertir la URI en un archivo para su uso en la solicitud:
+        String filePath = imageUri.getPath();
+        File file = new File(filePath);
+
+        // Implementar lógica para subir el archivo (ejemplo no incluido aquí).
+        Toast.makeText(this, "Subiendo imagen: " + file.getName(), Toast.LENGTH_SHORT).show();
+    }
 
     /**
      * Verifica si un EditText está vacío.
@@ -368,53 +375,10 @@ public class RegistroActivity extends AppCompatActivity {
     public boolean checkEspaciosObligatorios() {
         if (isEmpty(nameEditText) || isEmpty(lastNameEditText) || isEmpty(nicknameEditText)
                 || isEmpty(emailEditText) || isEmpty(passwordEditText) || isEmpty(nicknameEditText)
-                || isEmpty(professorNameEditText) || nacionalidad == null
+                || isEmpty(nationalityEditText) || isEmpty(professorNameEditText)
                 || isEmpty(childhoodNicknameEditText) || isEmpty(favoriteTeamEditText)
                 || isEmpty(cardNumberEditText) || isEmpty(cardExpiryEditText)
                 || isEmpty(cardCvcEditText)) {
-
-            //Se notifica al usuario las casillas que faltan, se quita si ya esta llena
-            if (isEmpty(nameEditText)) {
-                nameEditText.setBackgroundResource(R.drawable.edittext_background);
-            } else {nameEditText.setBackgroundResource(R.color.white);}
-            if (isEmpty(lastNameEditText)) {
-                lastNameEditText.setBackgroundResource(R.drawable.edittext_background);
-            } else {lastNameEditText.setBackgroundResource(R.color.white);}
-            if (isEmpty(nicknameEditText)) {
-                nicknameEditText.setBackgroundResource(R.drawable.edittext_background);
-            } else {nicknameEditText.setBackgroundResource(R.color.white);}
-            if (isEmpty(emailEditText)) {
-                emailEditText.setBackgroundResource(R.drawable.edittext_background);
-            } else {emailEditText.setBackgroundResource(R.color.white);}
-            if (isEmpty(passwordEditText)) {
-                passwordEditText.setBackgroundResource(R.drawable.edittext_background);
-            } else {passwordEditText.setBackgroundResource(R.color.white);}
-            if (isEmpty(nicknameEditText)) {
-                nicknameEditText.setBackgroundResource(R.drawable.edittext_background);
-            } else {nicknameEditText.setBackgroundResource(R.color.white);}
-            if (isEmpty(professorNameEditText)) {
-                professorNameEditText.setBackgroundResource(R.drawable.edittext_background);
-            } else {professorNameEditText.setBackgroundResource(R.color.white);}
-            if (nacionalidad == null) {
-                autoCompleteTextView.setBackgroundResource(R.drawable.edittext_background);
-            } else {autoCompleteTextView.setBackgroundResource(R.color.white);}
-            if (isEmpty(childhoodNicknameEditText)) {
-                childhoodNicknameEditText.setBackgroundResource(R.drawable.edittext_background);
-            } else {childhoodNicknameEditText.setBackgroundResource(R.color.white);}
-            if (isEmpty(favoriteTeamEditText)) {
-                favoriteTeamEditText.setBackgroundResource(R.drawable.edittext_background);
-            } else {favoriteTeamEditText.setBackgroundResource(R.color.white);}
-            if (isEmpty(cardNumberEditText)) {
-                cardNumberEditText.setBackgroundResource(R.drawable.edittext_background);
-            } else {cardNumberEditText.setBackgroundResource(R.color.white);}
-            if (isEmpty(cardExpiryEditText)) {
-                cardExpiryEditText.setBackgroundResource(R.drawable.edittext_background);
-            } else {cardExpiryEditText.setBackgroundResource(R.color.white);}
-            if (isEmpty(cardCvcEditText)) {
-                cardCvcEditText.setBackgroundResource(R.drawable.edittext_background);
-            } else {cardCvcEditText.setBackgroundResource(R.color.white);}
-
-
             Toast.makeText(this, "Rellenar espacios obligatorios", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -446,83 +410,15 @@ public class RegistroActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    /**
-     * Se procesan los mensajes del servidor
-     * SIEMPRE al final de cada if poner "Socket.message=null"
-     */
-    private void procesarMensaje(){
-
-        // Se procesa el mensaje recibido del servidor.
-        // "1" equivale a true, "0" equivale a false
-        runOnUiThread(() -> {
-            if (com.example.miprimeraplicacion.Socket.message != null) {
-                String message = com.example.miprimeraplicacion.Socket.message;
-                if ("1".equals(message)) {
-                    // Abrir nueva ventana si el mensaje es "1"
-                    pantallaRegistroAbierta = false;
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RegistroActivity.this);
-                    builder.setTitle("Usuario registrado")
-                            .setMessage("El usuario ha sido registrado exitosamente")
-                            .setPositiveButton("Aceptar", (dialog, which) -> dialog.dismiss())
-                            .create()
-                            .show();
-                    Intent intent = new Intent(RegistroActivity.this, PrincipalActivity.class);
-                    startActivity(intent); //se abre la nueva ventana
-                    Socket.message = null; //se hace el mensaje de entrada null para recibir el siguiente mensaje
-                } else if ("0".equals(message)) {
-                    // Mostrar mensaje de credenciales incorrectas
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RegistroActivity.this);
-                    builder.setTitle("Error al registrarse")
-                            .setMessage("Por favor llenar los datos correctamente")
-                            .setPositiveButton("Aceptar", (dialog, which) -> dialog.dismiss())
-                            .create()
-                            .show();
-                    Socket.message = null; //se hace el mensaje de entrada null para recibir el siguiente mensaje
-
-                } else {
-                    // Manejar otros mensajes si es necesario
-                    Socket.message = null; //se hace el mensaje de entrada null para recibir el siguiente mensaje
-
-
+    private void sendMessage(String message) {
+        new Thread(() -> {
+            try {
+                if (MainActivity.out != null) {
+                    MainActivity.out.println(message);
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            else {
-
-            }
-        });
-
-    }
-
-    private void showImageOptions() {
-        // Abrir diálogo para elegir entre tomar foto o seleccionar de la galería
-        Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        Intent takePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        Intent chooser = Intent.createChooser(pickPhoto, "Seleccionar imagen");
-        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{takePhoto});
-
-        startActivityForResult(chooser, PICK_IMAGE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK) {
-            if (requestCode == PICK_IMAGE && data != null && data.getData() != null) {
-                // Imagen seleccionada de la galería
-                Uri imageUri = data.getData();
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-                    fotoPerfilButton.setImageBitmap(bitmap);
-                } catch (IOException e) {
-                    Toast.makeText(this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
-                }
-            } else if (requestCode == TAKE_PHOTO && data != null) {
-                // Foto tomada con la cámara
-                Bitmap photo = (Bitmap) data.getExtras().get("data");
-                fotoPerfilButton.setImageBitmap(photo);
-            }
-        }
+        }).start();
     }
 }
