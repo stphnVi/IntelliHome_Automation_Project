@@ -1,18 +1,32 @@
 package com.example.miprimeraplicacion;
+import static android.app.ProgressDialog.show;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import android.widget.Toast;
+import org.osmdroid.config.Configuration;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
 
 import java.util.ArrayList;
 
 public class RegistroCasa extends AppCompatActivity {
 
     private boolean pantallaRegistroCasasAbierta;
+    private TextView textoUbicaciones;
+    private String ubicacionSeleccionada = "Ninguna";
+    private TextView textoSeleccionadas;
+
 
     // Lista de amenidades
     String[] amenidades = {"Cocina equipada (con electrodomésticos modernos)",
@@ -66,6 +80,7 @@ public class RegistroCasa extends AppCompatActivity {
 
         Button botonAmenidades = findViewById(R.id.botonAmenidades);
         TextView textoSeleccionadas = findViewById(R.id.textoSeleccionadas);
+        textoUbicaciones = findViewById(R.id.textoUbicaciones);
 
         botonAmenidades.setOnClickListener(view -> {
             // Crear el AlertDialog
@@ -96,6 +111,8 @@ public class RegistroCasa extends AppCompatActivity {
             builder.create().show();
         });
 
+
+
         //Cada vez que se abre la pantalla de RegistroCasas se indica en el boolean como true
         pantallaRegistroCasasAbierta = true;
 
@@ -113,6 +130,7 @@ public class RegistroCasa extends AppCompatActivity {
             String capacidadmaxima = capacidadmaximaEditText.getText().toString();
             String precio = precioEditText.getText().toString();
             String amenidades = textoSeleccionadas.getText().toString();
+            String Ubicaciones = textoUbicaciones.getText().toString();
 
             String messageSend = "func: rec" + ", nombre de la propiedad: " + nombrepropiedad + ", reglas de uso: " + reglasuso + ", amenidades:" + amenidades + ", capacidad maxima: " + capacidadmaxima + ", precio: " +  precio;
             Socket.sendMessage(messageSend);
@@ -120,10 +138,25 @@ public class RegistroCasa extends AppCompatActivity {
 
 
         });
+
+        // Referencia a tu TextView
+        textoUbicaciones = findViewById(R.id.textoUbicaciones);
+
+        // Botón para abrir el mapa en un cuadro de diálogo
+        Button botonSeleccionarUbicacion = findViewById(R.id.botonSeleccionarUbicacion);
+        botonSeleccionarUbicacion.setOnClickListener(view -> {
+            // Crear el DialogFragment
+            MapaDialogFragment mapaDialogFragment = new MapaDialogFragment();
+            mapaDialogFragment.setTextoUbicaciones(textoUbicaciones); // Pasa el TextView
+            mapaDialogFragment.show(getSupportFragmentManager(), "MapaDialog");
+        });
+
+
+
         new Thread(() -> {
             while (pantallaRegistroCasasAbierta == true) {
                 // Escuchar continuamente los mensajes del servidor
-                if (com.example.miprimeraplicacion.Socket.message != null) {
+                if (Socket.message != null) {
                     procesarMensaje();
                     //textViewChat.append("Servidor: " + message + "\n");
                 }

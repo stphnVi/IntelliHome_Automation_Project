@@ -60,6 +60,23 @@
                 android:hint="Nombre de la propiedad"
                 android:inputType="textPersonName" />
 
+            <Button
+                android:id="@+id/botonSeleccionarUbicacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Seleccionar Ubicación"
+                android:backgroundTint="@color/Azuloscuro"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/textoUbicaciones"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="16dp" />
+
             <!-- Caracteristicas de la casa -->
 
             <TextView
