@@ -29,5 +29,5 @@ def decrypt_file(input_file, output_file, key):
 # Uso
 key = load_key('./database/key.txt')
 
-decrypt_file('./database/holaMundo_encrypted.txt',
-             './database/holaMundo.txt', key)
+decrypt_file('./database/data_encrypted.txt',
+             './database/data.txt', key)
