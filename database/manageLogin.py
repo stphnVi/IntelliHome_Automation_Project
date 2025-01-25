@@ -159,29 +159,34 @@ def receive_info(data):
         nuevo_data = data[:inicio].strip() + " " + data[fin+1:].strip()
 
     if valor_func == "login":
-        return login_info(nuevo_data.strip())
+        result = login_info(nuevo_data.strip())
+
     elif valor_func == "rec":
-        print("entra")
-        return questions(nuevo_data.strip())
+
+        result = questions(nuevo_data.strip())
     else:
-        return add_user(nuevo_data.strip())
+        result = add_user(nuevo_data.strip())
 
     encrypt_file('./database/data.txt',
                  './database/data_encrypted.txt', key, iv)
 
+#                                                      _____________________________________________________________________________________
+# _____________________________________________________/ SI SE REQUIERE VER EL CONTENIDO DE LA BASE DE DATOS PARA PRUEBAS COMENTAR ESTA LÍNEA
     os.remove('./database/data.txt')
+# _______________________________________________________  ES DE SUMA IMPORTANCIA VOLVER A PONERLA PARA CUMPLIR CON LO QUE EL CLIENTE SOLICITA
 
     print(" base de datos actualizada y cifrada, bade en plaintext eliminada")
+
+    return result
 
     print(f"Valor de 'func': {valor_func}")
     print(f"String modificado: {nuevo_data.strip()}")
 
 
 #                                                        _____________________________________________
-# ______________________________________________________/ Pruebas de mensajes del cliente
+# ______________________________________________________/ PRUEBAS de mensajes del cliente
 
-# receive_info(
-#    "func: login, userEmail: juan@example.com, password: 5678")
+# receive_info("func: rec, username: Tefa1, nombreProfe: Json, apodo: gogi, equipo: liga")
 
 
 # receive_info(
