@@ -158,28 +158,8 @@ def receive_info(data):
     print(f"String modificado: {nuevo_data.strip()}")
 
 
-def cargar_propiedades(nombre_archivo):
-    propiedades = []
-    with open(nombre_archivo, "r", encoding="utf-8") as file:
-        contenido = file.read().strip()
-        registros = contenido.split(
-            ", nombre de la propiedad: ")  # Separa cada propiedad
-
-        for registro in registros:
-            if registro.strip():
-                datos = {}
-                atributos = registro.split(", ")  # Divide los atributos
-                for atributo in atributos:
-                    if ": " in atributo:
-                        clave, valor = atributo.split(": ", 1)
-                        datos[clave.strip()] = valor.strip()
-                propiedades.append(datos)
-    return propiedades
-
-
 #                                                        _____________________________________________
 # ______________________________________________________/ Buscar propiedades en la base de datos
-
 
 def cargar_propiedades(nombre_archivo):
     propiedades = []
@@ -198,39 +178,70 @@ def cargar_propiedades(nombre_archivo):
             for atributo in atributos:
                 if ": " in atributo:
                     clave, valor = atributo.split(": ", 1)
-                    datos[clave.strip()] = valor.strip()
+                    clave = clave.strip()
+                    valor = valor.strip()
+
+                    if clave == "amenidades":
+
+                        valores_amenidades = valor.split(
+                            "; ")
+                        # Guardar lista completa de amenidades
+                        datos[clave] = valores_amenidades
+
+                        # print(f"Procesando amenidades: {valores_amenidades}")
+                    else:
+                        datos[clave] = valor  # Guardar valores normales
 
         if datos:
             propiedades.append(datos)
-    print(propiedades)
+
+    print(propiedades)  # Verificar la salida
     return propiedades
 
 
-def buscar_propiedades(propiedades, capacidad=None, precio=None):
+def buscar_propiedades(propiedades, capacidad=None, precio=None, amenidades=None):
     resultados = []
+    # print(propiedades)
     for prop in propiedades:
+        # Filtros de capacidad y precio
+        if capacidad and prop.get("capacidad maxima") != str(capacidad):
+            continue
+        if precio and int(prop.get("precio", 0)) > precio:
+            continuej
 
-        if (capacidad and prop.get("capacidad maxima") != str(capacidad)):
-            continue
-        if (precio and prop.get("precio") > str(precio)):
-            continue
+        # Filtro de amenidades (debe coincidir exactamente)
+        if amenidades:
+            amenidades_db = prop.get("amenidades", [])
+
+            # print(amenidades_db)
+
+            if set(amenidades) != set(amenidades_db):
+                continue  # Si no coinciden exactamente, descartamos la propiedad
+
+        # Si pasa todos los filtros, añadimos la propiedad al resultado
         resultados.append(
-            f'{prop["nombre de la propiedad"]}, capacidad maxima: {prop["capacidad maxima"]}, precio: {prop["precio"]}')
+            f'{prop["nombre de la propiedad"]}, capacidad maxima: {prop["capacidad maxima"]}, precio: {prop["precio"]}, amenidades: {", ".join(prop["amenidades"])}')
 
-        if not resultados:
-            print("no se encontrason resultados")
+    # Si no hay resultados, imprimir mensaje y devolver 0
+    if not resultados:
+        print(" No se encontraron propiedades que cumplan con los criterios.")
+        return 0
+
     return "; ".join(resultados)
 
 
-# prueba de busqueda
-
 propiedades = cargar_propiedades("./database/test.txt")
-capacidad_buscada = 4
+
+capacidad_buscada = 2
 precio_buscado = 4000
+# Ingresar exactamente las amenidades requeridas
+amenidades_buscadas = ["gatos"]
 
 # Buscar propiedades
 resultado = buscar_propiedades(
-    propiedades, capacidad=capacidad_buscada, precio=precio_buscado)
+    propiedades, capacidad=capacidad_buscada, precio=precio_buscado, amenidades=amenidades_buscadas
+)
+
 print(resultado)
 
 
