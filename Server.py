@@ -3,6 +3,7 @@ import threading
 import tkinter as tk
 from tkinter import scrolledtext
 from database.manageLogin import *
+import serial
 
 
 class ChatServer:
@@ -11,6 +12,16 @@ class ChatServer:
         self.server_socket.bind((host, port))
         self.server_socket.listen(5)
         self.clients = []
+        self.arduino = None
+        
+        #Conectarse al puerto serial
+        serialPort = 'COM6'
+        try:
+            self.arduino = serial.Serial(serialPort, 9600)
+            print(f"Conectado al puerto serial {serialPort}")
+        except serial.SerialException as e:
+            print(f"Error al abrir el puerto serial: {e}")
+            
 
         # Configuración de la interfaz gráfica
         self.root = tk.Tk()
@@ -83,6 +94,10 @@ class ChatServer:
     def broadcast(self, message, sender_socket):
         self.chat_display.config(state='normal')
         self.chat_display.insert(tk.END, f"Cliente: {message}\n")
+        
+        if(self.arduino != None):
+            self.arduino.write(message.encode('utf-8')) #Enviar los mensajes recividos via puerto serial
+        
         self.chat_display.config(state='disabled')
 
         for client in self.clients:  # para cada cliente que haya
@@ -149,6 +164,8 @@ class ChatServer:
     def close_server(self):
         for client in self.clients:
             client.close()
+        if(self.arduino != None):
+            self.arduino.close()
         self.server_socket.close()
         self.root.destroy()
 
