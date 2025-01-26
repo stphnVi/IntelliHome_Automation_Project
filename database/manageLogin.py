@@ -92,6 +92,21 @@ def add_user(user_info):
         return "1"
     except Exception as e:
         print(f"Error")
+        
+#                                                        _____________________________________________________
+# ______________________________________________________/Función que Agrega usuarios a la base de datos        
+
+
+def add_house(house_info):
+    try:
+        # Abrir el archivo en modo append (agregar al final)
+        with open('./database/casas.txt', 'a') as file:
+            # Escribir la información de la casa en el archivo
+            file.write("\n" + house_info)
+        print("Casa agregada")
+        return "1"
+    except Exception as e:
+        print(f"Error")
 
 #                                                        _______________________________________________________
 # ______________________________________________________/Auxiliar para tomar datos de recuperacion de contraseña
@@ -162,8 +177,13 @@ def receive_info(data):
         result = login_info(nuevo_data.strip())
 
     elif valor_func == "rec":
+        print("entra")
+        return questions(nuevo_data.strip())
+      
+    elif valor_func == "regcasa":
+        print("entra")
+        return add_house(nuevo_data.strip())
 
-        result = questions(nuevo_data.strip())
     else:
         result = add_user(nuevo_data.strip())
 
