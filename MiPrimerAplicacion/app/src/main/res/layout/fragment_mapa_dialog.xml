@@ -11,5 +11,14 @@
         android:layout_height="300dp"
         android:layout_marginTop="16dp" />
 
+    <Button
+        android:id="@+id/btnConfirmarUbicacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ConfirmarUbicacion"
+        android:backgroundTint="@color/Azuloscuro"
+        tools:layout_editor_absoluteX="102dp"
+        tools:layout_editor_absoluteY="375dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

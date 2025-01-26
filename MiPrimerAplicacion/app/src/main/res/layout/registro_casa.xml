@@ -8,6 +8,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="4dp"
         android:background="@color/Azul"
         android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -32,14 +33,6 @@
 
             <!-- Nombre de la propiedad -->
 
-            <ImageView
-                android:id="@+id/logoImageView"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_gravity="center_horizontal"
-                android:contentDescription="Logo de la empresa"
-                android:src="@drawable/logoempresa" />
-
             <TextView
                 android:id="@+id/titulo1"
                 android:layout_width="match_parent"
@@ -51,6 +44,25 @@
                 android:textColor="@color/black"
                 android:textSize="20dp" />
 
+            <Button
+                android:id="@+id/botonSeleccionarUbicacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/Azuloscuro"
+                android:text="Seleccionar Ubicación" />
+
+            <TextView
+                android:id="@+id/textoUbicaciones"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp" />
+
+            <!-- Caracteristicas de la casa -->
+
             <EditText
                 android:id="@+id/nombrepropiedad"
                 android:layout_width="match_parent"
@@ -60,32 +72,13 @@
                 android:hint="Nombre de la propiedad"
                 android:inputType="textPersonName" />
 
-            <Button
-                android:id="@+id/botonSeleccionarUbicacion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Seleccionar Ubicación"
-                android:backgroundTint="@color/Azuloscuro"
-                android:layout_marginTop="16dp"
-                android:layout_gravity="center" />
-
-            <TextView
-                android:id="@+id/textoUbicaciones"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:layout_marginTop="16dp"
-                android:layout_marginHorizontal="16dp" />
-
-            <!-- Caracteristicas de la casa -->
-
             <TextView
                 android:id="@+id/titulo2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
                 android:gravity="center"
-                android:paddingTop="20dp"
+                android:paddingTop="15dp"
                 android:paddingBottom="5dp"
                 android:text="Caracteristicas de la casa"
                 android:textColor="@color/black"
@@ -108,19 +101,19 @@
                 android:id="@+id/botonAmenidades"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Seleccionar amenidades"
-                android:backgroundTint="@color/Azuloscuro"
+                android:layout_gravity="center"
                 android:layout_marginTop="16dp"
-                android:layout_gravity="center" />
+                android:backgroundTint="@color/Azuloscuro"
+                android:text="Seleccionar amenidades" />
 
             <TextView
                 android:id="@+id/textoSeleccionadas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Seleccionadas: Ninguna"
-                android:textSize="16sp"
+                android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginHorizontal="16dp" />
+                android:text="Seleccionadas: Ninguna"
+                android:textSize="16sp" />
 
             <!-- Capacidad máxima -->
 
@@ -130,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
                 android:gravity="left"
-                android:paddingTop="20dp"
+                android:paddingTop="15dp"
                 android:paddingBottom="5dp"
                 android:text="Capacidad máxima"
                 android:textColor="@color/black"
@@ -152,7 +145,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
                 android:gravity="left"
-                android:paddingTop="20dp"
+                android:paddingTop="15dp"
                 android:paddingBottom="5dp"
                 android:text="Precio del alquiler"
                 android:textColor="@color/black"
