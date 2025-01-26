@@ -20,16 +20,16 @@ public class RegistroCasa extends AppCompatActivity {
 
 
     // Lista de amenidades
-    String[] amenidades = {"Cocina equipada (con electrodomésticos modernos)",
+    String[] amenidades = {"Cocina equipada (con electrodomesticos modernos)",
                             "Aire acondicionado",
-                            "Calefacción",
+                            "Calefaccion",
                             "Wi-Fi gratuito",
-                            "Televisión por cable o satélite",
+                            "Television por cable o satelite",
                             "Lavadora y secadora",
                             "Piscina",
-                            "Jardín o patio",
+                            "Jardin o patio",
                             "Barbacoa o parrilla",
-                            "Terraza o balcón",
+                            "Terraza o balcon",
                             "Gimnasio en casa",
                             "Garaje o espacio de estacionamiento",
                             "Sistema de seguridad",
@@ -39,15 +39,15 @@ public class RegistroCasa extends AppCompatActivity {
                             "Lavavajillas",
                             "Cafetera",
                             "Ropa de cama y toallas incluidas",
-                            "Acceso a áreas comunes (piscina, gimnasio)",
-                            "Camas adicionales o sofá cama",
+                            "Acceso a areas comunes (piscina, gimnasio)",
+                            "Camas adicionales o sofa cama",
                             "Servicios de limpieza opcionales",
                             "Acceso a transporte público cercano",
                             "Mascotas permitidas",
-                            "Cercanía a tiendas y restaurantes",
-                            "Sistema de calefacción por suelo radiante",
-                            "Escritorio o área de trabajo",
-                            "Sistemas de entretenimiento (videojuegos, equipo de música)",
+                            "Cercania a tiendas y restaurantes",
+                            "Sistema de calefaccion por suelo radiante",
+                            "Escritorio o area de trabajo",
+                            "Sistemas de entretenimiento (videojuegos, equipo de musica)",
                             "Chimenea",
                             "Acceso a internet de alta velocidad" };
 
@@ -77,7 +77,7 @@ public class RegistroCasa extends AppCompatActivity {
 
         // Mostrar las coordenadas en el TextView (o usarlas como lo necesites)
         textoUbicaciones = findViewById(R.id.textoUbicaciones);
-        textoUbicaciones.setText("Lat: " + latitud + "\nLng: " + longitud);
+        textoUbicaciones.setText("Lat: " + latitud + ", Lng: " + longitud);
 
 
         //Amenidades
@@ -126,7 +126,7 @@ public class RegistroCasa extends AppCompatActivity {
 
         });
 
-        buttonRegistrar.setOnClickListener(view -> { // mapeo del boton exit
+        buttonRegistrar.setOnClickListener(view -> { // mapeo del boton registrar
             //Asignacion de variables
             String nombrepropiedad = nombrepropiedadEditText.getText().toString();
             String reglasuso = reglasusoEditText.getText().toString();
@@ -135,7 +135,7 @@ public class RegistroCasa extends AppCompatActivity {
             String amenidades = textoSeleccionadas.getText().toString();
             String Ubicaciones = textoUbicaciones.getText().toString();
 
-            String messageSend = "func: rec" + ", nombre de la propiedad: " + nombrepropiedad + ", Ubicacion:" + Ubicaciones + ", reglas de uso: " + reglasuso + ", amenidades:" + amenidades + ", capacidad maxima: " + capacidadmaxima + ", precio: " +  precio;
+            String messageSend = "func: regcasa" + ", nombre de la propiedad: " + nombrepropiedad + ", Ubicacion:" + Ubicaciones + ", reglas de uso: " + reglasuso + ", amenidades:" + amenidades + ", capacidad maxima: " + capacidadmaxima + ", precio: " +  precio;
             Socket.sendMessage(messageSend);
 
 
@@ -204,8 +204,5 @@ public class RegistroCasa extends AppCompatActivity {
 
             }
         });
-
     }
-
-
 }
