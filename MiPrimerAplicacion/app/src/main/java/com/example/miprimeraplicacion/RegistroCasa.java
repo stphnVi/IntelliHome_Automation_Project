@@ -3,9 +3,12 @@ package com.example.miprimeraplicacion;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -77,7 +80,7 @@ public class RegistroCasa extends AppCompatActivity {
 
         // Mostrar las coordenadas en el TextView (o usarlas como lo necesites)
         textoUbicaciones = findViewById(R.id.textoUbicaciones);
-        textoUbicaciones.setText("Lat: " + latitud + ", Lng: " + longitud);
+        textoUbicaciones.setText("latitud: " + latitud + ", longitud: " + longitud);
 
 
         //Amenidades
@@ -135,9 +138,33 @@ public class RegistroCasa extends AppCompatActivity {
             String amenidades = textoSeleccionadas.getText().toString();
             String Ubicaciones = textoUbicaciones.getText().toString();
 
-            String messageSend = "func: regcasa" + ", nombre de la propiedad: " + nombrepropiedad + ", Ubicacion:" + Ubicaciones + ", reglas de uso: " + reglasuso + ", amenidades:" + amenidades + ", capacidad maxima: " + capacidadmaxima + ", precio: " +  precio;
-            Socket.sendMessage(messageSend);
+            // Validar campos vacíos
 
+            if (nombrepropiedad.isEmpty()) {
+                marcarCampoTemporalmente(nombrepropiedadEditText);
+            }
+
+            if (reglasuso.isEmpty()) {
+                marcarCampoTemporalmente(reglasusoEditText);
+            }
+
+            if (capacidadmaxima.isEmpty()) {
+                marcarCampoTemporalmente(capacidadmaximaEditText);
+            }
+
+            if (precio.isEmpty()) {
+                marcarCampoTemporalmente(precioEditText);
+            }
+
+            if (Ubicaciones.equals("latitud: 0.0, longitud: 0.0")) {
+                //Mensaje de completar
+                Toast.makeText(this, "No agregaste la ubicacion", Toast.LENGTH_SHORT).show();
+            }
+
+            if (!nombrepropiedad.isEmpty() && !reglasuso.isEmpty() && !capacidadmaxima.isEmpty() && !precio.isEmpty() && !Ubicaciones.isEmpty()) {
+                String messageSend = "func: regcasa" + ", nombre de la propiedad: " + nombrepropiedad + ", Ubicacion:" + Ubicaciones + ", reglas de uso: " + reglasuso + ", amenidades:" + amenidades + ", capacidad maxima: " + capacidadmaxima + ", precio: " + precio;
+                Socket.sendMessage(messageSend);
+            }
 
 
         });
@@ -165,7 +192,17 @@ public class RegistroCasa extends AppCompatActivity {
 
         }).start();
 
+    }
 
+    // Método para cambiar el fondo de un campo a rojo temporalmente
+    private void marcarCampoTemporalmente(EditText editText) {
+        // Cambiar el fondo a rojo
+        editText.setBackgroundResource(android.R.color.holo_red_light);
+
+        // Restaurar el fondo blanco después de 3 segundos
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            editText.setBackgroundResource(android.R.color.white); // Reestablecer el color blanco
+        }, 2000); // 2000 ms = 2 segundos
     }
 
     /**
