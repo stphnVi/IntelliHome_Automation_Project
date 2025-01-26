@@ -158,14 +158,87 @@ def receive_info(data):
     print(f"String modificado: {nuevo_data.strip()}")
 
 
+def cargar_propiedades(nombre_archivo):
+    propiedades = []
+    with open(nombre_archivo, "r", encoding="utf-8") as file:
+        contenido = file.read().strip()
+        registros = contenido.split(
+            ", nombre de la propiedad: ")  # Separa cada propiedad
+
+        for registro in registros:
+            if registro.strip():
+                datos = {}
+                atributos = registro.split(", ")  # Divide los atributos
+                for atributo in atributos:
+                    if ": " in atributo:
+                        clave, valor = atributo.split(": ", 1)
+                        datos[clave.strip()] = valor.strip()
+                propiedades.append(datos)
+    return propiedades
+
+
 #                                                        _____________________________________________
-# ______________________________________________________/ Pruebas de mensajes del cliente
-
-receive_info(
-    "func: login, userEmail: juan@example.com, password: 5678")
+# ______________________________________________________/ Buscar propiedades en la base de datos
 
 
-receive_info("func: login, userEmail: Juan123, password: 5678")
+def cargar_propiedades(nombre_archivo):
+    propiedades = []
+    with open(nombre_archivo, "r", encoding="utf-8") as file:
+        contenido = file.read().strip()
+        registros = contenido.split("\n")  # Separa cada propiedad por línea
+
+        datos = {}
+        for linea in registros:
+            if "nombre de la propiedad" in linea and datos:
+                # Guardar la propiedad anterior antes de iniciar una nueva
+                propiedades.append(datos)
+                datos = {}
+
+            atributos = linea.split(", ")  # Divide los atributos de la línea
+            for atributo in atributos:
+                if ": " in atributo:
+                    clave, valor = atributo.split(": ", 1)
+                    datos[clave.strip()] = valor.strip()
+
+        if datos:
+            propiedades.append(datos)
+    print(propiedades)
+    return propiedades
+
+
+def buscar_propiedades(propiedades, capacidad=None, precio=None):
+    resultados = []
+    for prop in propiedades:
+
+        if (capacidad and prop.get("capacidad maxima") != str(capacidad)):
+            continue
+        if (precio and prop.get("precio") > str(precio)):
+            continue
+        resultados.append(
+            f'{prop["nombre de la propiedad"]}, capacidad maxima: {prop["capacidad maxima"]}, precio: {prop["precio"]}')
+
+        if not resultados:
+            print("no se encontrason resultados")
+    return "; ".join(resultados)
+
+
+# prueba de busqueda
+
+propiedades = cargar_propiedades("./database/test.txt")
+capacidad_buscada = 4
+precio_buscado = 4000
+
+# Buscar propiedades
+resultado = buscar_propiedades(
+    propiedades, capacidad=capacidad_buscada, precio=precio_buscado)
+print(resultado)
+
+
+# receive_info(
+#    "func: login, userEmail: juan@example.com, password: 5678")
+
+
+# receive_info("func: login, userEmail: Juan123, password: 5678")
 
 # recovery: "func: rec, username: Tefa1, nombreProfe: Json, apodo: gogi, equipo: liga"
 # register: "func: reg, username: Juan123, email: juan@example.com, password: 5678"
