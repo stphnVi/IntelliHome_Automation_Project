@@ -1,6 +1,11 @@
 import re
+<<<<<<< HEAD
 import math
 from datetime import datetime
+=======
+from database.descifrado import *
+from database.cifrado import *
+>>>>>>> development
 
 #                                                        ________________________________________________
 # ______________________________________________________/función revisa si los credenciales son correctos
@@ -89,6 +94,21 @@ def add_user(user_info):
             # Escribir la información del usuario en el archivo
             file.write("\n" + user_info)
         print("Usuario agregado")
+        return "1"
+    except Exception as e:
+        print(f"Error")
+        
+#                                                        _____________________________________________________
+# ______________________________________________________/Función que Agrega usuarios a la base de datos        
+
+
+def add_house(house_info):
+    try:
+        # Abrir el archivo en modo append (agregar al final)
+        with open('./database/casas.txt', 'a') as file:
+            # Escribir la información de la casa en el archivo
+            file.write("\n" + house_info)
+        print("Casa agregada")
         return "1"
     except Exception as e:
         print(f"Error")
@@ -308,6 +328,16 @@ print(recibir_datos_alquilar(datos_entrada))
 
 def receive_info(data):
 
+    # desencriptar base de datos
+
+    key = load_key('./database/key.txt')
+
+    decrypt_file('./database/data_encrypted.txt',
+                 './database/data.txt', key)
+
+    key = os.urandom(32)  # AES-256
+    iv = os.urandom(16)
+
     print(f"String original: {data}")
 
     inicio = data.find("func:")
@@ -325,22 +355,51 @@ def receive_info(data):
         nuevo_data = data[:inicio].strip() + " " + data[fin+1:].strip()
 
     if valor_func == "login":
-        return login_info(nuevo_data.strip())
+        result = login_info(nuevo_data.strip())
+
     elif valor_func == "rec":
         print("entra")
         return questions(nuevo_data.strip())
+      
+    elif valor_func == "regcasa":
+        print("entra")
+        return add_house(nuevo_data.strip())
+
     else:
-        return add_user(nuevo_data.strip())
+        result = add_user(nuevo_data.strip())
+
+    encrypt_file('./database/data.txt',
+                 './database/data_encrypted.txt', key, iv)
+
+#                                                      _____________________________________________________________________________________
+# _____________________________________________________/ SI SE REQUIERE VER EL CONTENIDO DE LA BASE DE DATOS PARA PRUEBAS COMENTAR ESTA LÍNEA
+    os.remove('./database/data.txt')
+# _______________________________________________________  ES DE SUMA IMPORTANCIA VOLVER A PONERLA PARA CUMPLIR CON LO QUE EL CLIENTE SOLICITA
+
+    print(" base de datos actualizada y cifrada, bade en plaintext eliminada")
+
+    return result
 
     print(f"Valor de 'func': {valor_func}")
     print(f"String modificado: {nuevo_data.strip()}")
 
 
+<<<<<<< HEAD
 # receive_info(
 #    "func: login, userEmail: juan@example.com, password: 5678")
 
 
 # receive_info("func: login, userEmail: Juan123, password: 5678")
+=======
+#                                                        _____________________________________________
+# ______________________________________________________/ PRUEBAS de mensajes del cliente
+
+# receive_info("func: rec, username: Tefa1, nombreProfe: Json, apodo: gogi, equipo: liga")
+
+
+# receive_info(
+#    "func: reg, username: Juan123, email: juan@example.com, password: 5678")
+>>>>>>> development
 
 # recovery: "func: rec, username: Tefa1, nombreProfe: Json, apodo: gogi, equipo: liga"
 # register: "func: reg, username: Juan123, email: juan@example.com, password: 5678"

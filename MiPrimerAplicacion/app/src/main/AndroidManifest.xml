@@ -2,6 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 
     <application
         android:allowBackup="true"
@@ -14,8 +20,21 @@
         android:theme="@style/Theme.MiPrimerAplicacion"
         tools:targetApi="31">
 
+
+
+        <!-- Esta es la configuración de osmdroid -->
+        <meta-data
+            android:name="org.osmdroid.directions.ODDirectionService"
+            android:value="true" />
+        <meta-data
+            android:name="org.osmdroid.tileprovider.MapTileProviderBase"
+            android:value="org.osmdroid.tileprovider.tilesource.TileSourceFactory.MAPNIK" />
+
         <!-- Declarar la actividad ExitActivity -->
         <activity android:name=".RegistroActivity"></activity>
+
+        <!-- Declarar la actividad registro_casa -->
+        <activity android:name=".RegistroCasa"></activity>
 
         <!-- Declarar la actividad Principal -->
         <activity android:name=".PrincipalActivity"></activity>
