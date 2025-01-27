@@ -165,8 +165,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     // Manejar otros mensajes si es necesario
                     Socket.message = null;
-
-
                 }
             }
             else {
