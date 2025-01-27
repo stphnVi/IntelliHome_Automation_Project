@@ -1,5 +1,6 @@
 import re
 import math
+from datetime import datetime
 
 #                                                        ________________________________________________
 # ______________________________________________________/función revisa si los credenciales son correctos
@@ -179,6 +180,46 @@ def calcular_distancia(lat1, lon1, lat2, lon2):
     distancia = R * c
     return distancia
 
+#                                                        ____________________________________________________
+# ______________________________________________________/ Parseo de las fechas
+
+
+def parsear_fechas(fechas_str):
+    fechas = []
+    for fecha in fechas_str.split("; "):
+        if "-" in fecha:
+            inicio, fin = fecha.split("-")
+            fechas.append((datetime.strptime(inicio, "%m/%d/%Y"),
+                          datetime.strptime(fin, "%m/%d/%Y")))
+        else:
+            fechas.append(datetime.strptime(fecha, "%m/%d/%Y"))
+    return fechas
+#                                                        ____________________________________________________
+# ______________________________________________________/ Verificar disponibilidad de las fechas
+
+
+def verificar_disponibilidad(fechas_disponibles, fechas_busqueda):
+    fechas_db = parsear_fechas(fechas_disponibles)
+    fechas_buscadas = parsear_fechas("; ".join(fechas_busqueda))
+
+    for fecha_busqueda in fechas_buscadas:
+        if isinstance(fecha_busqueda, tuple):
+            for fecha in fechas_db:
+                if isinstance(fecha, tuple):
+                    if fecha_busqueda[0] >= fecha[0] and fecha_busqueda[1] <= fecha[1]:
+                        return True
+                else:
+                    if fecha_busqueda[0] <= fecha <= fecha_busqueda[1]:
+                        return True
+        else:
+            for fecha in fechas_db:
+                if isinstance(fecha, tuple):
+                    if fecha[0] <= fecha_busqueda <= fecha[1]:
+                        return True
+                elif fecha == fecha_busqueda:
+                    return True
+    return False
+
 #                                                        _____________________________________________
 # ______________________________________________________/ Buscar propiedades en la base de datos
 
@@ -215,7 +256,8 @@ def cargar_propiedades(nombre_archivo):
                         valores_ubi = valor.split("; ")
                         # Guardar coordenadas como (latitud, longitud)
                         datos[clave] = tuple(map(float, valores_ubi))
-
+                    elif clave == "fechas":
+                        datos[clave] = valor
                     else:
                         datos[clave] = valor  # Guardar valores normales
 
@@ -226,45 +268,38 @@ def cargar_propiedades(nombre_archivo):
     return propiedades
 
 
-def buscar_propiedades(propiedades, capacidad=None, precio=None, amenidades=None, ubi=None):
+def buscar_propiedades(propiedades, capacidad=None, precio=None, amenidades=None, ubi=None, fechas=None):
     resultados = []
-    # print(propiedades)
     if ubi:
-        # Convertir de string a float
         lat_entrada, lon_entrada = map(float, ubi)
 
     for prop in propiedades:
-        # Filtros de capacidad y precio
         if capacidad and prop.get("capacidad maxima") != str(capacidad):
             continue
         if precio and int(prop.get("precio", 0)) > precio:
-            continuej
+            continue
 
-        # Filtro de amenidades (debe coincidir exactamente las solicitadas)
         if amenidades:
             amenidades_db = prop.get("amenidades", [])
-
-            # print(amenidades_db)
-
             if set(amenidades) != set(amenidades_db):
-                continue  # Si no coinciden exactamente, descartamos la propiedad
-
-        # Filtro de ubicaciones  filtrará aquellas que esten dentro de un trango de 50km de distancia respecto a la solicitada
+                continue
 
         if ubi:
             lat_prop, lon_prop = prop.get("ubi", (None, None))
             if lat_prop is not None and lon_prop is not None:
                 distancia = calcular_distancia(
                     lat_entrada, lon_entrada, lat_prop, lon_prop)
-                if distancia > 50:  # Filtrar solo propiedades dentro de 30 km
-                    continue  # Si la propiedad está fuera del radio, la descartamos
-        # Si pasa todos los filtros, añadimos la propiedad al resultado
+                if distancia > 50:
+                    continue
+
+        if fechas and not verificar_disponibilidad(prop.get("fechas", ""), fechas):
+            continue
+
         resultados.append(
             f'{prop["nombre de la propiedad"]}, capacidad maxima: {prop["capacidad maxima"]}, precio: {prop["precio"]}, amenidades: {", ".join(prop["amenidades"])}')
 
-    # Si no hay resultados, imprimir mensaje y devolver 0
     if not resultados:
-        print(" No se encontraron propiedades que cumplan con los criterios.")
+        print("No se encontraron propiedades que cumplan con los criterios.")
         return 0
 
     return "; ".join(resultados)
@@ -279,11 +314,13 @@ precio_buscado = 4000
 amenidades_buscadas = ["perros", "wifi"]
 # amenidades_buscadas = ["gatos", "ducha"]
 ubicacion_buscada = ["10.666966", "-85.648673"]
-# Buscar propiedades
-resultado = buscar_propiedades(
-    propiedades, capacidad=capacidad_buscada, precio=precio_buscado, amenidades=amenidades_buscadas, ubi=ubicacion_buscada
-)
 
+fecha = ["02/21/2025"]
+# Buscar propiedades
+
+
+resultado = buscar_propiedades(propiedades, capacidad=capacidad_buscada, precio=precio_buscado,
+                               amenidades=amenidades_buscadas, ubi=ubicacion_buscada, fechas=fecha)
 print(resultado)
 
 
