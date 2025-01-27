@@ -466,8 +466,8 @@ public class RegistroActivity extends AppCompatActivity {
                             .setPositiveButton("Aceptar", (dialog, which) -> dialog.dismiss())
                             .create()
                             .show();
-                    Intent intent = new Intent(RegistroActivity.this, PrincipalActivity.class);
-                    startActivity(intent); //se abre la nueva ventana
+                    //Intent intent = new Intent(RegistroActivity.this, PrincipalActivity.class);
+                    //startActivity(intent); //se abre la nueva ventana
                     Socket.message = null; //se hace el mensaje de entrada null para recibir el siguiente mensaje
                 } else if ("0".equals(message)) {
                     // Mostrar mensaje de credenciales incorrectas

@@ -42,7 +42,21 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="363dp" />
+            android:layout_height="259dp" />
+
+
+        <Button
+            android:id="@+id/casamodelo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/Azuloscuro"
+            android:text="Casa modelo" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="80dp" />
+
 
         <Button
             android:id="@+id/button2"

@@ -39,6 +39,9 @@
         <!-- Declarar la actividad Principal -->
         <activity android:name=".PrincipalActivity"></activity>
 
+        <!-- Declarar la actividad Casa modelo -->
+        <activity android:name=".CasaModelo"></activity>
+
         <!-- Declarar la actividad MainActivity -->
         <activity
             android:name=".MainActivity"

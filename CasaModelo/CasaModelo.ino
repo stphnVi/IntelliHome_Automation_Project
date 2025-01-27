@@ -18,17 +18,17 @@ void loop() {
   serverMessage =Serial.readStringUntil('\n'); //Leer strings del puerto serial hasta encontrar el caracter de nueva línea
 
   //Se usan claves para hacer diferentes cosas con base a los mensajes que se reciban, en este caso, encender o apagar los leds
-  if(serverMessage == "LED1_ON"){
+  if(serverMessage == "func: luzsalaLED1_ON"){
     digitalWrite(PIN_LED1, 1);
-  } else if (serverMessage == "LED1_OFF"){
+  } else if (serverMessage == "func: luzsalaLED1_OFF"){
     digitalWrite(PIN_LED1, 0);
-  } else if (serverMessage == "LED2_ON"){
+  } else if (serverMessage == "func: luzcuartoLED2_ON"){
     digitalWrite(PIN_LED2, 1);
-  } else if (serverMessage == "LED2_OFF"){
+  } else if (serverMessage == "func: luzcuartoLED2_OFF"){
     digitalWrite(PIN_LED2, 0);
-  } else if (serverMessage == "LED3_ON"){
+  } else if (serverMessage == "func: luzbañoLED3_ON"){
     digitalWrite(PIN_LED3, 1);
-  } else if (serverMessage == "LED3_OFF"){
+  } else if (serverMessage == "func: luzbañoLED3_OFF"){
     digitalWrite(PIN_LED3, 0);
   }
 }

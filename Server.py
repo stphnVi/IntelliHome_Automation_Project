@@ -81,6 +81,7 @@ class ChatServer:
 
                 else:
                     break
+                
             except:
                 break
 
@@ -115,6 +116,10 @@ class ChatServer:
     def broadcast1(self, message, sender_socket):
         self.chat_display.config(state='normal')
         self.chat_display.insert(tk.END, f"Servidor: {message}\n")
+        
+        if(self.arduino != None):
+            self.arduino.write(message.encode('utf-8')) #Enviar los mensajes recividos via puerto serial
+        
         self.chat_display.config(state='disabled')
 
         for client in self.clients:
