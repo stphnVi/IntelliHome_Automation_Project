@@ -125,39 +125,6 @@ def questions(user_info):
         print(f"Error: {e}")
         return "0"
 
-#                                                        _____________________________________________
-# ______________________________________________________/función que recibe los mensajes del cliente
-
-
-def receive_info(data):
-
-    print(f"String original: {data}")
-
-    inicio = data.find("func:")
-    if inicio == -1:
-        print("No se encontró 'func'")
-        return  # Si no hay "func:", termina la función
-
-    fin = data.find(",", inicio)  # Busca la coma después de "func:"
-
-    if fin == -1:
-        valor_func = data[inicio + 6:].strip()  # Último elemento
-        nuevo_data = ""
-    else:
-        valor_func = data[inicio + 6:fin].strip()
-        nuevo_data = data[:inicio].strip() + " " + data[fin+1:].strip()
-
-    if valor_func == "login":
-        return login_info(nuevo_data.strip())
-    elif valor_func == "rec":
-        print("entra")
-        return questions(nuevo_data.strip())
-    else:
-        return add_user(nuevo_data.strip())
-
-    print(f"Valor de 'func': {valor_func}")
-    print(f"String modificado: {nuevo_data.strip()}")
-
 
 #                                                        ____________________________________________________
 # ______________________________________________________/ Función auxiliar para el cálculo de las coordenadas
@@ -181,7 +148,7 @@ def calcular_distancia(lat1, lon1, lat2, lon2):
     return distancia
 
 #                                                        ____________________________________________________
-# ______________________________________________________/ Parseo de las fechas
+# ______________________________________________________/ Función auxiliar para Parseo de las fechas
 
 
 def parsear_fechas(fechas_str):
@@ -194,8 +161,9 @@ def parsear_fechas(fechas_str):
         else:
             fechas.append(datetime.strptime(fecha, "%m/%d/%Y"))
     return fechas
-#                                                        ____________________________________________________
-# ______________________________________________________/ Verificar disponibilidad de las fechas
+#                                                        _____________________________________________________
+# ______________________________________________________/ Función auxiliar para Verificar disponibilidad
+# de las fechas
 
 
 def verificar_disponibilidad(fechas_disponibles, fechas_busqueda):
@@ -220,8 +188,9 @@ def verificar_disponibilidad(fechas_disponibles, fechas_busqueda):
                     return True
     return False
 
-#                                                        _____________________________________________
-# ______________________________________________________/ Buscar propiedades en la base de datos
+#                                                        _____________________________________________________
+# ______________________________________________________/ Función auxiliar para Cargar las propiedades de la
+# base de datos
 
 
 def cargar_propiedades(nombre_archivo):
@@ -264,8 +233,12 @@ def cargar_propiedades(nombre_archivo):
         if datos:
             propiedades.append(datos)
 
-    print(propiedades)  # Verificar la salida
+    print(propiedades)
     return propiedades
+
+#                                                        ____________________________________________________
+# ______________________________________________________/ Función para Buscar propiedades de la base de datos
+# e identificar coincidencias
 
 
 def buscar_propiedades(propiedades, capacidad=None, precio=None, amenidades=None, ubi=None, fechas=None):
@@ -304,24 +277,63 @@ def buscar_propiedades(propiedades, capacidad=None, precio=None, amenidades=None
 
     return "; ".join(resultados)
 
-
-# EJEMPLO DE USO
-propiedades = cargar_propiedades("./database/test.txt")
-
-capacidad_buscada = 2
-precio_buscado = 4000
-# Ingresar exactamente las amenidades requeridas
-amenidades_buscadas = ["perros", "wifi"]
-# amenidades_buscadas = ["gatos", "ducha"]
-ubicacion_buscada = ["10.666966", "-85.648673"]
-
-fecha = ["02/21/2025"]
-# Buscar propiedades
+#                                                        _____________________________________________
+# ______________________________________________________/ Función para recibir datos para su posterior
+# consulta de alquileres
 
 
-resultado = buscar_propiedades(propiedades, capacidad=capacidad_buscada, precio=precio_buscado,
-                               amenidades=amenidades_buscadas, ubi=ubicacion_buscada, fechas=fecha)
-print(resultado)
+def recibir_datos_alquilar(entrada):
+    try:
+        datos = eval(entrada)
+        return buscar_propiedades(
+            propiedades=cargar_propiedades("./database/test.txt"),
+            capacidad=datos.get("capacidad"),
+            precio=datos.get("precio"),
+            amenidades=datos.get("amenidades"),
+            ubi=datos.get("ubi"),
+            fechas=datos.get("fecha")
+        )
+    except Exception as e:
+        return f"Error procesando los datos: {e}"
+
+
+# Ejemplo de uso
+datos_entrada = '{"capacidad": 2, "precio": 4000, "amenidades": ["perros", "wifi"], "ubi": ["10.666966", "-85.648673"], "fecha": ["02/03/2025-02/17/2025"]}'
+print(recibir_datos_alquilar(datos_entrada))
+
+
+#                                                        _____________________________________________
+# ______________________________________________________/función que recibe los mensajes del cliente
+
+
+def receive_info(data):
+
+    print(f"String original: {data}")
+
+    inicio = data.find("func:")
+    if inicio == -1:
+        print("No se encontró 'func'")
+        return  # Si no hay "func:", termina la función
+
+    fin = data.find(",", inicio)  # Busca la coma después de "func:"
+
+    if fin == -1:
+        valor_func = data[inicio + 6:].strip()  # Último elemento
+        nuevo_data = ""
+    else:
+        valor_func = data[inicio + 6:fin].strip()
+        nuevo_data = data[:inicio].strip() + " " + data[fin+1:].strip()
+
+    if valor_func == "login":
+        return login_info(nuevo_data.strip())
+    elif valor_func == "rec":
+        print("entra")
+        return questions(nuevo_data.strip())
+    else:
+        return add_user(nuevo_data.strip())
+
+    print(f"Valor de 'func': {valor_func}")
+    print(f"String modificado: {nuevo_data.strip()}")
 
 
 # receive_info(
