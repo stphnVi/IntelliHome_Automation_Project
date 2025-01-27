@@ -1,6 +1,6 @@
 import re
 import math
-from datetime import datetime
+from datetime import datetime, timedelta
 from database.descifrado import *
 from database.cifrado import *
 
@@ -170,6 +170,9 @@ def calcular_distancia(lat1, lon1, lat2, lon2):
 
 
 def parsear_fechas(fechas_str):
+    if not fechas_str.strip():  # Si la cadena está vacía, retornar una lista vacía
+        return []
+
     fechas = []
     for fecha in fechas_str.split("; "):
         if "-" in fecha:
@@ -316,8 +319,117 @@ def recibir_datos_alquilar(entrada):
 
 
 # Ejemplo de uso
-datos_entrada = '{"capacidad": 2, "precio": 4000, "amenidades": ["perros", "wifi"], "ubi": ["10.666966", "-85.648673"], "fecha": ["02/03/2025-02/15/2025"]}'
-print(recibir_datos_alquilar(datos_entrada))
+# datos_entrada = '{"capacidad": 2, "precio": 4000, "amenidades": ["perros", "wifi"], "ubi": ["10.666966", "-85.648673"], "fecha": ["02/03/2025-02/15/2025"]}'
+# print(recibir_datos_alquilar(datos_entrada))
+
+
+#                                                        _____________________________________________
+# ______________________________________________________/ Función para recibir datos para su posterior
+# consulta de alquileres
+
+def actualizar_fechas_reservadas(nombre_archivo, nombre_propiedad, fecha_reservada):
+    propiedades = cargar_propiedades(nombre_archivo)
+
+    # Convertimos la fecha reservada en formato datetime
+    if "-" in fecha_reservada:
+        inicio_res, fin_res = fecha_reservada.split("-")
+        fecha_reservada = (datetime.strptime(
+            inicio_res, "%m/%d/%Y"), datetime.strptime(fin_res, "%m/%d/%Y"))
+    else:
+        fecha_reservada = datetime.strptime(fecha_reservada, "%m/%d/%Y")
+
+    for prop in propiedades:
+        if prop["nombre de la propiedad"] == nombre_propiedad:
+            fechas_actuales = parsear_fechas(prop.get("fechas", ""))
+            nuevas_fechas = []
+
+            for fecha in fechas_actuales:
+                if isinstance(fecha, tuple):  # Es un rango de fechas
+                    if isinstance(fecha_reservada, tuple):  # Reservando un rango
+                        # Si la reserva cubre completamente el rango, eliminarlo
+                        if fecha_reservada[0] <= fecha[0] and fecha_reservada[1] >= fecha[1]:
+                            continue
+
+                        elif fecha_reservada[0] <= fecha[0] <= fecha_reservada[1]:
+                            nuevo_inicio = fecha_reservada[1] + \
+                                timedelta(days=1)
+                            if nuevo_inicio == fecha[1]:
+                                nuevas_fechas.append(nuevo_inicio.strftime(
+                                    '%m/%d/%Y'))
+                            else:
+                                nuevas_fechas.append(
+                                    f"{nuevo_inicio.strftime('%m/%d/%Y')}-{fecha[1].strftime('%m/%d/%Y')}")
+
+                        # Ajuste si la reserva toca el final del rango
+                        elif fecha_reservada[0] <= fecha[1] <= fecha_reservada[1]:
+                            nuevo_fin = fecha_reservada[0] - timedelta(days=1)
+                            if nuevo_fin == fecha[0]:
+                                nuevas_fechas.append(nuevo_fin.strftime(
+                                    '%m/%d/%Y'))
+                            else:
+                                nuevas_fechas.append(
+                                    f"{fecha[0].strftime('%m/%d/%Y')}-{nuevo_fin.strftime('%m/%d/%Y')}")
+
+                        # Si la reserva está dentro del rango, dividirlo
+                        elif fecha[0] < fecha_reservada[0] and fecha_reservada[1] < fecha[1]:
+                            nuevas_fechas.append(
+                                f"{fecha[0].strftime('%m/%d/%Y')}-{(fecha_reservada[0] - timedelta(days=1)).strftime('%m/%d/%Y')}")
+                            nuevas_fechas.append(
+                                f"{(fecha_reservada[1] + timedelta(days=1)).strftime('%m/%d/%Y')}-{fecha[1].strftime('%m/%d/%Y')}")
+
+                        else:
+                            nuevas_fechas.append(
+                                f"{fecha[0].strftime('%m/%d/%Y')}-{fecha[1].strftime('%m/%d/%Y')}")
+
+                    else:  # Reservando una sola fecha dentro de un rango
+                        if fecha[0] < fecha_reservada < fecha[1]:
+                            nuevas_fechas.append(
+                                f"{fecha[0].strftime('%m/%d/%Y')}-{(fecha_reservada - timedelta(days=1)).strftime('%m/%d/%Y')}")
+                            nuevas_fechas.append(
+                                f"{(fecha_reservada + timedelta(days=1)).strftime('%m/%d/%Y')}-{fecha[1].strftime('%m/%d/%Y')}")
+
+                        elif fecha_reservada == fecha[0]:
+                            nuevo_inicio = fecha[0] + timedelta(days=1)
+                            if nuevo_inicio == fecha[1]:
+                                nuevas_fechas.append(nuevo_inicio.strftime(
+                                    '%m/%d/%Y'))  # Convertir a fecha única
+                            else:
+                                nuevas_fechas.append(
+                                    f"{nuevo_inicio.strftime('%m/%d/%Y')}-{fecha[1].strftime('%m/%d/%Y')}")
+
+                        elif fecha_reservada == fecha[1]:
+                            nuevo_fin = fecha[1] - timedelta(days=1)
+                            if nuevo_fin == fecha[0]:
+                                nuevas_fechas.append(nuevo_fin.strftime(
+                                    '%m/%d/%Y'))  # Convertir a fecha única
+                            else:
+                                nuevas_fechas.append(
+                                    f"{fecha[0].strftime('%m/%d/%Y')}-{nuevo_fin.strftime('%m/%d/%Y')}")
+
+                        else:
+                            nuevas_fechas.append(
+                                f"{fecha[0].strftime('%m/%d/%Y')}-{fecha[1].strftime('%m/%d/%Y')}")
+
+                else:  # Es una fecha única
+                    if fecha != fecha_reservada:
+                        nuevas_fechas.append(fecha.strftime('%m/%d/%Y'))
+
+            prop["fechas"] = "; ".join(nuevas_fechas)
+
+    # Guardamos las propiedades actualizadas en el archivo
+    with open(nombre_archivo, "w", encoding="utf-8") as file:
+        for prop in propiedades:
+            line = f'nombre de la propiedad: {prop["nombre de la propiedad"]}, capacidad maxima: {prop["capacidad maxima"]}, precio: {prop["precio"]}, amenidades: {", ".join(prop["amenidades"])}, ubi: {prop["ubi"][0]}; {prop["ubi"][1]}, fechas: {prop["fechas"]}\n'
+            file.write(line)
+
+
+# Reservar un solo día
+# actualizar_fechas_reservadas("./database/test.txt", "caribe", "02/15/2025")
+
+# Reservar un rango de fechas
+# actualizar_fechas_reservadas("base_de_datos.txt", "Caribe", "02/10/2025-02/12/2025")
+actualizar_fechas_reservadas(
+    "./database/test.txt", "caribe", "02/11/2025")
 
 
 #                                                        _____________________________________________
@@ -357,20 +469,20 @@ def receive_info(data):
 
     elif valor_func == "rec":
         print("entra")
-        return questions(nuevo_data.strip())
+        result = questions(nuevo_data.strip())
 
     elif valor_func == "regcasa":
         print("entra")
         return add_house(nuevo_data.strip())
-    
+
     elif valor_func == "luzcuarto":
         print("cuarto")
         return 0
-    
+
     elif valor_func == "luzbaño":
         print("baño")
         return 0
-    
+
     elif valor_func == "luzsala":
         print("sala")
         return 0
@@ -383,6 +495,7 @@ def receive_info(data):
 
 #                                                      _____________________________________________________________________________________
 # _____________________________________________________/ SI SE REQUIERE VER EL CONTENIDO DE LA BASE DE DATOS PARA PRUEBAS COMENTAR ESTA LÍNEA
+
     os.remove('./database/data.txt')
 # _______________________________________________________  ES DE SUMA IMPORTANCIA VOLVER A PONERLA PARA CUMPLIR CON LO QUE EL CLIENTE SOLICITA
 
