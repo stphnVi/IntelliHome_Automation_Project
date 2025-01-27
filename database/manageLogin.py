@@ -1,11 +1,9 @@
 import re
-<<<<<<< HEAD
 import math
 from datetime import datetime
-=======
 from database.descifrado import *
 from database.cifrado import *
->>>>>>> development
+
 
 #                                                        ________________________________________________
 # ______________________________________________________/función revisa si los credenciales son correctos
@@ -97,9 +95,9 @@ def add_user(user_info):
         return "1"
     except Exception as e:
         print(f"Error")
-        
+
 #                                                        _____________________________________________________
-# ______________________________________________________/Función que Agrega usuarios a la base de datos        
+# ______________________________________________________/Función que Agrega usuarios a la base de datos
 
 
 def add_house(house_info):
@@ -318,7 +316,7 @@ def recibir_datos_alquilar(entrada):
 
 
 # Ejemplo de uso
-datos_entrada = '{"capacidad": 2, "precio": 4000, "amenidades": ["perros", "wifi"], "ubi": ["10.666966", "-85.648673"], "fecha": ["02/03/2025-02/17/2025"]}'
+datos_entrada = '{"capacidad": 2, "precio": 4000, "amenidades": ["perros", "wifi"], "ubi": ["10.666966", "-85.648673"], "fecha": ["02/03/2025-02/15/2025"]}'
 print(recibir_datos_alquilar(datos_entrada))
 
 
@@ -360,7 +358,7 @@ def receive_info(data):
     elif valor_func == "rec":
         print("entra")
         return questions(nuevo_data.strip())
-      
+
     elif valor_func == "regcasa":
         print("entra")
         return add_house(nuevo_data.strip())
@@ -384,13 +382,12 @@ def receive_info(data):
     print(f"String modificado: {nuevo_data.strip()}")
 
 
-<<<<<<< HEAD
 # receive_info(
 #    "func: login, userEmail: juan@example.com, password: 5678")
 
 
 # receive_info("func: login, userEmail: Juan123, password: 5678")
-=======
+
 #                                                        _____________________________________________
 # ______________________________________________________/ PRUEBAS de mensajes del cliente
 
@@ -399,7 +396,7 @@ def receive_info(data):
 
 # receive_info(
 #    "func: reg, username: Juan123, email: juan@example.com, password: 5678")
->>>>>>> development
+
 
 # recovery: "func: rec, username: Tefa1, nombreProfe: Json, apodo: gogi, equipo: liga"
 # register: "func: reg, username: Juan123, email: juan@example.com, password: 5678"
