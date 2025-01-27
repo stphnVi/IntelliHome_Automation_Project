@@ -12,4 +12,5 @@
     <color name="Gray">#F6F4F0</color> <!-- Gris Claro -->
     <color name="Azul">#4DA1A9</color>
     <color name="Azuloscuro">#2E5077</color>
+    <color name="Amarillo">#FFFF00</color>
 </resources>

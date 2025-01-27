@@ -16,6 +16,13 @@ public class PrincipalActivity extends AppCompatActivity {
         setContentView(R.layout.principal);
 
         ImageButton buttonAgregar= findViewById(R.id.agregarCasa);
+        Button botoncasamodelo = findViewById(R.id.casamodelo);
+
+
+        botoncasamodelo.setOnClickListener(view -> { // mapeo del boton casa modelo
+            Intent intent = new Intent(PrincipalActivity.this, CasaModelo.class);
+            startActivity(intent);
+        });
 
         buttonAgregar.setOnClickListener(view -> { // mapeo del boton agregar
             Intent intent = new Intent(PrincipalActivity.this, RegistroCasa.class);
