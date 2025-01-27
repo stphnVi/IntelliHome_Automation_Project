@@ -65,7 +65,7 @@
             android:layout_gravity="center"
             android:backgroundTint="@color/Azuloscuro"
             android:gravity="center"
-            android:text="Regresar"
+            android:text="Salir de la aplicación"
             tools:layout_editor_absoluteX="149dp"
             tools:layout_editor_absoluteY="654dp" />
 

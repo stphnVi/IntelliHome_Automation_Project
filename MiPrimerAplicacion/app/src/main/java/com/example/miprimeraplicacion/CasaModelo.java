@@ -20,6 +20,14 @@ public class CasaModelo extends AppCompatActivity {
     private boolean baño_encendido = false;
     private boolean sala_encendido = false;
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        pantallaCasaModeloAbierta = false;
+        Intent intent = new Intent(CasaModelo.this, PrincipalActivity.class);
+        startActivity(intent);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
