@@ -1,8 +1,9 @@
 import re
-
+import math
 
 #                                                        ________________________________________________
 # ______________________________________________________/función revisa si los credenciales son correctos
+
 
 def login_info(message):
     print(f"Mensaje recibido: {message}")
@@ -123,7 +124,6 @@ def questions(user_info):
         print(f"Error: {e}")
         return "0"
 
-
 #                                                        _____________________________________________
 # ______________________________________________________/función que recibe los mensajes del cliente
 
@@ -158,8 +158,30 @@ def receive_info(data):
     print(f"String modificado: {nuevo_data.strip()}")
 
 
+#                                                        ____________________________________________________
+# ______________________________________________________/ Función auxiliar para el cálculo de las coordenadas
+
+def calcular_distancia(lat1, lon1, lat2, lon2):
+    lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
+
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+
+    # Fórmula de Haversine
+    a = math.sin(dlat / 2)**2 + math.cos(lat1) * \
+        math.cos(lat2) * math.sin(dlon / 2)**2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+    # Radio de la Tierra en kilómetros
+    R = 6371
+
+    # Distancia final en km
+    distancia = R * c
+    return distancia
+
 #                                                        _____________________________________________
 # ______________________________________________________/ Buscar propiedades en la base de datos
+
 
 def cargar_propiedades(nombre_archivo):
     propiedades = []
@@ -189,6 +211,11 @@ def cargar_propiedades(nombre_archivo):
                         datos[clave] = valores_amenidades
 
                         # print(f"Procesando amenidades: {valores_amenidades}")
+                    elif clave == "ubi":
+                        valores_ubi = valor.split("; ")
+                        # Guardar coordenadas como (latitud, longitud)
+                        datos[clave] = tuple(map(float, valores_ubi))
+
                     else:
                         datos[clave] = valor  # Guardar valores normales
 
@@ -199,9 +226,13 @@ def cargar_propiedades(nombre_archivo):
     return propiedades
 
 
-def buscar_propiedades(propiedades, capacidad=None, precio=None, amenidades=None):
+def buscar_propiedades(propiedades, capacidad=None, precio=None, amenidades=None, ubi=None):
     resultados = []
     # print(propiedades)
+    if ubi:
+        # Convertir de string a float
+        lat_entrada, lon_entrada = map(float, ubi)
+
     for prop in propiedades:
         # Filtros de capacidad y precio
         if capacidad and prop.get("capacidad maxima") != str(capacidad):
@@ -209,7 +240,7 @@ def buscar_propiedades(propiedades, capacidad=None, precio=None, amenidades=None
         if precio and int(prop.get("precio", 0)) > precio:
             continuej
 
-        # Filtro de amenidades (debe coincidir exactamente)
+        # Filtro de amenidades (debe coincidir exactamente las solicitadas)
         if amenidades:
             amenidades_db = prop.get("amenidades", [])
 
@@ -218,6 +249,15 @@ def buscar_propiedades(propiedades, capacidad=None, precio=None, amenidades=None
             if set(amenidades) != set(amenidades_db):
                 continue  # Si no coinciden exactamente, descartamos la propiedad
 
+        # Filtro de ubicaciones  filtrará aquellas que esten dentro de un trango de 50km de distancia respecto a la solicitada
+
+        if ubi:
+            lat_prop, lon_prop = prop.get("ubi", (None, None))
+            if lat_prop is not None and lon_prop is not None:
+                distancia = calcular_distancia(
+                    lat_entrada, lon_entrada, lat_prop, lon_prop)
+                if distancia > 50:  # Filtrar solo propiedades dentro de 30 km
+                    continue  # Si la propiedad está fuera del radio, la descartamos
         # Si pasa todos los filtros, añadimos la propiedad al resultado
         resultados.append(
             f'{prop["nombre de la propiedad"]}, capacidad maxima: {prop["capacidad maxima"]}, precio: {prop["precio"]}, amenidades: {", ".join(prop["amenidades"])}')
@@ -230,16 +270,18 @@ def buscar_propiedades(propiedades, capacidad=None, precio=None, amenidades=None
     return "; ".join(resultados)
 
 
+# EJEMPLO DE USO
 propiedades = cargar_propiedades("./database/test.txt")
 
 capacidad_buscada = 2
 precio_buscado = 4000
 # Ingresar exactamente las amenidades requeridas
-amenidades_buscadas = ["gatos"]
-
+amenidades_buscadas = ["perros", "wifi"]
+# amenidades_buscadas = ["gatos", "ducha"]
+ubicacion_buscada = ["10.666966", "-85.648673"]
 # Buscar propiedades
 resultado = buscar_propiedades(
-    propiedades, capacidad=capacidad_buscada, precio=precio_buscado, amenidades=amenidades_buscadas
+    propiedades, capacidad=capacidad_buscada, precio=precio_buscado, amenidades=amenidades_buscadas, ubi=ubicacion_buscada
 )
 
 print(resultado)
