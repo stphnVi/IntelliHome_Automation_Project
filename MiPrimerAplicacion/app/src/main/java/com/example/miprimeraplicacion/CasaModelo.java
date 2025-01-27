@@ -38,6 +38,12 @@ public class CasaModelo extends AppCompatActivity {
         Button botonregresarprincipal = findViewById(R.id.regresarprincipal);
 
         botonluzcuarto.setOnClickListener(view -> {
+
+            if(!cuarto_encendido) {
+                botonluzcuarto.setBackgroundResource(android.R.color.holo_green_light);
+            }else{
+                botonluzcuarto.setBackgroundResource(android.R.color.transparent);
+            }
             String messagecuarto = cuarto_encendido ? "LED2_OFF" : "LED2_ON";
             String messageSendcuarto = "func: luzcuarto" + messagecuarto;
             Socket.sendMessage(messageSendcuarto);
@@ -45,6 +51,13 @@ public class CasaModelo extends AppCompatActivity {
         });
 
         botonluzbaño.setOnClickListener(view -> {
+
+            if(!baño_encendido) {
+                botonluzbaño.setBackgroundResource(android.R.color.holo_green_light);
+            }else{
+                botonluzbaño.setBackgroundResource(android.R.color.transparent);
+            }
+
             String messagebaño = baño_encendido ? "LED3_OFF" : "LED3_ON";
             String messageSendbaño = "func: luzbaño" + messagebaño;
             Socket.sendMessage(messageSendbaño);
@@ -52,6 +65,13 @@ public class CasaModelo extends AppCompatActivity {
         });
 
         botonluzsala.setOnClickListener(view -> {
+
+            if(!sala_encendido) {
+                botonluzsala.setBackgroundResource(android.R.color.holo_green_light);
+            }else{
+                botonluzsala.setBackgroundResource(android.R.color.transparent);
+            }
+
             String messagesala = sala_encendido ? "LED1_OFF" : "LED1_ON";
             String messageSendsala = "func: luzsala" + messagesala;
             Socket.sendMessage(messageSendsala);
