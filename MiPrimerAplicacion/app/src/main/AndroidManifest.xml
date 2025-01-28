@@ -42,6 +42,9 @@
         <!-- Declarar la actividad Casa modelo -->
         <activity android:name=".CasaModelo"></activity>
 
+        <!-- Declarar la actividad BusquedaAlquiler -->
+        <activity android:name=".BusquedaAlquiler"></activity>
+
         <!-- Declarar la actividad MainActivity -->
         <activity
             android:name=".MainActivity"
