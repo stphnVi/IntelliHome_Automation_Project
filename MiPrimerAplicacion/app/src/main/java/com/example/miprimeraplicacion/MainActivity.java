@@ -117,10 +117,6 @@ public class MainActivity extends AppCompatActivity {
                 String messageSend = "func: login, " + "userEmail: " + userEmail + ", password: " + password;
                 Socket.sendMessage(messageSend);
             }
-
-            //textViewChat.append("Yo: " + message + "\n");
-            // editTextMessage.setText("");
-
         });
 
         buttonExit.setOnClickListener(view -> {

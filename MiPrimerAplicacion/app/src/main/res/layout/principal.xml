@@ -4,21 +4,70 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/Azul"
     tools:context=".PrincipalActivity">
 
 
     <LinearLayout
-        android:layout_width="284dp"
-        android:layout_height="256dp"
+        android:layout_width="356dp"
+        android:layout_height="636dp"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="63dp"
-        tools:layout_editor_absoluteY="252dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
+
+        <!-- Logo -->
+
+        <ImageView
+            android:id="@+id/logoImageView"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="Logo de la empresa"
+            android:src="@drawable/logoempresa" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="21dp" />
+
+
+        <ImageButton
+            android:id="@+id/agregarCasa"
+            android:layout_width="wrap_content"
+            android:layout_height="57dp"
+            android:background="@color/Azul"
+            app:srcCompat="@drawable/agregar" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="259dp" />
+
+
+        <Button
+            android:id="@+id/casamodelo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/Azuloscuro"
+            android:text="Casa modelo" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="80dp" />
+
 
         <Button
             android:id="@+id/button2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Regresar" />
+            android:layout_height="43dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/Azuloscuro"
+            android:gravity="center"
+            android:text="Regresar"
+            tools:layout_editor_absoluteX="149dp"
+            tools:layout_editor_absoluteY="654dp" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

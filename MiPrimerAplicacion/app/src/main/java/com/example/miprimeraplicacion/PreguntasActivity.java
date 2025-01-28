@@ -28,7 +28,7 @@ public class PreguntasActivity extends AppCompatActivity {
         Button buttonVerifyAnswers = findViewById(R.id.verifyAnswersButton);
         Button buttonCancel = findViewById(R.id.cancelRecoveryButton);
 
-        //Cada vez que se abre la pantalla de registro se indica en el boolean
+        //Cada vez que se abre la pantalla de preguntas se indica en el boolean como true
         pantallaPreguntasAbierta = true;
 
         buttonCancel.setOnClickListener(view -> { // mapeo del boton exit
