@@ -42,6 +42,9 @@
         <!-- Declarar la actividad Casa modelo -->
         <activity android:name=".CasaModelo"></activity>
 
+        <!-- Declarar la actividad Recuperacion de contraseña -->
+        <activity android:name=".RecuperacionContrasena"></activity>
+
         <!-- Declarar la actividad MainActivity -->
         <activity
             android:name=".MainActivity"

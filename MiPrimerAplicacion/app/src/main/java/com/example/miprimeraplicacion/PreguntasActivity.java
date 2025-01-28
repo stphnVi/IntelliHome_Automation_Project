@@ -16,6 +16,12 @@ public class PreguntasActivity extends AppCompatActivity {
     private boolean pantallaPreguntasAbierta;
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity(); // Esto cierra todas las actividades en la pila
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.preguntas_seguridad);
@@ -33,8 +39,7 @@ public class PreguntasActivity extends AppCompatActivity {
 
         buttonCancel.setOnClickListener(view -> { // mapeo del boton exit
             pantallaPreguntasAbierta = false;
-            Intent intent = new Intent(PreguntasActivity.this, MainActivity.class);
-            startActivity(intent);
+            finishAffinity(); // Esto cierra todas las actividades en la pila
         });
 
         buttonVerifyAnswers.setOnClickListener(view -> { // mapeo del boton exit
@@ -70,13 +75,13 @@ public class PreguntasActivity extends AppCompatActivity {
         runOnUiThread(() -> {
             if (com.example.miprimeraplicacion.Socket.message != null) {
                 String message = com.example.miprimeraplicacion.Socket.message;
-                if ("1".equals(message)) {
+                if ("10".equals(message)) {
                     // Abrir nueva ventana si el mensaje es "1"
                     pantallaPreguntasAbierta = false;
-                    Intent intent = new Intent(PreguntasActivity.this, PrincipalActivity.class);
+                    Intent intent = new Intent(PreguntasActivity.this, RecuperacionContrasena.class);
                     startActivity(intent);
                     Socket.message = null;
-                } else if ("0".equals(message)) {
+                } else if ("20".equals(message)) {
                     // Mostrar mensaje de credenciales incorrectas
                     AlertDialog.Builder builder = new AlertDialog.Builder(PreguntasActivity.this);
                     builder.setTitle("Error de autenticación")
@@ -88,6 +93,12 @@ public class PreguntasActivity extends AppCompatActivity {
 
                 } else {
                     // Manejar otros mensajes si es necesario
+                    AlertDialog.Builder builder = new AlertDialog.Builder(PreguntasActivity.this);
+                    builder.setTitle("Error")
+                            .setMessage("Fallo Fatal")
+                            .setPositiveButton("Aceptar", (dialog, which) -> dialog.dismiss())
+                            .create()
+                            .show();
                     Socket.message = null;
 
 

@@ -3,6 +3,8 @@ import math
 from datetime import datetime
 from database.descifrado import *
 from database.cifrado import *
+import subprocess
+import os
 
 
 #                                                        ________________________________________________
@@ -41,6 +43,9 @@ def login_info(message):
 
                 if db_password and db_identifier and db_password == password and db_identifier == identifier:
                     print("¡Coinciden las credenciales!")
+                     # Llamar al archivo Notificaciones.py como un script independiente
+                    #ruta_notificaciones = os.path.join("database", "Notificaciones.py")
+                    #subprocess.run(["python", ruta_notificaciones])
                     return "1"
     except FileNotFoundError:
         print("Error: Archivo de base de datos no encontrado.")
@@ -136,12 +141,12 @@ def questions(user_info):
                 if all(get_field_from_string(user_info, field) == get_field_from_string(line, field)
                        for field in ["username", "nombreProfe", "apodo", "equipo"]):
                     print("SI es el usuario")
-                    return "1"  # Todos los datos coinciden
+                    return "10"  # Todos los datos coinciden
         print("NO es el usuario")
-        return "0"  # No se encontraron coincidencias
+        return "20"  # No se encontraron coincidencias
     except Exception as e:
         print(f"Error: {e}")
-        return "0"
+        return "30"
 
 
 #                                                        ____________________________________________________
