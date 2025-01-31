@@ -3,8 +3,12 @@ import math
 from datetime import datetime, timedelta
 from database.descifrado import *
 from database.cifrado import *
+from geopy.geocoders import Nominatim
+from geopy.exc import GeocoderTimedOut
+import certifi
+import ssl
 
-
+ssl._create_default_https_context = ssl._create_unverified_context
 #                                                        ________________________________________________
 # ______________________________________________________/función revisa si los credenciales son correctos
 
@@ -213,6 +217,28 @@ def verificar_disponibilidad(fechas_disponibles, fechas_busqueda):
     return False
 
 #                                                        _____________________________________________________
+# ______________________________________________________/ Función auxiliar para Buscar las coordenadas de los
+# cantones
+
+
+def obtener_coordenadas_canton(canton):
+    # print(canton)
+    geolocator = Nominatim(scheme='https', user_agent="my_app")  # Usar HTTPS
+    try:
+        location = geolocator.geocode(canton + ", Costa Rica", timeout=3)
+        if location:
+            print(location)
+            print(location.latitude, location.longitude)
+            return (location.latitude, location.longitude)
+        else:
+            print("No se encontro ubicacion.")
+            return (None, None)
+    except GeocoderTimedOut as e:
+        print("Error: geocode failed on input %s with message %s" %
+              (canton, e.msg))
+        return None
+
+#                                                        _____________________________________________________
 # ______________________________________________________/ Función auxiliar para Cargar las propiedades de la
 # base de datos
 
@@ -268,7 +294,9 @@ def cargar_propiedades(nombre_archivo):
 def buscar_propiedades(propiedades, capacidad=None, precio=None, amenidades=None, ubi=None, fechas=None):
     resultados = []
     if ubi != -1 and ubi:
-        lat_entrada, lon_entrada = map(float, ubi)
+        print(ubi)
+        lat_entrada, lon_entrada = obtener_coordenadas_canton(ubi)
+        # map(float, ubi)
 
     for prop in propiedades:
         if capacidad != -1 and capacidad and prop.get("capacidad maxima") != str(capacidad):
@@ -286,7 +314,7 @@ def buscar_propiedades(propiedades, capacidad=None, precio=None, amenidades=None
             if lat_prop is not None and lon_prop is not None:
                 distancia = calcular_distancia(
                     lat_entrada, lon_entrada, lat_prop, lon_prop)
-                if distancia > 50:
+                if distancia > 70:
                     continue
 
         if fechas != -1 and fechas and not verificar_disponibilidad(prop.get("fechas", ""), fechas):
@@ -318,12 +346,12 @@ def recibir_datos_alquilar(entrada):
             fechas=datos.get("fecha")
         )
     except Exception as e:
-        return f"Error procesando los datos: {e}"
+        return f"Error procesando los datosss: {e}"
 
 
 # Ejemplo de uso
-# datos_entrada = '{"capacidad": -1, "precio": -1, "amenidades": -1, "ubi": -1, "fecha": -1}'
-# print(recibir_datos_alquilar(datos_entrada))
+datos_entrada = '{"capacidad": -1, "precio": 4000, "amenidades": -1, "ubi": "liberia", "fecha": -1}'
+print(recibir_datos_alquilar(datos_entrada))
 
 
 #                                                        _____________________________________________
@@ -485,7 +513,7 @@ def change_password(datos_entrada):
                     # Obtener la contraseña actual
                     password_actual = get_password_from_string(linea)
                     if password_actual:
-                        # Reemplazar la contraseña antigua con la nueva
+                        # Reemplazar la contraseña
                         linea = linea.replace(
                             f"password: {password_actual}", f"password: {nueva_contrasena}")
                     else:
@@ -496,13 +524,14 @@ def change_password(datos_entrada):
                 file.write(linea)
 
         print("Contraseña actualizada correctamente.")
-        return 1  # Éxito
+        return 1
     except Exception as e:
         print(f"Error al cambiar la contraseña: {e}")
-        return 0  # Fallo
+        return 0
 
-    #                                                        _____________________________________________
-    # ______________________________________________________/función que recibe los mensajes del cliente
+
+#                                                        _____________________________________________
+# ______________________________________________________/función que recibe los mensajes del cliente
 
 
 def receive_info(data):
