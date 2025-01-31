@@ -4,6 +4,9 @@ import tkinter as tk
 from tkinter import scrolledtext
 from database.manageLogin import *
 import serial
+import subprocess
+import os
+
 
 
 class ChatServer:
@@ -179,11 +182,14 @@ class ChatServer:
     #funcion para leer señales del arduino 
     def read_arduino_msg(self):
         while True:
-            ino_message= self.arduino.read_until(b"\n").decode('utf-8')
+            ino_message = self.arduino.read_until(b"\n").decode('utf-8') # Limpia espacios y pone en minúsculas
+            print(f"Mensaje recibido: '{ino_message}'")  # Para depuración
+
             self.broadcast1(ino_message, self.server_socket)
 
-             # Verifica si el mensaje indica una llama detectada
-            if ino_message == "Llama detectada!":
+            # Si el mensaje contiene "llama encendida", ejecuta Notificaciones.py
+            if "Llama detectada!" in ino_message:
+                print("¡Llama detectada! Ejecutando Notificaciones.py...")
                 ruta_notificaciones = os.path.join("database", "Notificaciones.py")
                 subprocess.run(["python", ruta_notificaciones], check=True)
 
