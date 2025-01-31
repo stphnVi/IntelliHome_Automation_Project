@@ -4,6 +4,9 @@ import tkinter as tk
 from tkinter import scrolledtext
 from database.manageLogin import *
 import serial
+import subprocess
+import os
+
 
 
 class ChatServer:
@@ -45,6 +48,9 @@ class ChatServer:
         # Para que sea en hilo separado
         self.thread = threading.Thread(target=self.accept_connections)
         self.thread.start()
+        #hilo para leer mensaje del arduino
+        self.arduino_thread= threading.Thread(target=self.read_arduino_msg)
+        self.arduino_thread.start()
 
         self.root.protocol("WM_DELETE_WINDOW", self.close_server)
         self.root.mainloop()
@@ -173,6 +179,24 @@ class ChatServer:
             self.arduino.close()
         self.server_socket.close()
         self.root.destroy()
+    #funcion para leer señales del arduino 
+    def read_arduino_msg(self):
+        while True:
+            ino_message = self.arduino.read_until(b"\n").decode('utf-8') # Limpia espacios y pone en minúsculas
+            print(f"Mensaje recibido: '{ino_message}'")  # Para depuración
+
+            self.broadcast1(ino_message, self.server_socket)
+
+            # Si el mensaje contiene "llama encendida", ejecuta Notificaciones.py
+            if "Llama detectada!" in ino_message:
+                print("¡Llama detectada! Ejecutando Notificaciones.py...")
+                ruta_notificaciones = os.path.join("database", "Notificaciones.py")
+                subprocess.run(["python", ruta_notificaciones], check=True)
+            elif "Inclinación detectada (HIGH)" in ino_message:
+                print("¡sismo detectado! Ejecutando NotificacionesSismos.py...")
+                ruta_notificaciones = os.path.join("database", "NotificacionesSismos.py")
+                subprocess.run(["python", ruta_notificaciones], check=True)
+
 
 
 if __name__ == "__main__":

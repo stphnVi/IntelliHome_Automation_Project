@@ -96,6 +96,13 @@ public class RegistroActivity extends AppCompatActivity {
     private ImageView logoImageView;
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity(); // Esto cierra todas las actividades en la pila
+    }
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registro);
@@ -145,8 +152,7 @@ public class RegistroActivity extends AppCompatActivity {
         // Configura el listener para el botón de cancelar
         buttonCancel.setOnClickListener(view -> {
             pantallaRegistroAbierta = false;
-            Intent intent = new Intent(RegistroActivity.this, MainActivity.class);
-            startActivity(intent);
+            finishAffinity(); // Esto cierra todas las actividades en la pila
         });
 
         registerButton.setOnClickListener(view -> {
