@@ -2,6 +2,8 @@
 #define PIN_LED2 3
 #define PIN_LED3 4
 #define SENSOR_FLAME_PIN 10
+//Define el pin del switch de inclinacion
+const int switchPin = 11;
 
 //Declaración de la variable del mensaje recibido
 String serverMessage;
@@ -18,6 +20,9 @@ void setup() {
   pinMode(PIN_LED2, OUTPUT); 
   pinMode(PIN_LED3, OUTPUT); 
   pinMode(SENSOR_FLAME_PIN, INPUT);
+
+  //Configura el pin del switch como entrada
+  pinMode(switchPin, INPUT);
 }
 
 void loop() {
@@ -54,4 +59,19 @@ void loop() {
   }
 
   delay(200);
+
+  //Lee el estado del switch de inclinacion
+  int switchState = digitalRead(switchPin);
+
+  //Imprime el estado del Switch en el Monitor Serie
+  if(switchState == HIGH){
+    Serial.println("No hay inclinacion (LOW)");
+  } else {
+    Serial.println("Inclinacion detectada (HIGH)");
+  }
+
+  // Espera un momento para evitar lecturas demasiado rápidas
+  delay(500);
+
+
 }
