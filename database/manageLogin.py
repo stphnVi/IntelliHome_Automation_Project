@@ -254,7 +254,7 @@ def cargar_propiedades(nombre_archivo):
         if datos:
             propiedades.append(datos)
 
-    print(propiedades)
+    # print(propiedades)
     return propiedades
 
 #                                                        ____________________________________________________
@@ -264,21 +264,21 @@ def cargar_propiedades(nombre_archivo):
 
 def buscar_propiedades(propiedades, capacidad=None, precio=None, amenidades=None, ubi=None, fechas=None):
     resultados = []
-    if ubi:
+    if ubi != -1 and ubi:
         lat_entrada, lon_entrada = map(float, ubi)
 
     for prop in propiedades:
-        if capacidad and prop.get("capacidad maxima") != str(capacidad):
+        if capacidad != -1 and capacidad and prop.get("capacidad maxima") != str(capacidad):
             continue
-        if precio and int(prop.get("precio", 0)) > precio:
+        if precio != -1 and precio and int(prop.get("precio", 0)) > precio:
             continue
 
-        if amenidades:
+        if amenidades != -1 and amenidades:
             amenidades_db = prop.get("amenidades", [])
             if set(amenidades) != set(amenidades_db):
                 continue
 
-        if ubi:
+        if ubi != -1 and ubi:
             lat_prop, lon_prop = prop.get("ubi", (None, None))
             if lat_prop is not None and lon_prop is not None:
                 distancia = calcular_distancia(
@@ -286,7 +286,7 @@ def buscar_propiedades(propiedades, capacidad=None, precio=None, amenidades=None
                 if distancia > 50:
                     continue
 
-        if fechas and not verificar_disponibilidad(prop.get("fechas", ""), fechas):
+        if fechas != -1 and fechas and not verificar_disponibilidad(prop.get("fechas", ""), fechas):
             continue
 
         resultados.append(
@@ -319,8 +319,8 @@ def recibir_datos_alquilar(entrada):
 
 
 # Ejemplo de uso
-# datos_entrada = '{"capacidad": 2, "precio": 4000, "amenidades": ["perros", "wifi"], "ubi": ["10.666966", "-85.648673"], "fecha": ["02/03/2025-02/15/2025"]}'
-# print(recibir_datos_alquilar(datos_entrada))
+datos_entrada = '{"capacidad": -1, "precio": -1, "amenidades": -1, "ubi": -1, "fecha": -1}'
+print(recibir_datos_alquilar(datos_entrada))
 
 
 #                                                        _____________________________________________
@@ -428,8 +428,8 @@ def actualizar_fechas_reservadas(nombre_archivo, nombre_propiedad, fecha_reserva
 
 # Reservar un rango de fechas
 # actualizar_fechas_reservadas("base_de_datos.txt", "Caribe", "02/10/2025-02/12/2025")
-actualizar_fechas_reservadas(
-    "./database/test.txt", "caribe", "02/11/2025")
+# actualizar_fechas_reservadas(
+    # "./database/test.txt", "caribe", "02/11/2025")
 
 
 #                                                        _____________________________________________
