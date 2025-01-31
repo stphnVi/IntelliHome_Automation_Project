@@ -45,6 +45,9 @@ class ChatServer:
         # Para que sea en hilo separado
         self.thread = threading.Thread(target=self.accept_connections)
         self.thread.start()
+        #hilo para leer mensaje del arduino
+        self.arduino_thread= threading.Thread(target=self.read_arduino_msg)
+        self.arduino_thread.start()
 
         self.root.protocol("WM_DELETE_WINDOW", self.close_server)
         self.root.mainloop()
@@ -173,6 +176,11 @@ class ChatServer:
             self.arduino.close()
         self.server_socket.close()
         self.root.destroy()
+    #funcion para leer señales del arduino 
+    def read_arduino_msg(self):
+        while True:
+            ino_message= self.arduino.read_untill(b"\n").decode('utf.8')
+            self.broadcast1(ino_message, self.server_socket)
 
 
 if __name__ == "__main__":
