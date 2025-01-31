@@ -5,7 +5,7 @@ account_sid = ''
 auth_token = ''
 client = Client(account_sid, auth_token)
 
-mensaje = 'Su casa se está incendiada'
+mensaje = 'Hay un sismo'
 mensaje_de = 'whatsapp:+14155238886'
 mensaje_para = 'whatsapp:+50687127929'
 

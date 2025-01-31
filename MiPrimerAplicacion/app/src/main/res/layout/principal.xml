@@ -33,41 +33,68 @@
             android:layout_height="21dp" />
 
 
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:text="Agregar nueva propiedad" />
+
         <ImageButton
             android:id="@+id/agregarCasa"
-            android:layout_width="wrap_content"
+            android:layout_width="76dp"
             android:layout_height="57dp"
             android:background="@color/Azul"
             app:srcCompat="@drawable/agregar" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="259dp" />
+            android:layout_height="45dp" />
 
 
-        <Button
-            android:id="@+id/casamodelo"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="156dp"
             android:layout_height="wrap_content"
+            android:text="Buscar propiedades" />
+
+        <ImageButton
+            android:id="@+id/buscarcasa"
+            android:layout_width="88dp"
+            android:layout_height="wrap_content"
+            android:background="@color/Azul"
+            app:srcCompat="@drawable/lupa" />
+
+        <View
+            android:layout_width="371dp"
+            android:layout_height="47dp" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="105dp"
+            android:layout_height="29dp"
             android:layout_gravity="center"
-            android:backgroundTint="@color/Azuloscuro"
             android:text="Casa modelo" />
+
+        <ImageButton
+            android:id="@+id/casamodelo"
+            android:layout_width="128dp"
+            android:layout_height="61dp"
+            android:layout_gravity="center"
+            android:background="@color/Azul"
+            app:srcCompat="@drawable/modelocasa" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="80dp" />
+            android:layout_height="39dp" />
 
-
-        <Button
+        <ImageButton
             android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="43dp"
+            android:layout_width="99dp"
+            android:layout_height="79dp"
             android:layout_gravity="center"
-            android:backgroundTint="@color/Azuloscuro"
-            android:gravity="center"
-            android:text="Salir de la aplicación"
-            tools:layout_editor_absoluteX="149dp"
-            tools:layout_editor_absoluteY="654dp" />
+            android:background="@color/Azul"
+            app:srcCompat="@drawable/salida" />
+
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -22,7 +22,7 @@ public class PrincipalActivity extends AppCompatActivity {
         setContentView(R.layout.principal);
 
         ImageButton buttonAgregar= findViewById(R.id.agregarCasa);
-        Button botoncasamodelo = findViewById(R.id.casamodelo);
+        ImageButton botoncasamodelo = findViewById(R.id.casamodelo);
 
 
         botoncasamodelo.setOnClickListener(view -> { // mapeo del boton casa modelo
@@ -35,7 +35,7 @@ public class PrincipalActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        Button buttonCancel = findViewById(R.id.button2);
+        ImageButton buttonCancel = findViewById(R.id.button2);
         buttonCancel.setOnClickListener(view -> { // mapeo del boton exit
             //Intent intent = new Intent(PrincipalActivity.this, MainActivity.class);
             //startActivity(intent);
