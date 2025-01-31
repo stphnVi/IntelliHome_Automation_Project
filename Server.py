@@ -179,8 +179,13 @@ class ChatServer:
     #funcion para leer señales del arduino 
     def read_arduino_msg(self):
         while True:
-            ino_message= self.arduino.read_untill(b"\n").decode('utf.8')
+            ino_message= self.arduino.read_until(b"\n").decode('utf-8')
             self.broadcast1(ino_message, self.server_socket)
+
+             # Verifica si el mensaje indica una llama detectada
+            if ino_message == "Llama detectada!":
+                ruta_notificaciones = os.path.join("database", "Notificaciones.py")
+                subprocess.run(["python", ruta_notificaciones], check=True)
 
 
 if __name__ == "__main__":
