@@ -114,13 +114,13 @@ public class CasaModelo extends AppCompatActivity {
 
         runOnUiThread(() -> {
             String message = Socket.message;
-            if ("".equals(message)) {
+            if ("Llama detectada!".equals(message)) {
                 // Acción exitosa, actualizar UI
-                Toast.makeText(this, "Led encendido", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Hay un incendio", Toast.LENGTH_SHORT).show();
                 Socket.message = null;
-            } else if ("LED1_OFF".equals(message)) {
+            } else if ("Inclinación detectada (HIGH)".equals(message)) {
                 // Mostrar error
-                Toast.makeText(this, "Led apagado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Hay un sismo", Toast.LENGTH_SHORT).show();
                 Socket.message = null;
             } else {
                 // Manejar otros casos
