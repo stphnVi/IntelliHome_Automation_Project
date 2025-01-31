@@ -192,6 +192,11 @@ class ChatServer:
                 print("¡Llama detectada! Ejecutando Notificaciones.py...")
                 ruta_notificaciones = os.path.join("database", "Notificaciones.py")
                 subprocess.run(["python", ruta_notificaciones], check=True)
+            elif "Inclinación detectada (HIGH)" in ino_message:
+                print("¡sismo detectado! Ejecutando Notificaciones.py...")
+                ruta_notificaciones = os.path.join("database", "Notificaciones.py")
+                subprocess.run(["python", ruta_notificaciones], check=True)
+
 
 
 if __name__ == "__main__":
