@@ -136,7 +136,10 @@ def questions(user_info):
                 if all(get_field_from_string(user_info, field) == get_field_from_string(line, field)
                        for field in ["username", "nombreProfe", "apodo", "equipo"]):
                     print("SI es el usuario")
-                    return "1"  # Todos los datos coinciden
+                    username = get_field_from_string(line, "username")
+                    print(f"1: {username}")
+                    return f"1: {username}"  # return de nombre de usuario
+                    # return "1"
         print("NO es el usuario")
         return "0"  # No se encontraron coincidencias
     except Exception as e:
@@ -319,13 +322,14 @@ def recibir_datos_alquilar(entrada):
 
 
 # Ejemplo de uso
-datos_entrada = '{"capacidad": -1, "precio": -1, "amenidades": -1, "ubi": -1, "fecha": -1}'
-print(recibir_datos_alquilar(datos_entrada))
+# datos_entrada = '{"capacidad": -1, "precio": -1, "amenidades": -1, "ubi": -1, "fecha": -1}'
+# print(recibir_datos_alquilar(datos_entrada))
 
 
 #                                                        _____________________________________________
-# ______________________________________________________/ Función para recibir datos para su posterior
-# consulta de alquileres
+# ______________________________________________________/ Función para actualizar fechas en la base de
+# datos según se solicitó
+#
 
 def actualizar_fechas_reservadas(nombre_archivo, nombre_propiedad, fecha_reservada):
     propiedades = cargar_propiedades(nombre_archivo)
@@ -431,9 +435,74 @@ def actualizar_fechas_reservadas(nombre_archivo, nombre_propiedad, fecha_reserva
 # actualizar_fechas_reservadas(
     # "./database/test.txt", "caribe", "02/11/2025")
 
-
 #                                                        _____________________________________________
-# ______________________________________________________/función que recibe los mensajes del cliente
+# ______________________________________________________/función Auxiliar de cambio de contraseña
+
+
+def get_nueva_contrasena_from_string(data):
+    match = re.search(r"nuevaC:\s*(\S+)", data)
+    if match:
+        return match.group(1)
+    return None
+#                                                        _____________________________________________
+# ______________________________________________________/función de cambio de contraseña
+
+
+def change_password(datos_entrada):
+    try:
+        # Extraer el username y la nueva contraseña del string de entrada
+        print(datos_entrada)
+        username = get_username_from_string(datos_entrada)
+        nueva_contrasena = get_nueva_contrasena_from_string(datos_entrada)
+        print(username)
+        print(nueva_contrasena)
+
+        if not username or not nueva_contrasena:
+            print("Formato de entrada inválido.")
+            return 0  # Fallo
+
+        # Abrir el archivo en modo lectura para leer todas las líneas
+        with open("./database/data.txt", "r") as file:
+            lineas = file.readlines()
+
+        usuario_encontrado = False
+        for linea in lineas:
+            current_username = get_username_from_string(linea)
+            if current_username == username:
+                usuario_encontrado = True
+                break
+
+        if not usuario_encontrado:
+            print("El nombre de usuario no existe.")
+            return 2  # Usuario no encontrado
+
+        # Abrir el archivo en modo escritura para actualizar los datos
+        with open("./database/data.txt", "w") as file:
+            for linea in lineas:
+
+                current_username = get_username_from_string(linea)
+                if current_username == username:
+                    # Obtener la contraseña actual
+                    password_actual = get_password_from_string(linea)
+                    if password_actual:
+                        # Reemplazar la contraseña antigua con la nueva
+                        linea = linea.replace(
+                            f"password: {password_actual}", f"password: {nueva_contrasena}")
+                    else:
+                        print(
+                            f"No se encontró la contraseña para el usuario {username}.")
+                        return 0  # Fallo
+                # Escribir la línea (actualizada o sin cambios) en el archivo
+                file.write(linea)
+
+        print("Contraseña actualizada correctamente.")
+        return 1  # Éxito
+    except Exception as e:
+        print(f"Error al cambiar la contraseña: {e}")
+        return 0  # Fallo
+
+    #                                                        _____________________________________________
+    # ______________________________________________________/función que recibe los mensajes del cliente
 
 
 def receive_info(data):
@@ -470,6 +539,9 @@ def receive_info(data):
     elif valor_func == "rec":
         print("entra")
         result = questions(nuevo_data.strip())
+    elif valor_func == "cpass":
+        print("cambiar contrasena")
+        result = change_password(nuevo_data.strip())
 
     elif valor_func == "regcasa":
         print("entra")
@@ -516,7 +588,12 @@ def receive_info(data):
 #                                                        _____________________________________________
 # ______________________________________________________/ PRUEBAS de mensajes del cliente
 
-# receive_info("func: rec, username: Tefa1, nombreProfe: Json, apodo: gogi, equipo: liga")
+
+# receive_info(
+#    "func: cpass, username: jose1234, nuevaC: 123454123")
+
+# receive_info(
+#    "func: rec, username: Tefa1, nombreProfe: Json, apodo: gogi, equipo: liga")
 
 
 # receive_info(
