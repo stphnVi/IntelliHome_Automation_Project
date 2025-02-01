@@ -12,11 +12,16 @@ import android.widget.Toast;
 import android.view.View;
 import android.widget.SeekBar;
 import androidx.appcompat.app.AlertDialog;
-import android.view.View;
+
 import android.content.DialogInterface;
 import java.util.ArrayList;
 import java.util.Calendar;
 import android.view.Menu;
+
+import android.view.LayoutInflater;
+
+
+
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -36,8 +41,10 @@ public class BusquedaAlquiler extends AppCompatActivity {
 
     private TextView capacidadText;
     private Button selectCantidadButton;
-    public TextView txtView;
     float curBrightnessValue = 0;
+    private String capacidadSeleccionada;
+
+    private int cantidad;
 
 
 
@@ -81,6 +88,8 @@ public class BusquedaAlquiler extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navbar);
+
+
 
         EditText UbiEditText = findViewById(R.id.UbiText);
 
@@ -147,37 +156,60 @@ public class BusquedaAlquiler extends AppCompatActivity {
 
         CantidadButton.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(BusquedaAlquiler.this);
-            builder.setTitle("Selecciona la capacidad");
+            View customView = getLayoutInflater().inflate(R.layout.dialogo_seleccion_capacidad, null);
 
-            // Contenedor para el SeekBar
-            LinearLayout layout = new LinearLayout(BusquedaAlquiler.this);
-            layout.setOrientation(LinearLayout.VERTICAL);
-            layout.setPadding(50, 40, 50, 10);
+            // Buscar vistas
+            SeekBar seekBar = customView.findViewById(R.id.seekBar);
+            TextView capacityText = customView.findViewById(R.id.capacityText);
+            Button btnGuardar = customView.findViewById(R.id.btnGuardar);
+            Button btnCancelar = customView.findViewById(R.id.btnCancelar);
 
-            // Crear SeekBar
-            SeekBar seekBar = new SeekBar(BusquedaAlquiler.this);
-            seekBar.setMax(20);
-            seekBar.setProgress(1);
+            if (capacityText == null) {
+                Log.e("Error", "capacityText es null, verifica el ID en el XML");
+            }
 
-            layout.addView(seekBar);
+            seekBar.setProgress(0);
+            seekBar.setMax(10);
 
-            // Configurar el AlertDialog para mostrar el SeekBar
-            builder.setView(layout);
+            // Establecer el valor inicial del TextView
+            capacityText.setText(String.valueOf(seekBar.getProgress() + 1));
 
-            // Botón de aceptar (sin acción por ahora)
-            builder.setPositiveButton("Aceptar", (dialog, which) -> {
-                // Aquí puedes agregar alguna acción más tarde si es necesario
+            // Configurar el SeekBar
+            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    capacityText.setText(String.valueOf(progress));
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {}
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    cantidad = seekBar.getProgress();
+                }
             });
 
-            // Botón de cancelar (sin acción por ahora)
-            builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
+            // Crear el diálogo
+            AlertDialog dialog = builder.setView(customView).create();
 
-            // Mostrar el AlertDialog
-            builder.create().show();
+            // Botón Guardar - Guarda el valor en capacidadText y cierra el diálogo
+            btnGuardar.setOnClickListener(v -> {
+                //capacidadText.setText(cantidad);
+                //dialog.dismiss();
+            });
 
+            // Botón Cancelar - Cierra el diálogo sin cambios
+            btnCancelar.setOnClickListener(v -> dialog.dismiss());
 
-
+            // Mostrar el diálogo
+            dialog.show();
         });
+
+
+
+
+
 
 
 
