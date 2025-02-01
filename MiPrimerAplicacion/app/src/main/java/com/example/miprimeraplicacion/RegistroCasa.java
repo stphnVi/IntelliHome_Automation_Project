@@ -335,18 +335,12 @@ public class RegistroCasa extends AppCompatActivity {
                         for (int i=0; i<count; i++) {
                             Uri imageUri = data.getClipData().getItemAt(i).getUri();
                             imagePath = imageUri.getPath();
-//                            imagePaths[i] = imagePath;
                             imageUris.add(imageUri); //add to list
                         }
                         //Se pone la primer imagen en el image view
                         casaImageView.setImageURI(imageUris.get(0));
                         position = 0;
                         casaImageView.setBackground(getDrawable(R.color.Azul));
-//                        try {
-//                            Socket.sendImages(Socket.dataOut, imagePaths);
-//                        } catch (IOException e) {
-//                            throw new RuntimeException(e);
-//                        }
                     }
                     else { // se eligen mas de 12 casas
                         Toast.makeText(this, "El maximo de imagenes por casa es 4", Toast.LENGTH_SHORT).show();

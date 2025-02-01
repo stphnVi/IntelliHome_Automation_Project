@@ -50,35 +50,6 @@ public class Socket {
         }).start();
     }
 
-//    public static void sendImages(DataOutputStream dataOutputStream, String[] imagePaths) throws IOException {
-//        dataOutputStream.writeInt(imagePaths.length); // Send number of images
-//
-//        for (String imagePath : imagePaths) {
-//            File imageFile = new File(imagePath);
-//
-//            if (!imageFile.exists()) {
-//                System.out.println("File not found: " + imagePath);
-//                continue;
-//            }
-//
-//            long fileSize = imageFile.length();
-//            dataOutputStream.writeLong(fileSize); // Send image size
-//
-//            try (FileInputStream fileInputStream = new FileInputStream(imageFile)) {
-//                byte[] buffer = new byte[4096];
-//                int bytesRead;
-//
-//                while ((bytesRead = fileInputStream.read(buffer)) != -1) {
-//                    dataOutputStream.write(buffer, 0, bytesRead);
-//                }
-//            }
-//
-//            System.out.println("Sent " + imagePath);
-//        }
-//
-//        System.out.println("All images sent successfully!");
-//    }
-
 
 
 }
