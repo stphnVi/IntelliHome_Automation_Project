@@ -1,3 +1,4 @@
+import base64
 import re
 import math
 from datetime import datetime
@@ -321,6 +322,43 @@ def recibir_datos_alquilar(entrada):
 datos_entrada = '{"capacidad": 2, "precio": 4000, "amenidades": ["perros", "wifi"], "ubi": ["10.666966", "-85.648673"], "fecha": ["02/03/2025-02/15/2025"]}'
 print(recibir_datos_alquilar(datos_entrada))
 
+#                                                        _____________________________________________
+# ______________________________________________________/funcion que convierte string a imagen
+
+def convert_base64_to_image(base64_string, output_image_path):
+    try:
+        # Decode the Base64 string into binary data
+        image_data = base64.b64decode(base64_string)
+
+        # Write the binary data to an image file
+        with open(output_image_path, 'wb') as image_file:
+            image_file.write(image_data)
+
+        print(f"Image saved successfully at {output_image_path}")
+        return 1
+    except Exception as e:
+        print(f"Error converting Base64 to image: {e}")
+        return 0
+
+
+#                                                        _____________________________________________
+# ______________________________________________________/función que recibe los mensajes del cliente
+
+def parse_base64_string(input_string):
+    try:
+        # Split the input string at the comma
+        parts = input_string.split(", ")
+
+        # Extract the base64 string and output image path
+        base64_part = parts[0].split("base64: ")[1]
+        output_image_path_part = parts[1].split("output_image_path: ")[1]
+
+        return base64_part, output_image_path_part
+
+    except Exception as e:
+        print(f"Error parsing input string: {e}")
+        return None, None
+
 
 #                                                        _____________________________________________
 # ______________________________________________________/función que recibe los mensajes del cliente
@@ -376,6 +414,10 @@ def receive_info(data):
     elif valor_func == "luzsala":
         print("sala")
         return 0
+
+    elif valor_func == "fotos":
+        base64_string, output_image_path = parse_base64_string(nuevo_data.strip())
+        # result = convert_base64_to_image(base64_string, output_image_path)
 
     else:
         result = add_user(nuevo_data.strip())

@@ -1,6 +1,7 @@
 package com.example.miprimeraplicacion;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -40,7 +41,6 @@ public class RegistroCasa extends AppCompatActivity {
     private static final int PICK_IMAGES_CODE = 0;
     private ImageSwitcher casaImageView;
     private String imagePath = null;
-    private String[] imagePaths = new String[4];
 
 
     // Lista de amenidades
@@ -335,18 +335,20 @@ public class RegistroCasa extends AppCompatActivity {
                         for (int i=0; i<count; i++) {
                             Uri imageUri = data.getClipData().getItemAt(i).getUri();
                             imagePath = imageUri.getPath();
-//                            imagePaths[i] = imagePath;
                             imageUris.add(imageUri); //add to list
                         }
                         //Se pone la primer imagen en el image view
                         casaImageView.setImageURI(imageUris.get(0));
                         position = 0;
                         casaImageView.setBackground(getDrawable(R.color.Azul));
-//                        try {
-//                            Socket.sendImages(Socket.dataOut, imagePaths);
-//                        } catch (IOException e) {
-//                            throw new RuntimeException(e);
-//                        }
+                        new Thread(() -> {
+                            try {
+                                ContentResolver contentResolver = getContentResolver();
+                                Socket.sendImages(Socket.out, imageUris, contentResolver);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }).start();
                     }
                     else { // se eligen mas de 12 casas
                         Toast.makeText(this, "El maximo de imagenes por casa es 4", Toast.LENGTH_SHORT).show();
