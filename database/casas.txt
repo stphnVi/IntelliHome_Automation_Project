@@ -1,3 +1,6 @@
 
 nombre de la propiedad: Casa1, Ubicacion:Lat: 9.745042642538621, Lng: -84.09588088467201, reglas de uso: Ninguna, amenidades:Calefaccion, Lavadora y secadora, Piscina, capacidad maxima: 3, precio: 50000
 nombre de la propiedad: Cabaña, Ubicacion:latitud: 9.883990604928343, longitud: -83.82024873260511, reglas de uso: Mascotas, amenidades:Television por cable o satelite, capacidad maxima: 6, precio: 70000
+Ubicacion:lindora , amenidades:Wi-Fi gratuito, Terraza o balcon, Lavadora y secadora, Jardin o patio
+Ubicacion:liberia, amenidades:Calefaccion, Wi-Fi gratuito, Lavadora y secadora, fecha:Entrada: 06/01/2025 - Salida: 01/01/2025
+Ubicacion:liberia, amenidades:Calefaccion, Wi-Fi gratuito, fecha: 14/01/2025-09/01/2025

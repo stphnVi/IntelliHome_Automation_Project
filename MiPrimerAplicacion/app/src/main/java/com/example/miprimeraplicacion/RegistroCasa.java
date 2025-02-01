@@ -75,12 +75,6 @@ public class RegistroCasa extends AppCompatActivity {
         //Mapa
 
         // Recuperar las coordenadas del Intent
-        double latitud = getIntent().getDoubleExtra("latitud", 0.0);  // Valor por defecto 0.0
-        double longitud = getIntent().getDoubleExtra("longitud", 0.0);  // Valor por defecto 0.0
-
-        // Mostrar las coordenadas en el TextView (o usarlas como lo necesites)
-        textoUbicaciones = findViewById(R.id.textoUbicaciones);
-        textoUbicaciones.setText("latitud: " + latitud + ", longitud: " + longitud);
 
 
         //Amenidades
@@ -170,14 +164,9 @@ public class RegistroCasa extends AppCompatActivity {
         });
 
 
-        // Botón para abrir el mapa en un cuadro de diálogo
-        Button botonSeleccionarUbicacion = findViewById(R.id.botonSeleccionarUbicacion);
-        botonSeleccionarUbicacion.setOnClickListener(view -> {
-            // Crear el DialogFragment
-            MapaDialogFragment mapaDialogFragment = new MapaDialogFragment();
-            mapaDialogFragment.show(getSupportFragmentManager(), "MapaDialog");
 
-        });
+
+
 
 
 
