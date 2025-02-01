@@ -1,10 +1,16 @@
 package com.example.miprimeraplicacion;
 
+import android.content.ContentResolver;
+import android.net.Uri;
+
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Socket {
@@ -50,35 +56,43 @@ public class Socket {
         }).start();
     }
 
-//    public static void sendImages(DataOutputStream dataOutputStream, String[] imagePaths) throws IOException {
-//        dataOutputStream.writeInt(imagePaths.length); // Send number of images
+//    public static void sendImages(DataOutputStream dataOutputStream, ArrayList<Uri> imageUris, ContentResolver contentResolver) throws IOException {
+//        dataOutputStream.writeInt(imageUris.size()); // Send number of images
 //
-//        for (String imagePath : imagePaths) {
-//            File imageFile = new File(imagePath);
-//
-//            if (!imageFile.exists()) {
-//                System.out.println("File not found: " + imagePath);
-//                continue;
-//            }
-//
-//            long fileSize = imageFile.length();
-//            dataOutputStream.writeLong(fileSize); // Send image size
-//
-//            try (FileInputStream fileInputStream = new FileInputStream(imageFile)) {
-//                byte[] buffer = new byte[4096];
-//                int bytesRead;
-//
-//                while ((bytesRead = fileInputStream.read(buffer)) != -1) {
-//                    dataOutputStream.write(buffer, 0, bytesRead);
+//        for (Uri imageUri : imageUris) {
+//            try (InputStream inputStream = contentResolver.openInputStream(imageUri)) {
+//                if (inputStream == null) {
+//                    System.out.println("Unable to access image: " + imageUri);
+//                    continue;
 //                }
-//            }
 //
-//            System.out.println("Sent " + imagePath);
+//                byte[] imageBytes = readBytesFromInputStream(inputStream);
+//                int fileSize = imageBytes.length;
+//                dataOutputStream.writeLong(fileSize); // Send image size
+//
+//                dataOutputStream.write(imageBytes);
+//
+//                System.out.println("Sent image from URI: " + imageUri);
+//            } catch (Exception e) {
+//                System.out.println("Failed to send image from URI: " + imageUri);
+//                e.printStackTrace();
+//            }
 //        }
 //
 //        System.out.println("All images sent successfully!");
 //    }
-
+//
+//    private static byte[] readBytesFromInputStream(InputStream inputStream) throws IOException {
+//        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+//        byte[] data = new byte[4096];
+//        int bytesRead;
+//
+//        while ((bytesRead = inputStream.read(data, 0, data.length)) != -1) {
+//            buffer.write(data, 0, bytesRead);
+//        }
+//
+//        return buffer.toByteArray();
+//    }
 
 
 }
