@@ -281,23 +281,23 @@ public class BusquedaAlquiler extends AppCompatActivity {
             String precioElegido = PrecioSeleccionado.getText().toString();
 
             // Verificar si algún campo está vacío y reemplazar con "-1"
-            if (ubicacion.isEmpty()) {
+            if (ubicacion.isEmpty() || ubicacion.equalsIgnoreCase("Ubicación")) {
                 ubicacion = "-1";
             }
-            if (amenidades.isEmpty()) {
+            if (amenidades.isEmpty() || amenidades.equalsIgnoreCase("Amenidades: ")) {
                 amenidades = "-1";
             }
-            if (fecha.isEmpty()) {
+            if (fecha.isEmpty()|| fecha.equalsIgnoreCase("Rango de Fechas: ")) {
                 fecha = "-1";
             }
-            if (capacidadElegida.isEmpty()) {
+            if (capacidadElegida.isEmpty() || capacidadElegida.equalsIgnoreCase("Capacidad:")) {
                 capacidadElegida = "-1";
             }
-            if (precioElegido.isEmpty()) {
+            if (precioElegido.isEmpty() || precioElegido.equalsIgnoreCase("Precio:")) {
                 precioElegido = "-1";
             }
             //cambiar func
-            String messageSend = "func: regcasa" + ", Ubicacion:" + ubicacion + ", amenidades:" + amenidades + ", fecha: " + fecha + ", capacidad:" + capacidadElegida + ", precio:" + precioElegido;
+            String messageSend = "func: buscarCasa" + ", ubi:" + ubicacion + "; amenidades:" + amenidades + "; fecha: " + fecha + "; capacidad:" + capacidadElegida + "; precio:" + precioElegido;
             Socket.sendMessage(messageSend);
         });
 

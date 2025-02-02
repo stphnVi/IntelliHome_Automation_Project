@@ -3,6 +3,7 @@ import math
 from datetime import datetime, timedelta
 from database.descifrado import *
 from database.cifrado import *
+from database.norm import *
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut
 import certifi
@@ -350,8 +351,8 @@ def recibir_datos_alquilar(entrada):
 
 
 # Ejemplo de uso
-datos_entrada = '{"capacidad": -1, "precio": 4000, "amenidades": -1, "ubi": "liberia", "fecha": -1}'
-print(recibir_datos_alquilar(datos_entrada))
+# datos_entrada = '{"capacidad": -1, "precio": 4000, "amenidades": -1, "ubi": "liberia", "fecha": -1}'
+# print(recibir_datos_alquilar(datos_entrada))
 
 
 #                                                        _____________________________________________
@@ -562,6 +563,8 @@ def receive_info(data):
         valor_func = data[inicio + 6:fin].strip()
         nuevo_data = data[:inicio].strip() + " " + data[fin+1:].strip()
 
+    print(valor_func)
+
     if valor_func == "login":
         result = login_info(nuevo_data.strip())
 
@@ -572,9 +575,15 @@ def receive_info(data):
         print("cambiar contrasena")
         result = change_password(nuevo_data.strip())
 
+    elif valor_func == "buscarCasa":
+        print("--------------ENTRA A BUSCAR CASAS")
+        print(nuevo_data.strip())
+        print(normalizar_datos(nuevo_data.strip()))
+        print(recibir_datos_alquilar(normalizar_datos(nuevo_data.strip())))
+        result = recibir_datos_alquilar(normalizar_datos(nuevo_data.strip()))
+
     elif valor_func == "regcasa":
-        print("entra")
-        return add_house(nuevo_data.strip())
+        result = add_house(nuevo_data.strip())
 
     elif valor_func == "luzcuarto":
         print("cuarto")
@@ -597,7 +606,7 @@ def receive_info(data):
 #                                                      _____________________________________________________________________________________
 # _____________________________________________________/ SI SE REQUIERE VER EL CONTENIDO DE LA BASE DE DATOS PARA PRUEBAS COMENTAR ESTA LÍNEA
 
-    os.remove('./database/data.txt')
+    # os.remove('./database/data.txt')
 # _______________________________________________________  ES DE SUMA IMPORTANCIA VOLVER A PONERLA PARA CUMPLIR CON LO QUE EL CLIENTE SOLICITA
 
     print(" base de datos actualizada y cifrada, bade en plaintext eliminada")
