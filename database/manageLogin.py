@@ -108,25 +108,27 @@ def add_user(user_info):
 
 
 def add_house(house_info):
+    # print(f"Asi entra la info de la casa {house_info}")
 
     try:
         # Abrir el archivo en modo append (agregar al final)
-
+        print("entra a add_house")
         house_info_normalizada = normalizar_casa(house_info)
-        print(f'casa normalizada: {house_info_normalizada}')
+        print(
+            f'----------------->dato casa normalizado: {house_info_normalizada}')
 
         fechas = ", fechas: 02/04/2025-12/31/2025"
         house_info_final = house_info_normalizada + fechas
         with open('./database/casas.txt', 'a') as file:
             # Escribir la información de la casa en el archivo
             file.write("\n" + house_info_final)
-        print("Casa agregada")
+        print("----------------->Casa agregada a la base de datos")
         return "1"
     except Exception as e:
         print(f"Error")
 
 
-texto = "nombre de la propiedad: CasaPruebaServer, ubi:Lat: 9.745042642538621, Lng: -84.09588088467201, reglas de uso: Ninguna, No perros, amenidades:Calefaccion, Lavadora y secadora, Piscina, capacidad maxima: 3, precio: 50000"
+# texto = "nombre de la propiedad: CasaPruebaServer, ubi:Lat: 9.745042642538621, Lng: -84.09588088467201, reglas de uso: Ninguna, No perros, amenidades:Calefaccion, Lavadora y secadora, Piscina, capacidad maxima: 3, precio: 50000"
 # ejemploNOSIRVE = "nombre de la propiedad: Casa1, Ubicacion:Lat: 9.745042642538621, Lng: -84.09588088467201, reglas de uso: Ninguna, amenidades:Calefaccion, Lavadora y secadora, Piscina, capacidad maxima: 3, precio: 50000"
 # add_house(texto)
 #                                                        _______________________________________________________
@@ -244,8 +246,8 @@ def obtener_coordenadas_canton(canton):
     try:
         location = geolocator.geocode(canton + ", Costa Rica", timeout=3)
         if location:
-            # print(location)
-            # print(location.latitude, location.longitude)
+            print(location)
+            print(location.latitude, location.longitude)
             return (location.latitude, location.longitude)
         else:
             print("No se encontro ubicacion.")
@@ -255,7 +257,7 @@ def obtener_coordenadas_canton(canton):
               (canton, e.msg))
         return None
 
-        _____________________________________________________
+ #                                                        _____________________________________________________
 # ______________________________________________________/ Función auxiliar para Cargar las propiedades de la
 # base de datos
 
@@ -347,7 +349,7 @@ def buscar_propiedades(propiedades, capacidad=None, precio=None, amenidades=None
     if not resultados:
         print("No se encontraron propiedades que cumplan con los criterios.")
         return 0
-    print(f"PROPIEDADES/PROPIEDAD ENCONTRADA------>: {resultados}")
+    print(f"PROPIEDADES/PROPIEDAD ENCONTRADA----------------->: {resultados}")
     return "; ".join(resultados)
 
 #                                                        _____________________________________________
@@ -356,6 +358,7 @@ def buscar_propiedades(propiedades, capacidad=None, precio=None, amenidades=None
 
 
 def recibir_datos_alquilar(entrada):
+    # print(f'entro a recibir los datos normalizados para la búsqueda {entrada}')
     try:
         datos = eval(entrada)
         return buscar_propiedades(
@@ -371,12 +374,12 @@ def recibir_datos_alquilar(entrada):
 
 
 # Ejemplo de uso
-datos_entrada = '{"capacidad": -1, "precio": -1, "amenidades": -1, "ubi": -1, "fecha": -1}'
+# datos_entrada = '{"capacidad": -1, "precio": -1, "amenidades": -1, "ubi": -1, "fecha": -1}'
 
 # datos_entrada = "{'capacidad': -1, 'precio': 1000, 'amenidades': -1, 'ubi': 'cieneguita limon', 'fecha': -1}"
 
 # datos_entrada = '{"capacidad": -1, "precio": 4000, "amenidades": -1, "ubi": "liberia", "fecha": -1}'
-print(recibir_datos_alquilar(datos_entrada))
+# print(recibir_datos_alquilar(datos_entrada))
 
 
 #                                                        _____________________________________________
@@ -628,7 +631,7 @@ def receive_info(data):
 #                                                      _____________________________________________________________________________________
 # _____________________________________________________/ SI SE REQUIERE VER EL CONTENIDO DE LA BASE DE DATOS PARA PRUEBAS COMENTAR ESTA LÍNEA
 
-    # os.remove('./database/data.txt')
+    os.remove('./database/data.txt')
 # _______________________________________________________  ES DE SUMA IMPORTANCIA VOLVER A PONERLA PARA CUMPLIR CON LO QUE EL CLIENTE SOLICITA
 
     print(" base de datos actualizada y cifrada, bade en plaintext eliminada")

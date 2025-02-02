@@ -24,35 +24,35 @@ public class RegistroCasa extends AppCompatActivity {
 
     // Lista de amenidades
     String[] amenidades = {"Cocina equipada (con electrodomesticos modernos)",
-                            "Aire acondicionado",
-                            "Calefaccion",
-                            "Wi-Fi gratuito",
-                            "Television por cable o satelite",
-                            "Lavadora y secadora",
-                            "Piscina",
-                            "Jardin o patio",
-                            "Barbacoa o parrilla",
-                            "Terraza o balcon",
-                            "Gimnasio en casa",
-                            "Garaje o espacio de estacionamiento",
-                            "Sistema de seguridad",
-                            "Habitaciones con baño en suite",
-                            "Muebles de exterior",
-                            "Microondas",
-                            "Lavavajillas",
-                            "Cafetera",
-                            "Ropa de cama y toallas incluidas",
-                            "Acceso a areas comunes (piscina, gimnasio)",
-                            "Camas adicionales o sofa cama",
-                            "Servicios de limpieza opcionales",
-                            "Acceso a transporte público cercano",
-                            "Mascotas permitidas",
-                            "Cercania a tiendas y restaurantes",
-                            "Sistema de calefaccion por suelo radiante",
-                            "Escritorio o area de trabajo",
-                            "Sistemas de entretenimiento (videojuegos, equipo de musica)",
-                            "Chimenea",
-                            "Acceso a internet de alta velocidad" };
+            "Aire acondicionado",
+            "Calefaccion",
+            "Wi-Fi gratuito",
+            "Television por cable o satelite",
+            "Lavadora y secadora",
+            "Piscina",
+            "Jardin o patio",
+            "Barbacoa o parrilla",
+            "Terraza o balcon",
+            "Gimnasio en casa",
+            "Garaje o espacio de estacionamiento",
+            "Sistema de seguridad",
+            "Habitaciones con baño en suite",
+            "Muebles de exterior",
+            "Microondas",
+            "Lavavajillas",
+            "Cafetera",
+            "Ropa de cama y toallas incluidas",
+            "Acceso a areas comunes (piscina, gimnasio)",
+            "Camas adicionales o sofa cama",
+            "Servicios de limpieza opcionales",
+            "Acceso a transporte público cercano",
+            "Mascotas permitidas",
+            "Cercania a tiendas y restaurantes",
+            "Sistema de calefaccion por suelo radiante",
+            "Escritorio o area de trabajo",
+            "Sistemas de entretenimiento (videojuegos, equipo de musica)",
+            "Chimenea",
+            "Acceso a internet de alta velocidad" };
 
     boolean[] amenidadesSeleccionadas = new boolean[amenidades.length];
     ArrayList<String> seleccionadas = new ArrayList<>();
@@ -83,6 +83,12 @@ public class RegistroCasa extends AppCompatActivity {
         //Mapa
 
         // Recuperar las coordenadas del Intent
+        double latitud = getIntent().getDoubleExtra("latitud", 0.0);  // Valor por defecto 0.0
+        double longitud = getIntent().getDoubleExtra("longitud", 0.0);  // Valor por defecto 0.0
+
+        // Mostrar las coordenadas en el TextView (o usarlas como lo necesites)
+        textoUbicaciones = findViewById(R.id.textoUbicaciones);
+        textoUbicaciones.setText("latitud: " + latitud + ", longitud: " + longitud);
 
 
         //Amenidades
@@ -173,9 +179,14 @@ public class RegistroCasa extends AppCompatActivity {
         });
 
 
+        // Botón para abrir el mapa en un cuadro de diálogo
+        Button botonSeleccionarUbicacion = findViewById(R.id.botonSeleccionarUbicacion);
+        botonSeleccionarUbicacion.setOnClickListener(view -> {
+            // Crear el DialogFragment
+            MapaDialogFragment mapaDialogFragment = new MapaDialogFragment();
+            mapaDialogFragment.show(getSupportFragmentManager(), "MapaDialog");
 
-
-
+        });
 
 
 

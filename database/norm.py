@@ -118,11 +118,13 @@ def extraer_reglas(texto):
 
 
 def normalizar_casa(texto):
+
     # Extraer nombre de la propiedad
     nombre = re.search(r"nombre de la propiedad: (.*?),", texto).group(1)
 
     # Extraer latitud y longitud
-    ubi_match = re.search(r"ubi:Lat: ([\d.\-]+), Lng: ([\d.\-]+)", texto)
+    ubi_match = re.search(
+        r"ubi:latitud: ([\d.\-]+), longitud: ([\d.\-]+)", texto)
     lat, lng = ubi_match.groups()
 
     # Extraer reglas de uso
