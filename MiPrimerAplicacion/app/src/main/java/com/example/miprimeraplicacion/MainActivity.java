@@ -35,6 +35,13 @@ public class MainActivity extends AppCompatActivity {
     private boolean pantallaInicioSesionAbierta;
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity(); // Esto cierra todas las actividades en la pila
+    }
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -161,8 +168,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     // Manejar otros mensajes si es necesario
                     Socket.message = null;
-
-
                 }
             }
             else {

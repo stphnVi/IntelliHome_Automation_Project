@@ -59,14 +59,26 @@
                 android:hint="Apellido"
                 android:inputType="textPersonName" />
 
-            <!-- Fecha de Nacimiento -->
-            <ImageButton
-                android:id="@+id/botonFotoPerfil"
-                android:layout_width="180dp"
-                android:layout_height="180dp"
-                android:layout_marginTop="24dp"
-                app:srcCompat="@android:drawable/ic_menu_upload" />
+            <!-- Profile picture -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/fotoPerfilImageView"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_marginTop="30dp"
+                app:shapeAppearanceOverlay="@style/circular"
+                app:srcCompat="@drawable/baseline_account_circle_24"
+                android:background="@color/Azuloscuro"
+                android:scaleType="centerCrop"/>
 
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/botonFotoPerfil"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                app:srcCompat="@drawable/baseline_camera_alt_24"
+                />
+
+            <!-- Fecha de Nacimiento -->
             <Button
                 android:id="@+id/selectDateButton"
                 android:layout_width="match_parent"

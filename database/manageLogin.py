@@ -3,6 +3,8 @@ import math
 from datetime import datetime, timedelta
 from database.descifrado import *
 from database.cifrado import *
+import subprocess
+import os
 from database.norm import *
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut
@@ -142,15 +144,16 @@ def questions(user_info):
                 if all(get_field_from_string(user_info, field) == get_field_from_string(line, field)
                        for field in ["username", "nombreProfe", "apodo", "equipo"]):
                     print("SI es el usuario")
+                    return "10"  # Todos los datos coinciden
                     username = get_field_from_string(line, "username")
                     print(f"1: {username}")
                     return f"1: {username}"  # return de nombre de usuario
                     # return "1"
         print("NO es el usuario")
-        return "0"  # No se encontraron coincidencias
+        return "20"  # No se encontraron coincidencias
     except Exception as e:
         print(f"Error: {e}")
-        return "0"
+        return "30"
 
 
 #                                                        ____________________________________________________

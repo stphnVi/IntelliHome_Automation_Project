@@ -57,6 +57,14 @@ public class RegistroCasa extends AppCompatActivity {
     boolean[] amenidadesSeleccionadas = new boolean[amenidades.length];
     ArrayList<String> seleccionadas = new ArrayList<>();
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        pantallaRegistroCasasAbierta = false;
+        Intent intent = new Intent(RegistroCasa.this, PrincipalActivity.class);
+        startActivity(intent);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +130,7 @@ public class RegistroCasa extends AppCompatActivity {
             startActivity(intent);
 
         });
+
 
         buttonRegistrar.setOnClickListener(view -> { // mapeo del boton registrar
             //Asignacion de variables

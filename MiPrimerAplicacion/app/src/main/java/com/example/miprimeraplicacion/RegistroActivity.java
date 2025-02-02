@@ -2,13 +2,16 @@ package com.example.miprimeraplicacion;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,7 +27,9 @@ import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Calendar;
 
@@ -34,6 +39,8 @@ import java.util.Scanner;
 import java.util.Set;
 import android.provider.MediaStore;
 
+import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -74,7 +81,8 @@ public class RegistroActivity extends AppCompatActivity {
     private EditText cardCvcEditText;
     private Button registerButton;
 
-    private ImageButton fotoPerfilButton;
+    private FloatingActionButton fotoPerfilButton;
+    private ImageView fotoPerfilImageView;
 
     private static final int PICK_IMAGE_REQUEST = 1; // Código de solicitud para la galería
     private Uri imageUri; // URI de la imagen seleccionada
@@ -84,11 +92,22 @@ public class RegistroActivity extends AppCompatActivity {
     AutoCompleteTextView autoCompleteTextView;
     ArrayAdapter<String> adapterItems;
     private String nacionalidad;
+    private String profileImagePath;
+    private ImageView logoImageView;
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity(); // Esto cierra todas las actividades en la pila
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registro);
+
+        Objects.requireNonNull(getSupportActionBar()).setBackgroundDrawable(new ColorDrawable(getColor(R.color.Azul)));
 
         // Inicializa los elementos de la interfaz
         selectDateButton = findViewById(R.id.selectDateButton);
@@ -111,6 +130,8 @@ public class RegistroActivity extends AppCompatActivity {
         cardCvcEditText = findViewById(R.id.cardCvcEditText);
         registerButton = findViewById(R.id.registerButton);
         fotoPerfilButton = findViewById(R.id.botonFotoPerfil);
+        fotoPerfilImageView = findViewById(R.id.fotoPerfilImageView);
+        logoImageView = findViewById(R.id.logoImageView);
 
         // Variables para el menu drop down
         String[] item = {"Costa Rica", "Nicaragua", "Panama", "Honduras"};
@@ -131,8 +152,7 @@ public class RegistroActivity extends AppCompatActivity {
         // Configura el listener para el botón de cancelar
         buttonCancel.setOnClickListener(view -> {
             pantallaRegistroAbierta = false;
-            Intent intent = new Intent(RegistroActivity.this, MainActivity.class);
-            startActivity(intent);
+            finishAffinity(); // Esto cierra todas las actividades en la pila
         });
 
         registerButton.setOnClickListener(view -> {
@@ -170,6 +190,14 @@ public class RegistroActivity extends AppCompatActivity {
             }
         });
 
+        fotoPerfilButton.setOnClickListener(view -> {
+            ImagePicker.with(RegistroActivity.this)
+                    .crop()
+                    .compress(1024)
+                    .maxResultSize(1080, 1080)
+                    .start();
+        });
+
         //Se escuchan los mensajes unicamente cuando la pantalla de registro esta abierta
         new Thread(() -> {
             while (pantallaRegistroAbierta == true) {
@@ -181,8 +209,6 @@ public class RegistroActivity extends AppCompatActivity {
             }
 
         }).start();
-
-        fotoPerfilButton.setOnClickListener(v -> showImageOptions());
 
 
     }
@@ -483,7 +509,6 @@ public class RegistroActivity extends AppCompatActivity {
                     // Manejar otros mensajes si es necesario
                     Socket.message = null; //se hace el mensaje de entrada null para recibir el siguiente mensaje
 
-
                 }
             }
             else {
@@ -493,36 +518,65 @@ public class RegistroActivity extends AppCompatActivity {
 
     }
 
-    private void showImageOptions() {
-        // Abrir diálogo para elegir entre tomar foto o seleccionar de la galería
-        Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        Intent takePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        Intent chooser = Intent.createChooser(pickPhoto, "Seleccionar imagen");
-        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{takePhoto});
-
-        startActivityForResult(chooser, PICK_IMAGE);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Uri uri = data.getData();
+        fotoPerfilImageView.setImageURI(uri);
+        profileImagePath = saveImageToImagesDir(RegistroActivity.this, uri, "profile_pic");
+    }
 
-        if (resultCode == RESULT_OK) {
-            if (requestCode == PICK_IMAGE && data != null && data.getData() != null) {
-                // Imagen seleccionada de la galería
-                Uri imageUri = data.getData();
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-                    fotoPerfilButton.setImageBitmap(bitmap);
-                } catch (IOException e) {
-                    Toast.makeText(this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
-                }
-            } else if (requestCode == TAKE_PHOTO && data != null) {
-                // Foto tomada con la cámara
-                Bitmap photo = (Bitmap) data.getExtras().get("data");
-                fotoPerfilButton.setImageBitmap(photo);
+    public static String saveImageToImagesDir(Context context, Uri imageUri, String fileName) {
+        if (imageUri == null || context == null) return null;
+
+        File imagesDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Images");
+        if (!imagesDir.exists() && !imagesDir.mkdirs()) {
+            return null; // Failed to create the directory
+        }
+
+        File imageFile = new File(imagesDir, fileName);
+        try (InputStream inputStream = context.getContentResolver().openInputStream(imageUri);
+             FileOutputStream outputStream = new FileOutputStream(imageFile)) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+            outputStream.flush();
+            return imageFile.getAbsolutePath(); // Return the file path
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null; // Failed to save the image
+        }
+    }
+
+    public void setImageFromPath(ImageView imageView, String imagePath) {
+        if (imagePath != null && !imagePath.isEmpty()) {
+            // Convert the absolute path to a Uri
+            Uri imageUri = Uri.parse("file://" + imagePath);
+
+            // Set the image URI to the ImageView
+            imageView.setImageURI(imageUri);
+        } else {
+            // Handle the case where the path is null or empty
+            imageView.setImageResource(android.R.color.transparent); // Set a placeholder or clear the image
+        }
+    }
+
+    public static String getImagePathFromName(Context context, String fileName) {
+        if (context == null || fileName == null || fileName.isEmpty()) return null;
+
+        // Directory where images are saved
+        File imagesDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Images");
+
+        if (imagesDir.exists()) {
+            // Search for the file by name in the directory
+            File imageFile = new File(imagesDir, fileName);
+            if (imageFile.exists()) {
+                return imageFile.getAbsolutePath(); // Return the file path if it exists
             }
         }
+
+        return null; // Return null if the file is not found
     }
 }
