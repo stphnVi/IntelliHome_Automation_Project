@@ -1,6 +1,2 @@
 
-nombre de la propiedad: Casa1, Ubicacion:Lat: 9.745042642538621, Lng: -84.09588088467201, reglas de uso: Ninguna, amenidades:Calefaccion, Lavadora y secadora, Piscina, capacidad maxima: 3, precio: 50000
-nombre de la propiedad: Caba�a, Ubicacion:latitud: 9.883990604928343, longitud: -83.82024873260511, reglas de uso: Mascotas, amenidades:Television por cable o satelite, capacidad maxima: 6, precio: 70000
-nombre de la propiedad: Casa Caba�a, Ubicacion:latitud: 9.928271373823975, longitud: -84.09072875976562, reglas de uso: Nada, amenidades:Barbacoa o parrilla, capacidad maxima: 2, precio: 10000
-nombre de la propiedad: Departamento , Ubicacion:latitud: 10.317180238144374, longitud: -83.78417382224733, reglas de uso: Nada, amenidades:Gimnasio en casa, capacidad maxima: 2, precio: 50000
-nombre de la propiedad: Propiedad, Ubicacion:latitud: 9.928271373823975, longitud: -84.09072875976562, reglas de uso: Nada, amenidades:Lavadora y secadora, capacidad maxima: 1, precio: 20000
+nombre de la propiedad: CasaPruebaServer, ubi: 9.745042642538621; -84.09588088467201, reglas: Ninguna; No perros, amenidades: Calefaccion; Lavadora y secadora; Piscina, capacidad maxima: 3, precio: 50000, fechas: 02/04/2025-12/31/2025

@@ -104,21 +104,31 @@ def add_user(user_info):
         print(f"Error")
 
 #                                                        _____________________________________________________
-# ______________________________________________________/Función que Agrega usuarios a la base de datos
+# ______________________________________________________/Función que Agrega casas a la base de datos y las normaliza
 
 
 def add_house(house_info):
+
     try:
         # Abrir el archivo en modo append (agregar al final)
+
         house_info_normalizada = normalizar_casa(house_info)
+        print(f'casa normalizada: {house_info_normalizada}')
+
+        fechas = ", fechas: 02/04/2025-12/31/2025"
+        house_info_final = house_info_normalizada + fechas
         with open('./database/casas.txt', 'a') as file:
             # Escribir la información de la casa en el archivo
-            file.write("\n" + house_info_normalizada)
+            file.write("\n" + house_info_final)
         print("Casa agregada")
         return "1"
     except Exception as e:
         print(f"Error")
 
+
+texto = "nombre de la propiedad: CasaPruebaServer, ubi:Lat: 9.745042642538621, Lng: -84.09588088467201, reglas de uso: Ninguna, No perros, amenidades:Calefaccion, Lavadora y secadora, Piscina, capacidad maxima: 3, precio: 50000"
+# ejemploNOSIRVE = "nombre de la propiedad: Casa1, Ubicacion:Lat: 9.745042642538621, Lng: -84.09588088467201, reglas de uso: Ninguna, amenidades:Calefaccion, Lavadora y secadora, Piscina, capacidad maxima: 3, precio: 50000"
+# add_house(texto)
 #                                                        _______________________________________________________
 # ______________________________________________________/Auxiliar para tomar datos de recuperacion de contraseña
 
@@ -332,7 +342,7 @@ def buscar_propiedades(propiedades, capacidad=None, precio=None, amenidades=None
             continue
 
         resultados.append(
-            f'{prop["nombre de la propiedad"]}, capacidad maxima: {prop["capacidad maxima"]}, precio: {prop["precio"]}, amenidades: {", ".join(prop["amenidades"])}')
+            f'nombre de la propiedad: {prop["nombre de la propiedad"]}, capacidad maxima: {prop["capacidad maxima"]}, precio: {prop["precio"]}, amenidades: {", ".join(prop["amenidades"])}, reglas:  {", ".join(prop["reglas"].split("; "))}')
 
     if not resultados:
         print("No se encontraron propiedades que cumplan con los criterios.")
@@ -349,7 +359,7 @@ def recibir_datos_alquilar(entrada):
     try:
         datos = eval(entrada)
         return buscar_propiedades(
-            propiedades=cargar_propiedades("./database/test.txt"),
+            propiedades=cargar_propiedades("./database/casas.txt"),
             capacidad=datos.get('capacidad'),
             precio=datos.get('precio'),
             amenidades=datos.get('amenidades'),
@@ -361,12 +371,12 @@ def recibir_datos_alquilar(entrada):
 
 
 # Ejemplo de uso
-# datos_entrada = '{"capacidad": -1, "precio": -1, "amenidades": -1, "ubi": "cieneguita limon", "fecha": -1}'
+datos_entrada = '{"capacidad": -1, "precio": -1, "amenidades": -1, "ubi": -1, "fecha": -1}'
 
 # datos_entrada = "{'capacidad': -1, 'precio': 1000, 'amenidades': -1, 'ubi': 'cieneguita limon', 'fecha': -1}"
 
 # datos_entrada = '{"capacidad": -1, "precio": 4000, "amenidades": -1, "ubi": "liberia", "fecha": -1}'
-# print(recibir_datos_alquilar(datos_entrada))
+print(recibir_datos_alquilar(datos_entrada))
 
 
 #                                                        _____________________________________________

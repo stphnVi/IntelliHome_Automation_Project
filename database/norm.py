@@ -117,7 +117,7 @@ def extraer_reglas(texto):
     return ""
 
 
-def normalizar_string(texto):
+def normalizar_casa(texto):
     # Extraer nombre de la propiedad
     nombre = re.search(r"nombre de la propiedad: (.*?),", texto).group(1)
 
@@ -139,8 +139,8 @@ def normalizar_string(texto):
 
     # Formatear el string
     resultado = (f"nombre de la propiedad: {nombre}, "
-                 f"ubi: {lat};{lng}, "
-                 f"reglas de uso: {reglas}, "
+                 f"ubi: {lat}; {lng}, "
+                 f"reglas: {reglas}, "
                  f"amenidades: {amenidades}, "
                  f"capacidad maxima: {capacidad}, "
                  f"precio: {precio}")
@@ -150,4 +150,4 @@ def normalizar_string(texto):
 
 # Ejemplo de uso
 # texto = "nombre de la propiedad: Casa1, ubi:Lat: 9.745042642538621, Lng: -84.09588088467201, reglas de uso: Ninguna, No perros, amenidades:Calefaccion, Lavadora y secadora, Piscina, capacidad maxima: 3, precio: 50000"
-# print(normalizar_string(texto))
+# print(normalizar_casa(texto))
