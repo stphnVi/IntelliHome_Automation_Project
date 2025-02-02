@@ -108,9 +108,10 @@ def add_user(user_info):
 def add_house(house_info):
     try:
         # Abrir el archivo en modo append (agregar al final)
+        house_info_normalizada = normalizar_casa(house_info)
         with open('./database/casas.txt', 'a') as file:
             # Escribir la información de la casa en el archivo
-            file.write("\n" + house_info)
+            file.write("\n" + house_info_normalizada)
         print("Casa agregada")
         return "1"
     except Exception as e:
@@ -171,6 +172,8 @@ def calcular_distancia(lat1, lon1, lat2, lon2):
 
     # Distancia final en km
     distancia = R * c
+    # print(distancia)
+    # print(f" distancia: {distancia}")
     return distancia
 
 #                                                        ____________________________________________________
@@ -228,8 +231,8 @@ def obtener_coordenadas_canton(canton):
     try:
         location = geolocator.geocode(canton + ", Costa Rica", timeout=3)
         if location:
-            print(location)
-            print(location.latitude, location.longitude)
+            # print(location)
+            # print(location.latitude, location.longitude)
             return (location.latitude, location.longitude)
         else:
             print("No se encontro ubicacion.")
@@ -239,7 +242,7 @@ def obtener_coordenadas_canton(canton):
               (canton, e.msg))
         return None
 
-#                                                        _____________________________________________________
+        _____________________________________________________
 # ______________________________________________________/ Función auxiliar para Cargar las propiedades de la
 # base de datos
 
@@ -283,8 +286,8 @@ def cargar_propiedades(nombre_archivo):
 
         if datos:
             propiedades.append(datos)
-
-    # print(propiedades)
+    # print(
+    #    f"propiedades cargadas:  {propiedades}")
     return propiedades
 
 #                                                        ____________________________________________________
@@ -295,11 +298,13 @@ def cargar_propiedades(nombre_archivo):
 def buscar_propiedades(propiedades, capacidad=None, precio=None, amenidades=None, ubi=None, fechas=None):
     resultados = []
     if ubi != -1 and ubi:
-        print(ubi)
+
         lat_entrada, lon_entrada = obtener_coordenadas_canton(ubi)
-        # map(float, ubi)
+        # print(
+        #    f"coodenadas del canton {ubi} es:  {obtener_coordenadas_canton(ubi)}")
 
     for prop in propiedades:
+
         if capacidad != -1 and capacidad and prop.get("capacidad maxima") != str(capacidad):
             continue
         if precio != -1 and precio and int(prop.get("precio", 0)) > precio:
@@ -311,11 +316,13 @@ def buscar_propiedades(propiedades, capacidad=None, precio=None, amenidades=None
                 continue
 
         if ubi != -1 and ubi:
+
             lat_prop, lon_prop = prop.get("ubi", (None, None))
             if lat_prop is not None and lon_prop is not None:
                 distancia = calcular_distancia(
                     lat_entrada, lon_entrada, lat_prop, lon_prop)
-                if distancia > 70:
+                # print(lat_entrada, lon_entrada, lat_prop, lon_prop)
+                if distancia > 50:
                     continue
 
         if fechas != -1 and fechas and not verificar_disponibilidad(prop.get("fechas", ""), fechas):
@@ -327,7 +334,7 @@ def buscar_propiedades(propiedades, capacidad=None, precio=None, amenidades=None
     if not resultados:
         print("No se encontraron propiedades que cumplan con los criterios.")
         return 0
-
+    print(f"PROPIEDADES/PROPIEDAD ENCONTRADA------>: {resultados}")
     return "; ".join(resultados)
 
 #                                                        _____________________________________________
@@ -340,17 +347,21 @@ def recibir_datos_alquilar(entrada):
         datos = eval(entrada)
         return buscar_propiedades(
             propiedades=cargar_propiedades("./database/test.txt"),
-            capacidad=datos.get("capacidad"),
-            precio=datos.get("precio"),
-            amenidades=datos.get("amenidades"),
-            ubi=datos.get("ubi"),
-            fechas=datos.get("fecha")
+            capacidad=datos.get('capacidad'),
+            precio=datos.get('precio'),
+            amenidades=datos.get('amenidades'),
+            ubi=datos.get('ubi'),
+            fechas=datos.get('fecha')
         )
     except Exception as e:
         return f"Error procesando los datosss: {e}"
 
 
 # Ejemplo de uso
+# datos_entrada = '{"capacidad": -1, "precio": -1, "amenidades": -1, "ubi": "cieneguita limon", "fecha": -1}'
+
+# datos_entrada = "{'capacidad': -1, 'precio': 1000, 'amenidades': -1, 'ubi': 'cieneguita limon', 'fecha': -1}"
+
 # datos_entrada = '{"capacidad": -1, "precio": 4000, "amenidades": -1, "ubi": "liberia", "fecha": -1}'
 # print(recibir_datos_alquilar(datos_entrada))
 
@@ -576,10 +587,8 @@ def receive_info(data):
         result = change_password(nuevo_data.strip())
 
     elif valor_func == "buscarCasa":
-        print("--------------ENTRA A BUSCAR CASAS")
-        print(nuevo_data.strip())
-        print(normalizar_datos(nuevo_data.strip()))
-        print(recibir_datos_alquilar(normalizar_datos(nuevo_data.strip())))
+        print("ENTRA A BUSCAR CASAS")
+
         result = recibir_datos_alquilar(normalizar_datos(nuevo_data.strip()))
 
     elif valor_func == "regcasa":

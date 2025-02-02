@@ -1,5 +1,6 @@
 import unicodedata
 import json
+import re
 
 #                                                        ___________________________________________________________
 # ______________________________________________________/Normalización de los datos que llegan del cliente
@@ -31,7 +32,7 @@ def procesar_fecha(valor: str):
 
 
 def normalizar_datos(entrada: str):
-    print(entrada)
+    # print(f"entrada------------: {entrada}")
 
     datos_normalizados = {
         "capacidad": -1,
@@ -57,7 +58,7 @@ def normalizar_datos(entrada: str):
                 temp_dict[clave] = valor
 
     for clave, valor in temp_dict.items():
-        if clave == "ubicacion":
+        if clave == "ubi":
             datos_normalizados["ubi"] = normalizar_texto(
                 valor) if valor != "-1" else -1
         elif clave == "capacidad":
@@ -71,7 +72,8 @@ def normalizar_datos(entrada: str):
         elif clave == "amenidades":
             datos_normalizados["amenidades"] = procesar_amenidades(valor)
     resultado = json.dumps(datos_normalizados, ensure_ascii=False)
-    print(f"LOS DATOS HAN SIDO NORMALIZADOS: {datos_normalizados}")
+    print(
+        f"LOS DATOS HAN SIDO NORMALIZADOS----------------------->: {datos_normalizados}")
     return resultado
 
 
@@ -89,3 +91,63 @@ def normalizar_datos(entrada: str):
 # entrada4 = "ubi:-1; amenidades:-1; fecha: -1; capacidad:-1; precio:-1"
 
 # print(normalizar_datos(entrada4))
+
+
+#                                                        ________________________________________________
+# ______________________________________________________/ NORMALIZACIÓN PARA LA BASE DE DATOS DE LAS CASAS
+
+
+def formatear_lista(texto):
+    items = [item.strip() for item in texto.split(",")]
+    # Concatenar los items y eliminar el último punto y coma, si es necesario
+    return "; ".join(items).rstrip("; ")
+
+
+def extraer_amenidades(texto):
+    match = re.search(r"amenidades:(.*?)capacidad maxima", texto)
+    if match:
+        return formatear_lista(match.group(1).strip())
+    return ""
+
+
+def extraer_reglas(texto):
+    match = re.search(r"reglas de uso: (.*?)amenidades", texto)
+    if match:
+        return formatear_lista(match.group(1).strip())
+    return ""
+
+
+def normalizar_string(texto):
+    # Extraer nombre de la propiedad
+    nombre = re.search(r"nombre de la propiedad: (.*?),", texto).group(1)
+
+    # Extraer latitud y longitud
+    ubi_match = re.search(r"ubi:Lat: ([\d.\-]+), Lng: ([\d.\-]+)", texto)
+    lat, lng = ubi_match.groups()
+
+    # Extraer reglas de uso
+    reglas = extraer_reglas(texto)
+
+    # Extraer y formatear amenidades
+    amenidades = extraer_amenidades(texto)
+
+    # Extraer capacidad máxima
+    capacidad = re.search(r"capacidad maxima: (\d+),", texto).group(1)
+
+    # Extraer precio
+    precio = re.search(r"precio: (\d+)", texto).group(1)
+
+    # Formatear el string
+    resultado = (f"nombre de la propiedad: {nombre}, "
+                 f"ubi: {lat};{lng}, "
+                 f"reglas de uso: {reglas}, "
+                 f"amenidades: {amenidades}, "
+                 f"capacidad maxima: {capacidad}, "
+                 f"precio: {precio}")
+
+    return resultado
+
+
+# Ejemplo de uso
+# texto = "nombre de la propiedad: Casa1, ubi:Lat: 9.745042642538621, Lng: -84.09588088467201, reglas de uso: Ninguna, No perros, amenidades:Calefaccion, Lavadora y secadora, Piscina, capacidad maxima: 3, precio: 50000"
+# print(normalizar_string(texto))

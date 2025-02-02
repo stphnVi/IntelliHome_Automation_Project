@@ -215,7 +215,7 @@ public class BusquedaAlquiler extends AppCompatActivity {
 
         CantidadButton.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(BusquedaAlquiler.this);
-            builder.setTitle("Seleccione la capacidad de personas");
+            builder.setTitle("Seleccione la cantidad de personas");
             LinearLayout layout = new LinearLayout(BusquedaAlquiler.this);
             layout.setOrientation(LinearLayout.VERTICAL);
             layout.setPadding(40, 40, 40, 40);
@@ -230,7 +230,7 @@ public class BusquedaAlquiler extends AppCompatActivity {
 
 
             TextView capacityText = new TextView(BusquedaAlquiler.this);
-            capacityText.setText(String.valueOf(seekBar.getProgress() + 1));
+            capacityText.setText(String.valueOf(seekBar.getProgress()));
             capacityText.setTextSize(18);
 
             layout.addView(seekBar);
@@ -241,8 +241,8 @@ public class BusquedaAlquiler extends AppCompatActivity {
             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    capacityText.setText(String.valueOf(progress + 1)); // Actualizar el TextView con el valor del SeekBar
-                    cantidad = progress + 1; // Guardar el valor de progreso en la variable cantidad
+                    capacityText.setText(String.valueOf(progress)); // Actualizar el TextView con el valor del SeekBar
+                    cantidad = progress; // Guardar el valor de progreso en la variable cantidad
                 }
 
                 @Override
@@ -281,23 +281,23 @@ public class BusquedaAlquiler extends AppCompatActivity {
             String precioElegido = PrecioSeleccionado.getText().toString();
 
             // Verificar si algún campo está vacío y reemplazar con "-1"
-            if (ubicacion.isEmpty() || ubicacion.equalsIgnoreCase("Ubicación")) {
+            if (ubicacion.isEmpty()) {
                 ubicacion = "-1";
             }
-            if (amenidades.isEmpty() || amenidades.equalsIgnoreCase("Amenidades: ")) {
+            if (amenidades.isEmpty()) {
                 amenidades = "-1";
             }
-            if (fecha.isEmpty()|| fecha.equalsIgnoreCase("Rango de Fechas: ")) {
+            if (fecha.isEmpty()) {
                 fecha = "-1";
             }
-            if (capacidadElegida.isEmpty() || capacidadElegida.equalsIgnoreCase("Capacidad:")) {
+            if (capacidadElegida.isEmpty()) {
                 capacidadElegida = "-1";
             }
-            if (precioElegido.isEmpty() || precioElegido.equalsIgnoreCase("Precio:")) {
+            if (precioElegido.isEmpty()) {
                 precioElegido = "-1";
             }
             //cambiar func
-            String messageSend = "func: buscarCasa" + ", ubi:" + ubicacion + "; amenidades:" + amenidades + "; fecha: " + fecha + "; capacidad:" + capacidadElegida + "; precio:" + precioElegido;
+            String messageSend = "func: buscarCasa" + ", ubi: " + ubicacion + "; amenidades:" + amenidades + "; fecha: " + fecha + "; capacidad:" + capacidadElegida + "; precio:" + precioElegido;
             Socket.sendMessage(messageSend);
         });
 

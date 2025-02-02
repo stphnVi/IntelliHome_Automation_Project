@@ -156,7 +156,7 @@ public class RegistroCasa extends AppCompatActivity {
             }
 
             if (!nombrepropiedad.isEmpty() && !reglasuso.isEmpty() && !capacidadmaxima.isEmpty() && !precio.isEmpty() && !Ubicaciones.isEmpty()) {
-                String messageSend = "func: regcasa" + ", nombre de la propiedad: " + nombrepropiedad + ", Ubicacion:" + Ubicaciones + ", reglas de uso: " + reglasuso + ", amenidades:" + amenidades + ", capacidad maxima: " + capacidadmaxima + ", precio: " + precio;
+                String messageSend = "func: regcasa" + ", nombre de la propiedad: " + nombrepropiedad + ", ubi:" + Ubicaciones + ", reglas de uso: " + reglasuso + ", amenidades:" + amenidades + ", capacidad maxima: " + capacidadmaxima + ", precio: " + precio;
                 Socket.sendMessage(messageSend);
             }
 
