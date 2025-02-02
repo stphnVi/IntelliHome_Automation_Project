@@ -30,21 +30,19 @@ public class BusquedaAlquiler extends AppCompatActivity {
 
     private boolean pantallaRegistroCasasAbierta;
 
-    // Variables para almacenar las fechas seleccionadas
     private String fechaEntrada = "";
     private String fechaSalida = "";
-
-    private String capacidad = "";
 
     private TextView rangoFechasText;
     private Button selectDateButton;
 
     private TextView capacidadText;
-    private Button selectCantidadButton;
-    float curBrightnessValue = 0;
-    private String capacidadSeleccionada;
+
+    private TextView PrecioSeleccionado;
 
     private int cantidad;
+
+    private int precio;
 
 
 
@@ -95,13 +93,16 @@ public class BusquedaAlquiler extends AppCompatActivity {
 
         rangoFechasText = findViewById(R.id.textFecha);
         selectDateButton = findViewById(R.id.fecha);
-        //TextView capacidadText = findViewById(R.id.textCapacidad);
+        capacidadText = findViewById(R.id.textCapacidad);
+        PrecioSeleccionado = findViewById(R.id.textPrecio);
         Button CantidadButton = findViewById(R.id.capacidad);
+        Button PrecioButton = findViewById(R.id.precio);
 
 
 
-        Button botonCancelar = findViewById(R.id.cancelar);
+        Button botonCancelar = findViewById(R.id.volver);
         Button botonAceptar = findViewById(R.id.aceptar);
+        Button botonLimpiar = findViewById(R.id.limpiar);
 
         botonCancelar.setOnClickListener(view -> { // mapeo del boton para alquilar
             Intent intent = new Intent(BusquedaAlquiler.this, PrincipalActivity.class);
@@ -151,81 +152,163 @@ public class BusquedaAlquiler extends AppCompatActivity {
             mostrarDatePickerDialogEntrada();
         });
 
-        //--------------------------------------------------------------------------------Capacidad
+        //--------------------------------------------------------------------------------Precio
 
 
-        CantidadButton.setOnClickListener(view -> {
+        PrecioButton.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(BusquedaAlquiler.this);
-            View customView = getLayoutInflater().inflate(R.layout.dialogo_seleccion_capacidad, null);
+            builder.setTitle("Seleccione el precio por noche");
+            LinearLayout layout = new LinearLayout(BusquedaAlquiler.this);
+            layout.setOrientation(LinearLayout.VERTICAL);
+            layout.setPadding(40, 40, 40, 40);
 
-            // Buscar vistas
-            SeekBar seekBar = customView.findViewById(R.id.seekBar);
-            TextView capacityText = customView.findViewById(R.id.capacityText);
-            Button btnGuardar = customView.findViewById(R.id.btnGuardar);
-            Button btnCancelar = customView.findViewById(R.id.btnCancelar);
 
-            if (capacityText == null) {
-                Log.e("Error", "capacityText es null, verifica el ID en el XML");
-            }
-
+            SeekBar seekBar = new SeekBar(BusquedaAlquiler.this);
+            seekBar.setMax(15);
             seekBar.setProgress(0);
-            seekBar.setMax(10);
+            seekBar.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
 
-            // Establecer el valor inicial del TextView
-            capacityText.setText(String.valueOf(seekBar.getProgress() + 1));
 
-            // Configurar el SeekBar
+            TextView PrecioText = new TextView(BusquedaAlquiler.this);
+            PrecioText.setText(String.valueOf(seekBar.getProgress()));
+            PrecioText.setTextSize(18);
+
+            layout.addView(seekBar);
+            layout.addView(PrecioText);
+
+            builder.setView(layout);
+
             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    capacityText.setText(String.valueOf(progress));
+                    PrecioText.setText("₡" + String.valueOf(progress * 5000)); // Actualizar el TextView con el valor del SeekBar
+                    precio = progress * 5000; // Guardar el valor de progreso en la variable cantidad
                 }
 
                 @Override
                 public void onStartTrackingTouch(SeekBar seekBar) {}
 
                 @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    cantidad = seekBar.getProgress();
-                }
+                public void onStopTrackingTouch(SeekBar seekBar) {}
             });
 
-            // Crear el diálogo
-            AlertDialog dialog = builder.setView(customView).create();
+            // Botón de confirmación (Guardar)
+            builder.setPositiveButton("Guardar", (dialog, which) -> {
 
-            // Botón Guardar - Guarda el valor en capacidadText y cierra el diálogo
-            btnGuardar.setOnClickListener(v -> {
-                //capacidadText.setText(cantidad);
-                //dialog.dismiss();
+                //TextView capacidadText = findViewById(R.id.textCapacidad);
+                PrecioSeleccionado.setText(String.valueOf(precio));
+
             });
 
-            // Botón Cancelar - Cierra el diálogo sin cambios
-            btnCancelar.setOnClickListener(v -> dialog.dismiss());
 
-            // Mostrar el diálogo
-            dialog.show();
+            builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
+
+
+            builder.create().show();
         });
 
 
+        //--------------------------------------------------------------------------------Capacidad
 
 
+        CantidadButton.setOnClickListener(view -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(BusquedaAlquiler.this);
+            builder.setTitle("Seleccione la capacidad de personas");
+            LinearLayout layout = new LinearLayout(BusquedaAlquiler.this);
+            layout.setOrientation(LinearLayout.VERTICAL);
+            layout.setPadding(40, 40, 40, 40);
 
 
+            SeekBar seekBar = new SeekBar(BusquedaAlquiler.this);
+            seekBar.setMax(10);
+            seekBar.setProgress(0);
+            seekBar.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
+
+
+            TextView capacityText = new TextView(BusquedaAlquiler.this);
+            capacityText.setText(String.valueOf(seekBar.getProgress() + 1));
+            capacityText.setTextSize(18);
+
+            layout.addView(seekBar);
+            layout.addView(capacityText);
+
+            builder.setView(layout);
+
+            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    capacityText.setText(String.valueOf(progress + 1)); // Actualizar el TextView con el valor del SeekBar
+                    cantidad = progress + 1; // Guardar el valor de progreso en la variable cantidad
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {}
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {}
+            });
+
+            // Botón de confirmación (Guardar)
+            builder.setPositiveButton("Guardar", (dialog, which) -> {
+
+                //TextView capacidadText = findViewById(R.id.textCapacidad);
+                capacidadText.setText(String.valueOf(cantidad));
+
+            });
+
+
+            builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss());
+
+
+            builder.create().show();
+        });
 
 
 
         //--------------------------------------------------------------------------------Ubicación Y envio de datos al server
 
         botonAceptar.setOnClickListener(view -> { // mapeo del boton para alquilar
-            Intent intent = new Intent(BusquedaAlquiler.this, PrincipalActivity.class);
-            startActivity(intent);
+            //Intent intent = new Intent(BusquedaAlquiler.this, PrincipalActivity.class);
+            //startActivity(intent);
             String ubicacion = UbiEditText.getText().toString();
             String amenidades = textoSeleccionadas.getText().toString();
             String fecha = rangoFechasText.getText().toString();
-            String capacidad = capacidadText.getText().toString();
+            String capacidadElegida = capacidadText.getText().toString();
+            String precioElegido = PrecioSeleccionado.getText().toString();
 
-            String messageSend = "func: regcasa" + ", Ubicacion:" + ubicacion + ", amenidades:" + amenidades + ", fecha: " + fecha + ", capacidad: " + capacidad ;
+            // Verificar si algún campo está vacío y reemplazar con "-1"
+            if (ubicacion.isEmpty()) {
+                ubicacion = "-1";
+            }
+            if (amenidades.isEmpty()) {
+                amenidades = "-1";
+            }
+            if (fecha.isEmpty()) {
+                fecha = "-1";
+            }
+            if (capacidadElegida.isEmpty()) {
+                capacidadElegida = "-1";
+            }
+            if (precioElegido.isEmpty()) {
+                precioElegido = "-1";
+            }
+            //cambiar func
+            String messageSend = "func: regcasa" + ", Ubicacion:" + ubicacion + ", amenidades:" + amenidades + ", fecha: " + fecha + ", capacidad:" + capacidadElegida + ", precio:" + precioElegido;
             Socket.sendMessage(messageSend);
+        });
+
+        botonLimpiar.setOnClickListener(view -> {
+
+            UbiEditText.setText("");
+            textoSeleccionadas.setText("");
+            rangoFechasText.setText("");
+            capacidadText.setText("");
+            PrecioSeleccionado.setText("");
+
         });
 
         new Thread(() -> {
@@ -240,17 +323,6 @@ public class BusquedaAlquiler extends AppCompatActivity {
         }).start();
 
     }
-
-
-
-    //txtView = (TextView)findViewById(R.id.textView1); // TextView
-    // Button1
-    //final Button btn1 = (Button) findViewById(R.id.button1);
-
-
-
-
-
 
 
 
@@ -311,8 +383,6 @@ public class BusquedaAlquiler extends AppCompatActivity {
             textFecha.setText(rangoFechas);
         }
     }
-
-
 
 
 

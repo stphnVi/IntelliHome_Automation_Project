@@ -4,3 +4,14 @@ nombre de la propiedad: Cabaña, Ubicacion:latitud: 9.883990604928343, longitud: 
 Ubicacion:lindora , amenidades:Wi-Fi gratuito, Terraza o balcon, Lavadora y secadora, Jardin o patio
 Ubicacion:liberia, amenidades:Calefaccion, Wi-Fi gratuito, Lavadora y secadora, fecha:Entrada: 06/01/2025 - Salida: 01/01/2025
 Ubicacion:liberia, amenidades:Calefaccion, Wi-Fi gratuito, fecha: 14/01/2025-09/01/2025
+Ubicacion:, amenidades:Amenidades: , fecha: Rango de Fechas:
+Ubicacion:, amenidades:Amenidades: , fecha: Rango de Fechas: , capacidad:1
+Ubicacion:, amenidades:Amenidades: , fecha: Rango de Fechas: , capacidad:1
+Ubicacion:, amenidades:Amenidades: , fecha: Rango de Fechas: , capacidad:7
+Ubicacion:liberia
+liberia, amenidades:Piscina, Television por cable o satelite, Calefaccion, Cocina equipada (con electrodomesticos modernos), fecha: 10/02/2025-20/02/2025, capacidad:5, precio:7
+Ubicacion:liberia, amenidades:Piscina, fecha: 18/02/2025-19/02/2025, capacidad:8, precio:30000
+Ubicacion:-1, amenidades:Amenidades: , fecha: 12/02/2025-01/02/2025, capacidad:Capacidad: , precio:Precio:
+Ubicacion:-1, amenidades:-1, fecha: -1, capacidad:-1, precio:-1
+Ubicacion:-1, amenidades:-1, fecha: -1, capacidad:7, precio:-1
+Ubicacion:-1, amenidades:Television por cable o satelite, Calefaccion, Aire acondicionado, Jardin o patio, Terraza o balcon, fecha: -1, capacidad:7, precio:-1
