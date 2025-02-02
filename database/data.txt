@@ -6,3 +6,18 @@ userNombre: Jose, userApellido: Umana, fechaNacimiento: 21/01/2025, username: jo
 userNombre: Armando, userApellido: Paredes, fechaNacimiento: 24/01/2025, username: Army, password: aaaa1111 email: army@correo.com, descripcion: dsad, instrucciones: dsad, nombreProfe: jason, apodo: gungi, equipo: carmelita, numeroTarjeta: 3213213213213213, expiracionTarjeta: 3213, cvvTarjeta: 321
 username: Juan123, email: juan@example.com, password: 1234
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

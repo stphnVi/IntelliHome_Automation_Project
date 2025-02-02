@@ -20,7 +20,7 @@ public class PrincipalActivity extends AppCompatActivity {
         setContentView(R.layout.principal);
 
         ImageButton buttonAgregar = findViewById(R.id.agregarCasa);
-        Button botoncasamodelo = findViewById(R.id.casamodelo);
+        ImageButton botoncasamodelo = findViewById(R.id.casamodelo);
         Button botonBusqueda = findViewById(R.id.dirigeNavBar);
 
         botonBusqueda.setOnClickListener(view -> { // mapeo del boton para alquilar

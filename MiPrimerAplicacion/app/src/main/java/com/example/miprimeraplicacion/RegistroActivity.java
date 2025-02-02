@@ -152,7 +152,10 @@ public class RegistroActivity extends AppCompatActivity {
         // Configura el listener para el botón de cancelar
         buttonCancel.setOnClickListener(view -> {
             pantallaRegistroAbierta = false;
-            finishAffinity(); // Esto cierra todas las actividades en la pila
+            //Esto esta crasheando la aplicacion, preguntar para que es y arreglarlo
+//            finishAffinity(); // Esto cierra todas las actividades en la pila
+            Intent intent = new Intent(RegistroActivity.this, MainActivity.class);
+            startActivity(intent); //se abre la nueva ventana
         });
 
         registerButton.setOnClickListener(view -> {

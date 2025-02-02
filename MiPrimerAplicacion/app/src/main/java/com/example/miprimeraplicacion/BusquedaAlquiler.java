@@ -16,6 +16,9 @@ import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+
 import android.view.Menu;
 
 import android.view.LayoutInflater;
@@ -28,7 +31,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class BusquedaAlquiler extends AppCompatActivity {
 
-    private boolean pantallaRegistroCasasAbierta;
+    private boolean pantallaBusquedaAlquilerAbierta;
 
     private String fechaEntrada = "";
     private String fechaSalida = "";
@@ -103,6 +106,8 @@ public class BusquedaAlquiler extends AppCompatActivity {
         Button botonCancelar = findViewById(R.id.volver);
         Button botonAceptar = findViewById(R.id.aceptar);
         Button botonLimpiar = findViewById(R.id.limpiar);
+
+        pantallaBusquedaAlquilerAbierta = true;
 
         botonCancelar.setOnClickListener(view -> { // mapeo del boton para alquilar
             Intent intent = new Intent(BusquedaAlquiler.this, PrincipalActivity.class);
@@ -312,7 +317,7 @@ public class BusquedaAlquiler extends AppCompatActivity {
         });
 
         new Thread(() -> {
-            while (pantallaRegistroCasasAbierta == true) {
+            while (pantallaBusquedaAlquilerAbierta == true) {
                 // Escuchar continuamente los mensajes del servidor
                 if (Socket.message != null) {
                     procesarMensaje();
@@ -391,33 +396,63 @@ public class BusquedaAlquiler extends AppCompatActivity {
         runOnUiThread(() -> {
             if (com.example.miprimeraplicacion.Socket.message != null) {
                 String message = com.example.miprimeraplicacion.Socket.message;
-                if ("1".equals(message)) {
-                    // Abrir nueva ventana si el mensaje es "1"
-                    pantallaRegistroCasasAbierta = false;
-                    Intent intent = new Intent(BusquedaAlquiler.this, PrincipalActivity.class);
-                    startActivity(intent);
-                    Socket.message = null;
-                } else if ("0".equals(message)) {
-                    // Mostrar mensaje de credenciales incorrectas
-                    AlertDialog.Builder builder = new AlertDialog.Builder(BusquedaAlquiler.this);
-                    builder.setTitle("Error de registro")
-                            .setMessage("Faltan espacios por completar. Por favor, completelos.")
-                            .setPositiveButton("Aceptar", (dialog, which) -> dialog.dismiss())
-                            .create()
-                            .show();
-                    Socket.message = null;
 
-                } else {
-                    // Manejar otros mensajes si es necesario
-                    Socket.message = null;
+                //amenidades tiene que tener un espacio luego de los dos puntos
 
+                String propiedadString = "nombre de la propiedad: Propiedad, Ubicacion:latitud: 9.928271373823975, longitud: -84.09072875976562, reglas de uso: Nada, amenidades:Lavadora y secadora, Calefaccion, Piscina, capacidad maxima: 1, precio: 20000";
 
-                }
+                Map<String, String> parsedData = parsePropiedad(propiedadString);
+
+                // Imprimir las variables extraídas
+                parsedData.forEach((key, value) -> {
+                    System.out.println(key + " -> " + value);
+                    if (key.equals("nombre de la propiedad")) {
+                        String nombrePropiedad = value;
+                    }
+                    else if (key.equals("latitud")) {
+                        String latitud = value;
+                    }
+                    else if (key.equals("longitud")) {
+                        String longitud = value;
+                    }
+                    else if (key.equals("reglas de uso")) {
+                        String reglasUso = value;
+                    }
+                    else if (key.equals("amenidades")) {
+                        String amenidades = value;
+                    }
+                    else if (key.equals("capacidad maxima")) {
+                        String capacidadMaxima = value;
+                    }
+                    else if (key.equals("precio")) {
+                        String precio = value;
+                    }
+                });
+
+                Socket.message = null;
+
             }
             else {
 
             }
         });
+    }
+
+    public static Map<String, String> parsePropiedad(String input) {
+        input = input.replace("Ubicacion:", "");
+        input = input.replace("amenidades:", "amenidades: ");
+
+        String[] entries = input.split(", (?=[^,]+: )"); // Evitar división de amenidades
+        Map<String, String> propertyData = new HashMap<>();
+
+        for (String entry : entries) {
+            String[] keyValue = entry.split(": ", 2);
+            if (keyValue.length == 2) {
+                propertyData.put(keyValue[0].trim(), keyValue[1].trim());
+            }
+        }
+
+        return propertyData;
     }
 
 }
