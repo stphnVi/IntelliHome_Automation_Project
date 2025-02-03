@@ -32,5 +32,5 @@ key = load_key('./database/key.txt')
 # decrypt_file('./database/data_encrypted.txt',
 #             './database/data.txt', key)
 
-# decrypt_file('./database/casas.txt',
-#             './database/casas_encrypted.txt', key, iv)
+# decrypt_file('./database/casas_encrypted.txt',
+#             './database/casas.txt', key)

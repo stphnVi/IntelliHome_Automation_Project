@@ -14,7 +14,7 @@ public class Socket {
         new Thread(() -> {
             try {
                 // Cambiar a la dirección IP de su servidor
-                socket = new java.net.Socket("192.168.1.24", 1717);
+                socket = new java.net.Socket("192.168.1.11", 1717);
                 out = new PrintWriter(socket.getOutputStream(), true);
                 in = new Scanner(socket.getInputStream());
                 new Thread(() -> {
