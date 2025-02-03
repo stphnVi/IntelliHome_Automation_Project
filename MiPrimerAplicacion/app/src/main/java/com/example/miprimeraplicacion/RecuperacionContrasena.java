@@ -50,7 +50,7 @@ public class RecuperacionContrasena extends AppCompatActivity {
             String password = editTextPassword.getText().toString();
             String passwordconfirm = editTextconfirmPassword.getText().toString();
             if(isValidPassword(password) && passwordConfirmationMatch(password, passwordconfirm)&& checkEspaciosObligatorios()) {
-                String messageSend = "func: cc" + ", password: " + password + ", passwordconfirm: " + passwordconfirm;
+                String messageSend = "func: cpass" + ", username: " + InformacionUsuario.usuarioRecuperacion + ", nuevaC: " + password;
                 Socket.sendMessage(messageSend);
                 pantallaRecuperacioncontrasenaabierta = false;
                 Intent intent = new Intent(RecuperacionContrasena.this, MainActivity.class);

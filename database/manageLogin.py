@@ -348,7 +348,7 @@ def buscar_propiedades(propiedades, capacidad=None, precio=None, amenidades=None
 
     if not resultados:
         print("No se encontraron propiedades que cumplan con los criterios.")
-        return 0
+        return "0"
     print(f"PROPIEDADES/PROPIEDAD ENCONTRADA----------------->: {resultados}")
     return "; ".join(resultados)
 
@@ -515,7 +515,7 @@ def change_password(datos_entrada):
 
         if not username or not nueva_contrasena:
             print("Formato de entrada inválido.")
-            return 0  # Fallo
+            return "0"  # Fallo
 
         # Abrir el archivo en modo lectura para leer todas las líneas
         with open("./database/data.txt", "r") as file:
@@ -530,7 +530,7 @@ def change_password(datos_entrada):
 
         if not usuario_encontrado:
             print("El nombre de usuario no existe.")
-            return 2  # Usuario no encontrado
+            return "2"  # Usuario no encontrado
 
         # Abrir el archivo en modo escritura para actualizar los datos
         with open("./database/data.txt", "w") as file:
@@ -547,15 +547,15 @@ def change_password(datos_entrada):
                     else:
                         print(
                             f"No se encontró la contraseña para el usuario {username}.")
-                        return 0  # Fallo
+                        return "0"  # Fallo
                 # Escribir la línea (actualizada o sin cambios) en el archivo
                 file.write(linea)
 
         print("Contraseña actualizada correctamente.")
-        return 1
+        return "1"
     except Exception as e:
         print(f"Error al cambiar la contraseña: {e}")
-        return 0
+        return "0"
 
 
 #                                                        _____________________________________________

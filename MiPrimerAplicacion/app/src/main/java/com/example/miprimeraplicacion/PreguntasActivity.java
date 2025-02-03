@@ -14,6 +14,10 @@ import java.util.Scanner;
 public class PreguntasActivity extends AppCompatActivity {
 
     private boolean pantallaPreguntasAbierta;
+    EditText usernameDisplayEditText;
+    EditText professorNameEditText;
+    EditText childhoodNicknameEditText;
+    EditText favoriteTeamEditText;
 
     @Override
     public void onBackPressed() {
@@ -26,10 +30,12 @@ public class PreguntasActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.preguntas_seguridad);
 
-        EditText usernameDisplayEditText = findViewById(R.id.usernameDisplayEditText);
-        EditText professorNameEditText = findViewById(R.id.professorNameEditText);
-        EditText childhoodNicknameEditText = findViewById(R.id.childhoodNicknameEditText);
-        EditText favoriteTeamEditText = findViewById(R.id.favoriteTeamEditText);
+        InformacionUsuario.usuarioRecuperacion = null;
+
+        usernameDisplayEditText = findViewById(R.id.usernameDisplayEditText);
+        professorNameEditText = findViewById(R.id.professorNameEditText);
+        childhoodNicknameEditText = findViewById(R.id.childhoodNicknameEditText);
+        favoriteTeamEditText = findViewById(R.id.favoriteTeamEditText);
 
         Button buttonVerifyAnswers = findViewById(R.id.verifyAnswersButton);
         Button buttonCancel = findViewById(R.id.cancelRecoveryButton);
@@ -54,6 +60,7 @@ public class PreguntasActivity extends AppCompatActivity {
             String messageSend = "func: rec" + ", username: " + username + ", nombreProfe: " + nombreProfe + ", apodo: " + apodo + ", equipo: " +  equipo;
             Socket.sendMessage(messageSend);
         });
+
         new Thread(() -> {
             while (pantallaPreguntasAbierta == true) {
                 // Escuchar continuamente los mensajes del servidor
@@ -80,6 +87,7 @@ public class PreguntasActivity extends AppCompatActivity {
                 if ("10".equals(message)) {
                     // Abrir nueva ventana si el mensaje es "1"
                     pantallaPreguntasAbierta = false;
+                    InformacionUsuario.usuarioRecuperacion = usernameDisplayEditText.getText().toString();
                     Intent intent = new Intent(PreguntasActivity.this, RecuperacionContrasena.class);
                     startActivity(intent);
                     Socket.message = null;
