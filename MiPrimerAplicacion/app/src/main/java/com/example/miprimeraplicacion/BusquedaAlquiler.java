@@ -15,8 +15,10 @@ import androidx.appcompat.app.AlertDialog;
 
 import android.content.DialogInterface;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import android.view.Menu;
@@ -90,7 +92,7 @@ public class BusquedaAlquiler extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navbar);
 
-
+        ListaCasas.listaCasas.clear();
 
         EditText UbiEditText = findViewById(R.id.UbiText);
 
@@ -401,58 +403,78 @@ public class BusquedaAlquiler extends AppCompatActivity {
 
                 String propiedadString = "nombre de la propiedad: Propiedad, Ubicacion:latitud: 9.928271373823975, longitud: -84.09072875976562, reglas de uso: Nada, amenidades:Lavadora y secadora, Calefaccion, Piscina, capacidad maxima: 1, precio: 20000";
 
-                Map<String, String> parsedData = parsePropiedad(propiedadString);
+                List<Map<String, Object>> propiedades = parsePropiedades(message);
+                int cantPropiedades = propiedades.size();
 
-                // Imprimir las variables extraídas
-                parsedData.forEach((key, value) -> {
-                    System.out.println(key + " -> " + value);
-                    if (key.equals("nombre de la propiedad")) {
-                        String nombrePropiedad = value;
-                    }
-                    else if (key.equals("latitud")) {
-                        String latitud = value;
-                    }
-                    else if (key.equals("longitud")) {
-                        String longitud = value;
-                    }
-                    else if (key.equals("reglas de uso")) {
-                        String reglasUso = value;
-                    }
-                    else if (key.equals("amenidades")) {
-                        String amenidades = value;
-                    }
-                    else if (key.equals("capacidad maxima")) {
-                        String capacidadMaxima = value;
-                    }
-                    else if (key.equals("precio")) {
-                        String precio = value;
-                    }
-                });
+                // Mostrar el resultado en consola
+                for (Map<String, Object> propiedad : propiedades) {
+                    System.out.println("Propiedad:");
+                    Casa casa = new Casa();
+                    propiedad.forEach((key, value) -> {
+                        System.out.println(key + " -> " + value);
+                        if (key.equals("nombre de la propiedad")) {
+                            casa.nombrePropiedad = value.toString();
+                        }
+                        else if (key.equals("reglas")) {
+                            if (value instanceof List) {
+                                casa.reglas = (List<String>) value;
+                            }
+                        }
+                        else if (key.equals("amenidades")) {
+                            if (value instanceof List) {
+                                casa.amenidades = (List<String>) value;
+                            }
+                        }
+                        else if (key.equals("capacidad maxima")) {
+                            casa.capacidadMaxima = value.toString();
+                        }
+                        else if (key.equals("precio")) {
+                            casa.precio = value.toString();
+                        }
+                    });
+                    System.out.println("----------");
+                    ListaCasas.listaCasas.add(casa);
+                }
 
                 Socket.message = null;
 
-            }
-            else {
+                Intent intent = new Intent(BusquedaAlquiler.this, ResultadosBusqueda.class);
+                startActivity(intent); //se abre la nueva ventana
 
+            }
+            else if (Socket.message == "") {
+                Toast.makeText(this, "No se han encontrado casas", Toast.LENGTH_SHORT);
             }
         });
     }
 
-    public static Map<String, String> parsePropiedad(String input) {
-        input = input.replace("Ubicacion:", "");
-        input = input.replace("amenidades:", "amenidades: ");
+    public static List<Map<String, Object>> parsePropiedades(String input) {
+        // Dividir cada propiedad por "; "
+        String[] propiedades = input.split("; ");
+        List<Map<String, Object>> propiedadesList = new ArrayList<>();
 
-        String[] entries = input.split(", (?=[^,]+: )"); // Evitar división de amenidades
-        Map<String, String> propertyData = new HashMap<>();
+        for (String propiedad : propiedades) {
+            Map<String, Object> propiedadData = new HashMap<>();
+            String[] entries = propiedad.split(", (?=[^,]+: )");
 
-        for (String entry : entries) {
-            String[] keyValue = entry.split(": ", 2);
-            if (keyValue.length == 2) {
-                propertyData.put(keyValue[0].trim(), keyValue[1].trim());
+            for (String entry : entries) {
+                String[] keyValue = entry.split(": ", 2);
+                if (keyValue.length == 2) {
+                    String key = keyValue[0].trim();
+                    String value = keyValue[1].trim();
+
+                    // Si la clave es "amenidades" o "reglas", dividir en lista
+                    if (key.equals("amenidades") || key.equals("reglas")) {
+                        propiedadData.put(key, Arrays.asList(value.split(", ")));
+                    } else {
+                        propiedadData.put(key, value);
+                    }
+                }
             }
+            propiedadesList.add(propiedadData);
         }
 
-        return propertyData;
+        return propiedadesList;
     }
 
 }

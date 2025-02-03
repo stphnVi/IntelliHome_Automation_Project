@@ -134,7 +134,10 @@ public class RegistroActivity extends AppCompatActivity {
         logoImageView = findViewById(R.id.logoImageView);
 
         // Variables para el menu drop down
-        String[] item = {"Costa Rica", "Nicaragua", "Panama", "Honduras"};
+        String[] item = {"Argentina", "Bolivia", "Brasil", "Chile", "Colombia", "Costa Rica",
+                "Cuba", "Ecuador", "El Salvador", "Granada", "Guatemala", "Guyana", "Haití",
+                "Honduras", "Jamaica", "México", "Nicaragua", "Panamá", "Paraguay", "Perú",
+                "República Dominicana", "Surinam", "Trinidad y Tobago", "Uruguay", "Venezuela"};
         autoCompleteTextView = findViewById(R.id.auto_complete_txt);
         adapterItems = new ArrayAdapter<String>(this, R.layout.list_item, item);
         autoCompleteTextView.setAdapter(adapterItems);
