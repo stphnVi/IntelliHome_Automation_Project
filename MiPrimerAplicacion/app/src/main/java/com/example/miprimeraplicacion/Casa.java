@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class Casa {
-    static String precio;
-    static List<String> reglas;
-    static String capacidadMaxima;
-    static List<String> amenidades;
-    static String nombrePropiedad;
+    String precio;
+    List<String> reglas;
+    String capacidadMaxima;
+    List<String> amenidades;
+    String nombrePropiedad;
 }
 
 class ListaCasas {

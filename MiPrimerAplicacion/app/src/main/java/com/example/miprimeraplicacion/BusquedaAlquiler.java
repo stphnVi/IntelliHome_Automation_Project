@@ -92,7 +92,7 @@ public class BusquedaAlquiler extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navbar);
 
-
+        ListaCasas.listaCasas.clear();
 
         EditText UbiEditText = findViewById(R.id.UbiText);
 
@@ -435,8 +435,11 @@ public class BusquedaAlquiler extends AppCompatActivity {
                     System.out.println("----------");
                     ListaCasas.listaCasas.add(casa);
                 }
-                System.out.println(ListaCasas.listaCasas.size());
+
                 Socket.message = null;
+
+                Intent intent = new Intent(BusquedaAlquiler.this, ResultadosBusqueda.class);
+                startActivity(intent); //se abre la nueva ventana
 
             }
             else {

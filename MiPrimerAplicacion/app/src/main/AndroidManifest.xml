@@ -48,6 +48,9 @@
         <!-- Declarar la actividad BusquedaAlquiler -->
         <activity android:name=".BusquedaAlquiler"></activity>
 
+        <!-- Declarar la actividad BusquedaAlquiler -->
+        <activity android:name=".ResultadosBusqueda"></activity>
+
         <!-- Declarar la actividad MainActivity -->
         <activity
             android:name=".MainActivity"
