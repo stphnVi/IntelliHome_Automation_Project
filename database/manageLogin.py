@@ -570,6 +570,8 @@ def receive_info(data):
 
     decrypt_file('./database/data_encrypted.txt',
                  './database/data.txt', key)
+    decrypt_file('./database/casas_encrypted.txt',
+                 './database/casas.txt', key)
 
     key = os.urandom(32)  # AES-256
     iv = os.urandom(16)
@@ -627,14 +629,17 @@ def receive_info(data):
 
     encrypt_file('./database/data.txt',
                  './database/data_encrypted.txt', key, iv)
+    encrypt_file('./database/casas.txt',
+                 './database/casas_encrypted.txt', key, iv)
 
 #                                                      _____________________________________________________________________________________
 # _____________________________________________________/ SI SE REQUIERE VER EL CONTENIDO DE LA BASE DE DATOS PARA PRUEBAS COMENTAR ESTA LÍNEA
 
     os.remove('./database/data.txt')
+    os.remove('./database/casas.txt')
 # _______________________________________________________  ES DE SUMA IMPORTANCIA VOLVER A PONERLA PARA CUMPLIR CON LO QUE EL CLIENTE SOLICITA
 
-    print(" base de datos actualizada y cifrada, bade en plaintext eliminada")
+    print(" bases de datos actualizadas y cifradas, bases en plaintext eliminada")
 
     return result
 
