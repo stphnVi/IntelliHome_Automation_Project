@@ -1,5 +1,6 @@
 package com.example.miprimeraplicacion;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Layout;
@@ -18,6 +19,7 @@ public class ResultadosBusqueda extends AppCompatActivity {
     private LinearLayout layoutPrincipal;
     private Button botonVolver;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,10 +48,26 @@ public class ResultadosBusqueda extends AppCompatActivity {
             TextView precioTextView = new TextView(this);
             precioTextView.setText("Precio: " + casa.precio + " colones");
 
+            // Crear boton para ver mas informacion
+            Button verMasBoton = new Button(this);
+            verMasBoton.setText("Ver mas");
+
             // Añadir TextViews al layout de cada casa
             casaLayout.addView(nombreTextView);
             casaLayout.addView(capacidadTextView);
             casaLayout.addView(precioTextView);
+            casaLayout.addView(verMasBoton);
+
+            //Funcionalidad boton
+            verMasBoton.setOnClickListener(view -> { // mapeo del boton para alquilar
+                CasaSeleccionada.precio = casa.precio;
+                CasaSeleccionada.reglas = casa.reglas;
+                CasaSeleccionada.capacidadMaxima = casa.capacidadMaxima;
+                CasaSeleccionada.amenidades = casa.amenidades;
+                CasaSeleccionada.nombrePropiedad = casa.nombrePropiedad;
+                Intent intent = new Intent(ResultadosBusqueda.this, OpcionSeleccionada.class);
+                startActivity(intent);
+            });
 
             // Añadir el layout de la casa al layout principal
             layoutPrincipal.addView(casaLayout);

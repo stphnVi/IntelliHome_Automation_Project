@@ -442,8 +442,8 @@ public class BusquedaAlquiler extends AppCompatActivity {
                 startActivity(intent); //se abre la nueva ventana
 
             }
-            else {
-
+            else if (Socket.message == "") {
+                Toast.makeText(this, "No se han encontrado casas", Toast.LENGTH_SHORT);
             }
         });
     }

@@ -55,14 +55,14 @@
 
             <!-- Caracteristicas de la casa -->
 
-            <EditText
+            <TextView
                 android:id="@+id/nombrepropiedad"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:background="@color/white"
-                android:hint="Nombre de la propiedad"
-                android:inputType="textPersonName" />
+                android:textColor="@color/black"
+                android:textSize="15dp"/>
 
             <TextView
                 android:id="@+id/titulo2"
@@ -86,18 +86,50 @@
 
             <!-- Reglas de uso -->
 
-            <EditText
+            <TextView
+                android:id="@+id/titulo3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:gravity="center"
+                android:paddingTop="15dp"
+                android:paddingBottom="5dp"
+                android:text="Reglas de uso"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+            <TextView
                 android:id="@+id/reglasuso"
                 android:layout_width="match_parent"
-                android:layout_height="91dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:background="@color/white"
-                android:hint="Reglas de uso"
-                android:inputType="textPersonName" />
+                android:textColor="@color/black"
+                android:textSize="15dp"/>
 
             <!-- Amenidades -->
 
+            <TextView
+                android:id="@+id/titulo4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:gravity="center"
+                android:paddingTop="15dp"
+                android:paddingBottom="5dp"
+                android:text="Amenidades"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
 
+            <TextView
+                android:id="@+id/amenidades"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@color/white"
+                android:textColor="@color/black"
+                android:textSize="15dp"
+                />
 
 
 
@@ -108,7 +140,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
-                android:gravity="left"
+                android:gravity="center"
                 android:paddingTop="15dp"
                 android:paddingBottom="5dp"
                 android:text="Capacidad máxima"
@@ -130,7 +162,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
-                android:gravity="left"
+                android:gravity="center"
                 android:paddingTop="15dp"
                 android:paddingBottom="5dp"
                 android:text="Precio del alquiler"
