@@ -20,6 +20,8 @@ public class CasaModelo extends AppCompatActivity {
     private boolean baño_encendido = false;
     private boolean sala_encendido = false;
 
+    private boolean pgarage_abierta = false;
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -43,6 +45,7 @@ public class CasaModelo extends AppCompatActivity {
         Button botonluzcuarto = findViewById(R.id.cuarto);
         Button botonluzbaño = findViewById(R.id.baño);
         Button botonluzsala = findViewById(R.id.sala);
+        Button botonpgarage = findViewById(R.id.pgarage);
         Button botonregresarprincipal = findViewById(R.id.regresarprincipal);
 
         botonluzcuarto.setOnClickListener(view -> {
@@ -84,6 +87,20 @@ public class CasaModelo extends AppCompatActivity {
             String messageSendsala = "func: luzsala" + messagesala;
             Socket.sendMessage(messageSendsala);
             sala_encendido = !sala_encendido;
+        });
+
+        botonpgarage.setOnClickListener(view -> {
+
+            if(!pgarage_abierta) {
+                botonpgarage.setBackgroundResource(android.R.color.holo_green_dark);
+            }else{
+                botonpgarage.setBackgroundResource(android.R.color.transparent);
+            }
+
+            String messagepgarage = pgarage_abierta ? "motor_CLOSE" : "motor_OPEN";
+            String messageSendpgarage = "func: " + messagepgarage;
+            Socket.sendMessage(messageSendpgarage);
+            pgarage_abierta = !pgarage_abierta;
         });
 
 

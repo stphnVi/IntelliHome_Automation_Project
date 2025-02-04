@@ -1,14 +1,17 @@
+#include <Servo.h>
 #define PIN_LED1 2
 #define PIN_LED2 3
 #define PIN_LED3 4
 #define SENSOR_FLAME_PIN 10
 #define SWITCH_PIN 11  // Pin del switch de inclinación
+#define Servo_PIN 6 //Pin del Servo Motor
 
 // Variables de estado
 String serverMessage;
 bool flameSensor;
 bool fire = false;
 bool lastSwitchState = HIGH;  // Estado previo del switch
+Servo motorServo;
 
 void setup() {
   Serial.begin(9600);  // Iniciar comunicación serie
@@ -21,6 +24,10 @@ void setup() {
   
   // Configurar el switch como entrada
   pinMode(SWITCH_PIN, INPUT);
+
+  //Configuracion del Servo motor
+  motorServo.attach(Servo_PIN);
+  motorServo.write(90); // Iniciar detenido
 }
 
 void loop() {
@@ -41,6 +48,22 @@ void loop() {
   } else if (serverMessage == "func: luzbañoLED3_OFF") {
     digitalWrite(PIN_LED3, LOW);
   }
+  //Servo motor
+
+  else if (serverMessage == "func: motor_CLOSE") {
+    motorServo.write(120); // Gira en un sentido
+    Serial.println("Cerrando la puerta");
+    delay(2000); // Mantener el giro por 2 segundos
+    motorServo.write(90); // Detener motor
+    Serial.println("Motor detenido");
+  } else if (serverMessage == "func: motor_OPEN") {
+    motorServo.write(60); // Gira en el otro sentido
+    Serial.println("Abriendo puerta");
+    delay(2000); // Mantener el giro por 2 segundos
+    motorServo.write(90); // Detener motor
+    Serial.println("Motor detenido");
+  }
+  delay(500); // Pequeña pausa para evitar múltiples lecturas seguidas
 
   // Lectura del sensor de llama
   flameSensor = digitalRead(SENSOR_FLAME_PIN);
@@ -65,5 +88,8 @@ void loop() {
   }
 
   delay(200);
+
+  
+
 }
 
