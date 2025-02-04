@@ -138,6 +138,8 @@ public class RegistroActivity extends AppCompatActivity {
         logoImageView = findViewById(R.id.logoImageView);
         terminosButton = findViewById(R.id.terminosButton);
 
+        pantallaRegistroAbierta = true;
+
         // Variables para el menu drop down
         String[] item = {"Argentina", "Bolivia", "Brasil", "Chile", "Colombia", "Costa Rica",
                 "Cuba", "Ecuador", "El Salvador", "Granada", "Guatemala", "Guyana", "Haití",
@@ -185,7 +187,7 @@ public class RegistroActivity extends AppCompatActivity {
             String cvvTarjeta =  cardCvcEditText.getText().toString();
 
             if (checkEspaciosObligatorios() && (checkProfanidades() && isValidPassword(password)
-                    && passwordConfirmationMatch(password, confirmacionPassword))) {
+                    && passwordConfirmationMatch(password, confirmacionPassword) && validarTerminosCondiciones())) {
                 // Se envia al usuario a la pagina principal
                 // Se envia al usuario a la pagina principal
                 String messageSend = "func: reg" + ", userNombre: " + userNombre + ", userApellido: " + userApellido + ", fechaNacimiento: " + fechaNacimiento +
@@ -453,9 +455,6 @@ public class RegistroActivity extends AppCompatActivity {
             if (isEmpty(cardCvcEditText)) {
                 cardCvcEditText.setBackgroundResource(R.drawable.edittext_background);
             } else {cardCvcEditText.setBackgroundResource(R.color.white);}
-            if (terminosCondicionesAceptados == false) {
-                Toast.makeText(this, "Aceptar terminos y condiciones", Toast.LENGTH_SHORT).show();
-            }
 
 
             Toast.makeText(this, "Rellenar espacios obligatorios", Toast.LENGTH_SHORT).show();
@@ -503,14 +502,9 @@ public class RegistroActivity extends AppCompatActivity {
                 if ("1".equals(message)) {
                     // Abrir nueva ventana si el mensaje es "1"
                     pantallaRegistroAbierta = false;
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RegistroActivity.this);
-                    builder.setTitle("Usuario registrado")
-                            .setMessage("El usuario ha sido registrado exitosamente")
-                            .setPositiveButton("Aceptar", (dialog, which) -> dialog.dismiss())
-                            .create()
-                            .show();
-                    //Intent intent = new Intent(RegistroActivity.this, PrincipalActivity.class);
-                    //startActivity(intent); //se abre la nueva ventana
+                    Toast.makeText(this, "Se ha creado el usuario", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(RegistroActivity.this, PrincipalActivity.class);
+                    startActivity(intent); //se abre la nueva ventana
                     Socket.message = null; //se hace el mensaje de entrada null para recibir el siguiente mensaje
                 } else if ("0".equals(message)) {
                     // Mostrar mensaje de credenciales incorrectas
@@ -533,6 +527,16 @@ public class RegistroActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private boolean validarTerminosCondiciones() {
+        if (terminosCondicionesAceptados == true) {
+            return true;
+        }
+        else {
+            Toast.makeText(this, "Aceptar terminos y condiciones", Toast.LENGTH_SHORT).show();
+            return false;
+        }
     }
 
     @Override
@@ -680,4 +684,5 @@ public class RegistroActivity extends AppCompatActivity {
 
         dialog.show();
     }
+
 }
