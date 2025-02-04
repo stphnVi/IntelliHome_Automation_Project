@@ -623,6 +623,10 @@ def receive_info(data):
     elif valor_func == "luzsala":
         print("sala")
         return 0
+    
+    elif valor_func == "pgarage":
+        print("pgarage")
+        return 0
 
     else:
         result = add_user(nuevo_data.strip())

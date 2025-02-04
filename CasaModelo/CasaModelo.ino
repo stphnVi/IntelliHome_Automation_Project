@@ -48,6 +48,22 @@ void loop() {
   } else if (serverMessage == "func: luzbañoLED3_OFF") {
     digitalWrite(PIN_LED3, LOW);
   }
+  //Servo motor
+
+  else if (serverMessage == "func: motor_CLOSE") {
+    motorServo.write(120); // Gira en un sentido
+    Serial.println("Cerrando la puerta");
+    delay(2000); // Mantener el giro por 2 segundos
+    motorServo.write(90); // Detener motor
+    Serial.println("Motor detenido");
+  } else if (serverMessage == "func: motor_OPEN") {
+    motorServo.write(60); // Gira en el otro sentido
+    Serial.println("Abriendo puerta");
+    delay(2000); // Mantener el giro por 2 segundos
+    motorServo.write(90); // Detener motor
+    Serial.println("Motor detenido");
+  }
+  delay(500); // Pequeña pausa para evitar múltiples lecturas seguidas
 
   // Lectura del sensor de llama
   flameSensor = digitalRead(SENSOR_FLAME_PIN);
@@ -73,22 +89,7 @@ void loop() {
 
   delay(200);
 
-  //Servo motor
-
-  if (serverMessage == "funM: motor_CLOSE") {
-    motorServo.write(120); // Gira en un sentido
-    Serial.println("Cerrando la puerta");
-    delay(2000); // Mantener el giro por 2 segundos
-    motorServo.write(90); // Detener motor
-    Serial.println("Motor detenido");
-  } else if (serverMessage == "funM: motor_OPEN") {
-    motorServo.write(60); // Gira en el otro sentido
-    Serial.println("Abriendo puerta");
-    delay(2000); // Mantener el giro por 2 segundos
-    motorServo.write(90); // Detener motor
-    Serial.println("Motor detenido");
-  }
-  delay(500); // Pequeña pausa para evitar múltiples lecturas seguidas
+  
 
 }
 
