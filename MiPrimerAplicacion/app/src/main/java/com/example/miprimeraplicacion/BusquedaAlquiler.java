@@ -86,6 +86,12 @@ public class BusquedaAlquiler extends AppCompatActivity {
     boolean[] amenidadesSeleccionadas = new boolean[amenidades.length];
     ArrayList<String> seleccionadas = new ArrayList<>();
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity(); // Esto cierra todas las actividades en la pila
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +118,7 @@ public class BusquedaAlquiler extends AppCompatActivity {
         pantallaBusquedaAlquilerAbierta = true;
 
         botonCancelar.setOnClickListener(view -> { // mapeo del boton para alquilar
+            pantallaBusquedaAlquilerAbierta = false;
             Intent intent = new Intent(BusquedaAlquiler.this, PrincipalActivity.class);
             startActivity(intent);
         });
@@ -397,53 +404,53 @@ public class BusquedaAlquiler extends AppCompatActivity {
 
         runOnUiThread(() -> {
             if (com.example.miprimeraplicacion.Socket.message != null) {
-                String message = com.example.miprimeraplicacion.Socket.message;
-
-                //amenidades tiene que tener un espacio luego de los dos puntos
-
-                String propiedadString = "nombre de la propiedad: Propiedad, Ubicacion:latitud: 9.928271373823975, longitud: -84.09072875976562, reglas de uso: Nada, amenidades:Lavadora y secadora, Calefaccion, Piscina, capacidad maxima: 1, precio: 20000";
-
-                List<Map<String, Object>> propiedades = parsePropiedades(message);
-                int cantPropiedades = propiedades.size();
-
-                // Mostrar el resultado en consola
-                for (Map<String, Object> propiedad : propiedades) {
-                    System.out.println("Propiedad:");
-                    Casa casa = new Casa();
-                    propiedad.forEach((key, value) -> {
-                        System.out.println(key + " -> " + value);
-                        if (key.equals("nombre de la propiedad")) {
-                            casa.nombrePropiedad = value.toString();
-                        }
-                        else if (key.equals("reglas")) {
-                            if (value instanceof List) {
-                                casa.reglas = (List<String>) value;
-                            }
-                        }
-                        else if (key.equals("amenidades")) {
-                            if (value instanceof List) {
-                                casa.amenidades = (List<String>) value;
-                            }
-                        }
-                        else if (key.equals("capacidad maxima")) {
-                            casa.capacidadMaxima = value.toString();
-                        }
-                        else if (key.equals("precio")) {
-                            casa.precio = value.toString();
-                        }
-                    });
-                    System.out.println("----------");
-                    ListaCasas.listaCasas.add(casa);
+                if (Socket.message.equals("0")) {
+                    Toast.makeText(this, "No se han encontrado casas", Toast.LENGTH_SHORT).show();
+                    Socket.message = null;
                 }
+                else {
+                    String message = com.example.miprimeraplicacion.Socket.message;
 
-                Socket.message = null;
+                    //amenidades tiene que tener un espacio luego de los dos puntos
 
-                Intent intent = new Intent(BusquedaAlquiler.this, ResultadosBusqueda.class);
-                startActivity(intent); //se abre la nueva ventana
+                    String propiedadString = "nombre de la propiedad: Propiedad, Ubicacion:latitud: 9.928271373823975, longitud: -84.09072875976562, reglas de uso: Nada, amenidades:Lavadora y secadora, Calefaccion, Piscina, capacidad maxima: 1, precio: 20000";
 
-            }
-            else if (Socket.message == "") {
-                Toast.makeText(this, "No se han encontrado casas", Toast.LENGTH_SHORT);
+                    List<Map<String, Object>> propiedades = parsePropiedades(message);
+                    int cantPropiedades = propiedades.size();
+
+                    // Mostrar el resultado en consola
+                    for (Map<String, Object> propiedad : propiedades) {
+                        System.out.println("Propiedad:");
+                        Casa casa = new Casa();
+                        propiedad.forEach((key, value) -> {
+                            System.out.println(key + " -> " + value);
+                            if (key.equals("nombre de la propiedad")) {
+                                casa.nombrePropiedad = value.toString();
+                            } else if (key.equals("reglas")) {
+                                if (value instanceof List) {
+                                    casa.reglas = (List<String>) value;
+                                }
+                            } else if (key.equals("amenidades")) {
+                                if (value instanceof List) {
+                                    casa.amenidades = (List<String>) value;
+                                }
+                            } else if (key.equals("capacidad maxima")) {
+                                casa.capacidadMaxima = value.toString();
+                            } else if (key.equals("precio")) {
+                                casa.precio = value.toString();
+                            }
+                        });
+                        System.out.println("----------");
+                        ListaCasas.listaCasas.add(casa);
+                    }
+
+                    Socket.message = null;
+                    pantallaBusquedaAlquilerAbierta = false;
+
+                    Intent intent = new Intent(BusquedaAlquiler.this, ResultadosBusqueda.class);
+                    startActivity(intent); //se abre la nueva ventana
+
+                }
             }
         });
     }
