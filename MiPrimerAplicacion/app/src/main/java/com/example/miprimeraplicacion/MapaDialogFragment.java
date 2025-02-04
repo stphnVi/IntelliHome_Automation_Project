@@ -70,4 +70,3 @@ public class MapaDialogFragment extends DialogFragment {
         return builder.create();
     }
 }
-

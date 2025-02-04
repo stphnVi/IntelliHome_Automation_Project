@@ -48,7 +48,26 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="45dp" />
+            android:layout_height="21dp" />
+
+
+        <TextView
+            android:id="@+id/alquilarTextView"
+            android:layout_width="156dp"
+            android:layout_height="wrap_content"
+            android:text="Alquilar propiedades" />
+
+        <ImageButton
+            android:id="@+id/dirigeNavBar"
+            android:layout_width="72dp"
+            android:layout_height="64dp"
+            android:background="@color/Azul"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/baseline_add_home_24" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="21dp" />
 
 
         <TextView
@@ -66,7 +85,7 @@
 
         <View
             android:layout_width="371dp"
-            android:layout_height="47dp" />
+            android:layout_height="21dp" />
 
         <TextView
             android:id="@+id/textView6"
@@ -85,12 +104,12 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="39dp" />
+            android:layout_height="21dp" />
 
         <ImageButton
             android:id="@+id/button2"
-            android:layout_width="99dp"
-            android:layout_height="79dp"
+            android:layout_width="85dp"
+            android:layout_height="62dp"
             android:layout_gravity="center"
             android:background="@color/Azul"
             app:srcCompat="@drawable/salida" />

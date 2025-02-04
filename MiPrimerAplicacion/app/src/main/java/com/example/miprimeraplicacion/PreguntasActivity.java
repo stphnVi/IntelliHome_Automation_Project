@@ -39,7 +39,9 @@ public class PreguntasActivity extends AppCompatActivity {
 
         buttonCancel.setOnClickListener(view -> { // mapeo del boton exit
             pantallaPreguntasAbierta = false;
-            finishAffinity(); // Esto cierra todas las actividades en la pila
+//            finishAffinity(); // Esto cierra todas las actividades en la pila
+            Intent intent = new Intent(PreguntasActivity.this, MainActivity.class);
+            startActivity(intent); //se abre la nueva ventana
         });
 
         buttonVerifyAnswers.setOnClickListener(view -> { // mapeo del boton exit

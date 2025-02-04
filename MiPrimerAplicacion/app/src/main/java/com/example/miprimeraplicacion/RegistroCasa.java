@@ -45,35 +45,35 @@ public class RegistroCasa extends AppCompatActivity {
 
     // Lista de amenidades
     String[] amenidades = {"Cocina equipada (con electrodomesticos modernos)",
-                            "Aire acondicionado",
-                            "Calefaccion",
-                            "Wi-Fi gratuito",
-                            "Television por cable o satelite",
-                            "Lavadora y secadora",
-                            "Piscina",
-                            "Jardin o patio",
-                            "Barbacoa o parrilla",
-                            "Terraza o balcon",
-                            "Gimnasio en casa",
-                            "Garaje o espacio de estacionamiento",
-                            "Sistema de seguridad",
-                            "Habitaciones con baño en suite",
-                            "Muebles de exterior",
-                            "Microondas",
-                            "Lavavajillas",
-                            "Cafetera",
-                            "Ropa de cama y toallas incluidas",
-                            "Acceso a areas comunes (piscina, gimnasio)",
-                            "Camas adicionales o sofa cama",
-                            "Servicios de limpieza opcionales",
-                            "Acceso a transporte público cercano",
-                            "Mascotas permitidas",
-                            "Cercania a tiendas y restaurantes",
-                            "Sistema de calefaccion por suelo radiante",
-                            "Escritorio o area de trabajo",
-                            "Sistemas de entretenimiento (videojuegos, equipo de musica)",
-                            "Chimenea",
-                            "Acceso a internet de alta velocidad" };
+            "Aire acondicionado",
+            "Calefaccion",
+            "Wi-Fi gratuito",
+            "Television por cable o satelite",
+            "Lavadora y secadora",
+            "Piscina",
+            "Jardin o patio",
+            "Barbacoa o parrilla",
+            "Terraza o balcon",
+            "Gimnasio en casa",
+            "Garaje o espacio de estacionamiento",
+            "Sistema de seguridad",
+            "Habitaciones con baño en suite",
+            "Muebles de exterior",
+            "Microondas",
+            "Lavavajillas",
+            "Cafetera",
+            "Ropa de cama y toallas incluidas",
+            "Acceso a areas comunes (piscina, gimnasio)",
+            "Camas adicionales o sofa cama",
+            "Servicios de limpieza opcionales",
+            "Acceso a transporte público cercano",
+            "Mascotas permitidas",
+            "Cercania a tiendas y restaurantes",
+            "Sistema de calefaccion por suelo radiante",
+            "Escritorio o area de trabajo",
+            "Sistemas de entretenimiento (videojuegos, equipo de musica)",
+            "Chimenea",
+            "Acceso a internet de alta velocidad" };
 
     boolean[] amenidadesSeleccionadas = new boolean[amenidades.length];
     ArrayList<String> seleccionadas = new ArrayList<>();
@@ -198,7 +198,7 @@ public class RegistroCasa extends AppCompatActivity {
             }
 
             if (!nombrepropiedad.isEmpty() && !reglasuso.isEmpty() && !capacidadmaxima.isEmpty() && !precio.isEmpty() && !Ubicaciones.isEmpty()) {
-                String messageSend = "func: regcasa" + ", nombre de la propiedad: " + nombrepropiedad + ", Ubicacion:" + Ubicaciones + ", reglas de uso: " + reglasuso + ", amenidades:" + amenidades + ", capacidad maxima: " + capacidadmaxima + ", precio: " + precio;
+                String messageSend = "func: regcasa" + ", nombre de la propiedad: " + nombrepropiedad + ", ubi:" + Ubicaciones + ", reglas de uso: " + reglasuso + ", amenidades:" + amenidades + ", capacidad maxima: " + capacidadmaxima + ", precio: " + precio;
                 Socket.sendMessage(messageSend);
             }
 

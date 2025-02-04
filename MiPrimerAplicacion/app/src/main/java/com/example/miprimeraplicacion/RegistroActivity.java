@@ -134,7 +134,10 @@ public class RegistroActivity extends AppCompatActivity {
         logoImageView = findViewById(R.id.logoImageView);
 
         // Variables para el menu drop down
-        String[] item = {"Costa Rica", "Nicaragua", "Panama", "Honduras"};
+        String[] item = {"Argentina", "Bolivia", "Brasil", "Chile", "Colombia", "Costa Rica",
+                "Cuba", "Ecuador", "El Salvador", "Granada", "Guatemala", "Guyana", "Haití",
+                "Honduras", "Jamaica", "México", "Nicaragua", "Panamá", "Paraguay", "Perú",
+                "República Dominicana", "Surinam", "Trinidad y Tobago", "Uruguay", "Venezuela"};
         autoCompleteTextView = findViewById(R.id.auto_complete_txt);
         adapterItems = new ArrayAdapter<String>(this, R.layout.list_item, item);
         autoCompleteTextView.setAdapter(adapterItems);
@@ -152,7 +155,10 @@ public class RegistroActivity extends AppCompatActivity {
         // Configura el listener para el botón de cancelar
         buttonCancel.setOnClickListener(view -> {
             pantallaRegistroAbierta = false;
-            finishAffinity(); // Esto cierra todas las actividades en la pila
+            //Esto esta crasheando la aplicacion, preguntar para que es y arreglarlo
+//            finishAffinity(); // Esto cierra todas las actividades en la pila
+            Intent intent = new Intent(RegistroActivity.this, MainActivity.class);
+            startActivity(intent); //se abre la nueva ventana
         });
 
         registerButton.setOnClickListener(view -> {

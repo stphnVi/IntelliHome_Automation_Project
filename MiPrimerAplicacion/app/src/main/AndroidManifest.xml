@@ -45,6 +45,15 @@
         <!-- Declarar la actividad Recuperacion de contraseña -->
         <activity android:name=".RecuperacionContrasena"></activity>
 
+        <!-- Declarar la actividad BusquedaAlquiler -->
+        <activity android:name=".BusquedaAlquiler"></activity>
+
+        <!-- Declarar la actividad ResultadosBusqueda -->
+        <activity android:name=".ResultadosBusqueda"></activity>
+
+        <!-- Declarar la actividad OpcionSeleccionada -->
+        <activity android:name=".OpcionSeleccionada"></activity>
+
         <!-- Declarar la actividad MainActivity -->
         <activity
             android:name=".MainActivity"
