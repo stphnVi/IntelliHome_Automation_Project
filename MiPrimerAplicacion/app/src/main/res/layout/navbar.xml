@@ -150,16 +150,16 @@
 
     <TextView
         android:id="@+id/textCapacidad"
-        android:layout_width="317dp"
-        android:layout_height="28dp"
-        android:layout_marginBottom="188dp"
+        android:layout_width="324dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="208dp"
         android:background="@color/white"
         android:text=""
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.51"
 
+        app:layout_constraintHorizontal_bias="0.528"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -185,7 +185,7 @@
         android:gravity="center"
         android:paddingTop="15dp"
         android:paddingBottom="5dp"
-        android:text="Cantidad"
+        android:text="Cantidad de personas"
         android:textColor="@color/black"
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"

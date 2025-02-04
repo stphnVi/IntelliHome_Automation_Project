@@ -49,7 +49,7 @@ public class ResultadosBusqueda extends AppCompatActivity {
             nombreTextView.setTextSize(18);
 
             TextView capacidadTextView = new TextView(this);
-            capacidadTextView.setText("Capacidad: " + casa.capacidadMaxima);
+            capacidadTextView.setText("Capacidad: " + casa.capacidadMaxima + " personas");
 
             TextView precioTextView = new TextView(this);
             precioTextView.setText("Precio: " + casa.precio + " colones");
