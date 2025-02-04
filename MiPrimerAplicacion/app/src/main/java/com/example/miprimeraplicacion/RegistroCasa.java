@@ -1,25 +1,46 @@
 package com.example.miprimeraplicacion;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageSwitcher;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.io.IOException;
+import java.sql.Array;
 import java.util.ArrayList;
 
 public class RegistroCasa extends AppCompatActivity {
 
     private boolean pantallaRegistroCasasAbierta;
     private TextView textoUbicaciones;
+
+    // posicion del tipo elegido
+    int position = 0;
+    private ArrayList<Uri> imageUris;
+
+    //pedir el codico para elegir imagenes
+    private static final int PICK_IMAGES_CODE = 0;
+    private ImageSwitcher casaImageView;
+    private String imagePath = null;
+    private String[] imagePaths = new String[4];
 
 
     // Lista de amenidades
@@ -79,6 +100,12 @@ public class RegistroCasa extends AppCompatActivity {
         //Botones
         Button buttonRegresar= findViewById(R.id.regresar);
         Button buttonRegistrar = findViewById(R.id.registrar);
+        Button buttonAgregarImagenes = findViewById(R.id.botonAgregarImagenes);
+        FloatingActionButton buttonForward = findViewById(R.id.derecha);
+        FloatingActionButton buttonBack = findViewById(R.id.izquierda);
+
+        // Imagenes casa
+        casaImageView = findViewById(R.id.casaImageView);
 
         //Mapa
 
@@ -185,7 +212,41 @@ public class RegistroCasa extends AppCompatActivity {
             // Crear el DialogFragment
             MapaDialogFragment mapaDialogFragment = new MapaDialogFragment();
             mapaDialogFragment.show(getSupportFragmentManager(), "MapaDialog");
+        });
 
+        //Se crea la lista de imagenes
+        imageUris = new ArrayList<>();
+
+        //Se crea el cambiador de imagenes
+        casaImageView.setFactory(() -> new ImageView(getApplicationContext()));
+
+        buttonAgregarImagenes.setOnClickListener(view -> {
+
+            pickImagesIntent();
+
+        });
+
+        buttonForward.setOnClickListener(view -> {
+
+            if (position < imageUris.size() - 1) {
+                position++;
+                casaImageView.setImageURI(imageUris.get(position));
+            }
+            else {
+                Toast.makeText(this, "No hay mas imagenes...", Toast.LENGTH_SHORT).show();
+            }
+
+        });
+
+        buttonBack.setOnClickListener(view -> {
+
+            if (position > 0) {
+                position--;
+                casaImageView.setImageURI(imageUris.get(position));
+            }
+            else {
+                Toast.makeText(this, "No hay imagenes previas...", Toast.LENGTH_SHORT).show();
+            }
         });
 
 
@@ -200,7 +261,6 @@ public class RegistroCasa extends AppCompatActivity {
             }
 
         }).start();
-
     }
 
     // Método para cambiar el fondo de un campo a rojo temporalmente
@@ -251,4 +311,52 @@ public class RegistroCasa extends AppCompatActivity {
             }
         });
     }
+
+    private void pickImagesIntent() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Image(s)"), PICK_IMAGES_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGES_CODE) {
+
+            if (resultCode== Activity.RESULT_OK) {
+
+                if (data.getClipData() != null) {
+                    // Se eligieron varias imagenes
+
+                    int count = data.getClipData().getItemCount(); // numero de imagenes elegidas
+                    if (count <= 4) { // Se eligen menos de 4 casas
+                        for (int i=0; i<count; i++) {
+                            Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                            imagePath = imageUri.getPath();
+                            imageUris.add(imageUri); //add to list
+                        }
+                        //Se pone la primer imagen en el image view
+                        casaImageView.setImageURI(imageUris.get(0));
+                        position = 0;
+                        casaImageView.setBackground(getDrawable(R.color.Azul));
+                    }
+                    else { // se eligen mas de 12 casas
+                        Toast.makeText(this, "El maximo de imagenes por casa es 4", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else {
+                    // Se eligio una sola imagen
+                    Uri imageUri = data.getData();
+                    imageUris.add(imageUri);
+                    //Se pone la primer imagen en el image view
+                    casaImageView.setImageURI(imageUris.get(0));
+                    position = 0;
+                }
+            }
+        }
+    }
+
+
 }
