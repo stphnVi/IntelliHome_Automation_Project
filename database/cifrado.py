@@ -23,5 +23,8 @@ def encrypt_file(input_file, output_file, key, iv):
         key_file.write(key)
 
 
-encrypt_file('./database/data.txt',
-             './database/data_encrypted.txt', key, iv)
+# encrypt_file('./database/data.txt',
+#             './database/data_encrypted.txt', key, iv)
+
+# encrypt_file('./database/casas.txt',
+#             './database/casas_encrypted.txt', key, iv)

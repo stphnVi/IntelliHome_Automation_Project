@@ -19,6 +19,12 @@ public class ResultadosBusqueda extends AppCompatActivity {
     private LinearLayout layoutPrincipal;
     private Button botonVolver;
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity(); // Esto cierra todas las actividades en la pila
+    }
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {

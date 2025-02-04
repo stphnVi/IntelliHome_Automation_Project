@@ -255,6 +255,16 @@
                 android:layout_marginTop="16dp"
                 android:maxLength="3"/>
 
+            <Button
+                android:id="@+id/terminosButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/Azuloscuro"
+                android:layout_marginTop="32dp"
+                android:text="Ver terminos y condiciones"
+                android:textColor="@color/colorWhite" />
+
 
             <!-- Botones -->
             <LinearLayout

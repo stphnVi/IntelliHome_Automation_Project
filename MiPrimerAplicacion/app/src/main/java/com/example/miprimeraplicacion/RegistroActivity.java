@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,6 +21,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
@@ -83,6 +85,7 @@ public class RegistroActivity extends AppCompatActivity {
 
     private FloatingActionButton fotoPerfilButton;
     private ImageView fotoPerfilImageView;
+    private Button terminosButton;
 
     private static final int PICK_IMAGE_REQUEST = 1; // Código de solicitud para la galería
     private Uri imageUri; // URI de la imagen seleccionada
@@ -94,6 +97,7 @@ public class RegistroActivity extends AppCompatActivity {
     private String nacionalidad;
     private String profileImagePath;
     private ImageView logoImageView;
+    private boolean terminosCondicionesAceptados = false;
 
     @Override
     public void onBackPressed() {
@@ -132,6 +136,7 @@ public class RegistroActivity extends AppCompatActivity {
         fotoPerfilButton = findViewById(R.id.botonFotoPerfil);
         fotoPerfilImageView = findViewById(R.id.fotoPerfilImageView);
         logoImageView = findViewById(R.id.logoImageView);
+        terminosButton = findViewById(R.id.terminosButton);
 
         // Variables para el menu drop down
         String[] item = {"Argentina", "Bolivia", "Brasil", "Chile", "Colombia", "Costa Rica",
@@ -162,7 +167,6 @@ public class RegistroActivity extends AppCompatActivity {
         });
 
         registerButton.setOnClickListener(view -> {
-
             //Asignacion de variables
             String userNombre = nameEditText.getText().toString();
             String userApellido = lastNameEditText.getText().toString();
@@ -215,6 +219,10 @@ public class RegistroActivity extends AppCompatActivity {
             }
 
         }).start();
+
+        terminosButton.setOnClickListener(view -> {
+            mostrarPopupTerminos();
+        });
 
 
     }
@@ -445,6 +453,9 @@ public class RegistroActivity extends AppCompatActivity {
             if (isEmpty(cardCvcEditText)) {
                 cardCvcEditText.setBackgroundResource(R.drawable.edittext_background);
             } else {cardCvcEditText.setBackgroundResource(R.color.white);}
+            if (terminosCondicionesAceptados == false) {
+                Toast.makeText(this, "Aceptar terminos y condiciones", Toast.LENGTH_SHORT).show();
+            }
 
 
             Toast.makeText(this, "Rellenar espacios obligatorios", Toast.LENGTH_SHORT).show();
@@ -584,5 +595,89 @@ public class RegistroActivity extends AppCompatActivity {
         }
 
         return null; // Return null if the file is not found
+    }
+
+    private void mostrarPopupTerminos() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View popupView = inflater.inflate(R.layout.popup_terminos, null);
+
+        TextView tvTerminosContenido = popupView.findViewById(R.id.tvTerminosContenido);
+
+        String terminosTexto = "Términos y Condiciones de Uso de Intellihome\n\n"
+                + "Fecha de entrada en vigor: [Fecha]\n\n"
+                + "Bienvenido a Intellihome. Al acceder y utilizar nuestra aplicación, usted acepta "
+                + "cumplir con los siguientes términos y condiciones. Si no está de acuerdo con estos "
+                + "términos, le solicitamos que no utilice nuestra aplicación.\n\n"
+                + "1. Definiciones\n"
+                + "• Intellihome: Se refiere a la aplicación móvil y/o plataforma web que facilita el "
+                + "alquiler de propiedades.\n"
+                + "• Usuario: Cualquier persona que se registre y utilice Intellihome.\n"
+                + "• Propiedad: Cualquier inmueble disponible para alquiler a través de Intellihome.\n\n"
+                + "2. Aceptación de Términos\n"
+                + "Al registrarse y utilizar Intellihome, usted acepta estos términos y condiciones en su "
+                + "totalidad. Nos reservamos el derecho a modificar estos términos en cualquier momento, "
+                + "por lo que recomendamos revisarlos periódicamente.\n\n"
+                + "3. Registro de Usuario\n"
+                + "Para utilizar algunas funcionalidades de la aplicación, es necesario crear una cuenta. "
+                + "El Usuario se compromete a proporcionar información veraz y actualizada. Es "
+                + "responsabilidad del Usuario mantener la confidencialidad de sus credenciales de acceso.\n\n"
+                + "4. Uso de la Aplicación\n"
+                + "• Intellihome permite a los Usuarios buscar y alquilar propiedades.\n"
+                + "• El Usuario se compromete a utilizar la aplicación solo para fines lícitos y de "
+                + "acuerdo con las leyes aplicables.\n\n"
+                + "5. Propiedades\n"
+                + "• Las propiedades listadas en Intellihome son ofrecidas por propietarios y "
+                + "agentes inmobiliarios.\n"
+                + "• Intellihome no es responsable de la veracidad, disponibilidad o estado de las "
+                + "propiedades.\n\n"
+                + "6. Comisiones y Pagos\n"
+                + "• Intellihome puede cobrar comisiones por los servicios ofrecidos. Las tarifas "
+                + "serán comunicadas claramente antes de confirmar cualquier transacción.\n"
+                + "• El Usuario acepta realizar los pagos a través de los métodos habilitados en la "
+                + "aplicación.\n\n"
+                + "7. Política de Cancelación\n"
+                + "Las políticas de cancelación varían según cada propiedad y serán indicadas en el "
+                + "anuncio correspondiente. Es responsabilidad del Usuario revisar estas políticas antes "
+                + "de realizar una reserva.\n\n"
+                + "8. Limitación de Responsabilidad\n"
+                + "Intellihome no será responsable de daños directos, indirectos, incidentales o "
+                + "consecuentes que surjan del uso de la aplicación o de la imposibilidad de uso.\n\n"
+                + "9. Propiedad Intelectual\n"
+                + "Todo el contenido de Intellihome, incluyendo textos, gráficos y logotipos, está "
+                + "protegido por derechos de propiedad intelectual. Queda prohibida la reproducción o "
+                + "distribución sin autorización.\n\n"
+                + "10. Modificaciones a los Términos\n"
+                + "Nos reservamos el derecho de modificar estos términos en cualquier momento. Las "
+                + "modificaciones entrarán en vigor al ser publicadas en la aplicación. El uso continuado "
+                + "de Intellihome tras la publicación de cambios implica la aceptación de los mismos.\n\n"
+                + "11. Legislación Aplicable\n"
+                + "Estos términos se rigen por las leyes de [país/estado]. Cualquier disputa relacionada "
+                + "con el uso de Intellihome será resuelta en los tribunales de [ciudad/estado].\n\n"
+                + "12. Contacto\n"
+                + "Para cualquier pregunta o inquietud sobre estos términos, por favor contáctenos en "
+                + "[correo electrónico].";
+
+        tvTerminosContenido.setText(terminosTexto);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(popupView);
+        builder.setCancelable(false);
+
+        Button btnAceptar = popupView.findViewById(R.id.btnAceptar);
+        Button btnCancelar = popupView.findViewById(R.id.btnCancelar);
+        AlertDialog dialog = builder.create();
+
+        btnAceptar.setOnClickListener(v -> {
+            terminosCondicionesAceptados = true;
+            dialog.dismiss();
+            // Acciones al aceptar los términos
+        });
+
+        btnCancelar.setOnClickListener(v -> {
+            dialog.dismiss();
+            // Finaliza la actividad actual
+        });
+
+        dialog.show();
     }
 }

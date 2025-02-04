@@ -14,7 +14,15 @@ public class OpcionSeleccionada extends AppCompatActivity {
     private TextView amenidades;
     private TextView precio;
     private Button botonVolver;
+    private Button reservar;
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity(); // Esto cierra todas las actividades en la pila
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.opcion_seleccionada);
@@ -25,11 +33,12 @@ public class OpcionSeleccionada extends AppCompatActivity {
         capacidad = findViewById(R.id.cmaxima);
         precio = findViewById(R.id.precio);
         botonVolver = findViewById(R.id.regresar);
+        reservar = findViewById(R.id.siguiente);
 
 
         nombrePropiedad.setText(CasaSeleccionada.nombrePropiedad);
-        capacidad.setText(CasaSeleccionada.capacidadMaxima);
-        precio.setText(CasaSeleccionada.precio);
+        capacidad.setText(CasaSeleccionada.capacidadMaxima + " personas");
+        precio.setText(CasaSeleccionada.precio + " colones por persona por dia");
 
         String amenidadesString = CasaSeleccionada.convertirListaEnString(CasaSeleccionada.amenidades);
         String reglasString = CasaSeleccionada.convertirListaEnString(CasaSeleccionada.reglas);
@@ -39,6 +48,11 @@ public class OpcionSeleccionada extends AppCompatActivity {
 
         botonVolver.setOnClickListener(view -> { // mapeo del boton para alquilar
             Intent intent = new Intent(OpcionSeleccionada.this, ResultadosBusqueda.class);
+            startActivity(intent);
+        });
+
+        reservar.setOnClickListener(view -> { // mapeo del boton para alquilar
+            Intent intent = new Intent(OpcionSeleccionada.this, AlquilerPropiedad.class);
             startActivity(intent);
         });
 

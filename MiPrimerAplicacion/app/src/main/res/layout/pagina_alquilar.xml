@@ -55,14 +55,15 @@
 
             <!-- Caracteristicas de la casa -->
 
-            <EditText
+            <TextView
                 android:id="@+id/nombrepropiedad"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:background="@color/white"
-                android:hint="Nombre de la propiedad"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:textSize="15dp"
+                android:textColor="@color/black"/>
 
 
             <!-- Reglas de uso -->
@@ -93,10 +94,12 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:ems="10"
-                android:inputType="number" />
+                android:inputType="number"
+                android:maxLength="16"
+                android:hint="XXXX-XXXX-XXXX-XXXX"/>
 
             <TextView
-                android:id="@+id/titulo2"
+                android:id="@+id/tituloExpiracion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
@@ -108,13 +111,14 @@
                 android:textSize="12dp" />
 
             <EditText
-                android:id="@+id/Expiracion"
+                android:id="@+id/textExpiracion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:ems="10"
-                android:inputType="number" />
-
+                android:inputType="number"
+                android:maxLength="4"
+                android:hint="MM/AA"/>
 
             <!-- Precio del alquiler -->
             <TextView
@@ -125,17 +129,43 @@
                 android:gravity="left"
                 android:paddingTop="15dp"
                 android:paddingBottom="5dp"
-                android:text="Precio del alquiler"
+                android:text="Codigo CVV"
                 android:textColor="@color/black"
                 android:textSize="12dp" />
 
             <EditText
-                android:id="@+id/cvv"
+                android:id="@+id/textCVV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:ems="10"
-                android:inputType="number" />
+                android:inputType="number"
+                android:maxLength="3"
+                android:hint="123"
+                />
+
+
+            <!-- Precio del alquiler -->
+            <TextView
+                android:id="@+id/tituloPrecio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:gravity="left"
+                android:paddingTop="15dp"
+                android:paddingBottom="5dp"
+                android:text="Precio del alquiler"
+                android:textColor="@color/black"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/textPrecio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:ems="10"
+                android:textSize="15dp"
+                android:textColor="@color/black"/>
 
 
             <LinearLayout

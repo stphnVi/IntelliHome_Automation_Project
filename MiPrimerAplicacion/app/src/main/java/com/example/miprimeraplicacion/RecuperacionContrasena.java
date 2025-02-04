@@ -50,7 +50,7 @@ public class RecuperacionContrasena extends AppCompatActivity {
             String password = editTextPassword.getText().toString();
             String passwordconfirm = editTextconfirmPassword.getText().toString();
             if(isValidPassword(password) && passwordConfirmationMatch(password, passwordconfirm)&& checkEspaciosObligatorios()) {
-                String messageSend = "func: cc" + ", password: " + password + ", passwordconfirm: " + passwordconfirm;
+                String messageSend = "func: cpass" + ", username: " + InformacionUsuario.usuarioRecuperacion + ", nuevaC: " + password;
                 Socket.sendMessage(messageSend);
                 pantallaRecuperacioncontrasenaabierta = false;
                 Intent intent = new Intent(RecuperacionContrasena.this, MainActivity.class);
@@ -165,9 +165,10 @@ public class RecuperacionContrasena extends AppCompatActivity {
         runOnUiThread(() -> {
             if (com.example.miprimeraplicacion.Socket.message != null) {
                 String message = com.example.miprimeraplicacion.Socket.message;
-                if ("respuestas correctas".equals(message)) {
+                if ("1".equals(message)) {
                     // Abrir nueva ventana si el mensaje es "1"
                     pantallaRecuperacioncontrasenaabierta = false;
+                    Toast.makeText(this, "Contraseña actualizada", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RecuperacionContrasena.this, MainActivity.class);
                     startActivity(intent);
                     Socket.message = null;
